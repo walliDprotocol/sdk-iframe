@@ -1,2 +1,2 @@
-# sdk-iframe
+# Verification-iframe
 Frontend code to support user interations over authentactions flow
