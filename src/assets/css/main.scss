@@ -1,0 +1,33 @@
+///// FONTS /////
+///
+
+// Load font local file
+
+@font-face {
+  font-family: "Karla";
+  src: local("Karla"),
+    url(../fonts/Karla-VariableFont_wght.ttf) format("truetype");
+}
+
+* {
+  font-family: Karla;
+}
+.title-h1 {
+  font-size: 17px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.59;
+  letter-spacing: normal;
+  color: var(--midnight);
+}
+
+.normal-text-p {
+  font-size: 13px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.51;
+  letter-spacing: normal;
+  color: var(--midnight);
+}

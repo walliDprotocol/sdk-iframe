@@ -1,0 +1,52 @@
+{
+  "accountIds": [
+    {
+      "IdName": "discord",
+      "IdNameDesc": "Discord",
+      "type": "web2"
+    },
+    {
+      "IdName": "facebook",
+      "IdNameDesc": "Facebook",
+      "type": "web2"
+    },
+    {
+      "IdName": "github",
+      "IdNameDesc": "Github",
+      "type": "web2"
+    },
+    {
+      "IdName": "google",
+      "IdNameDesc": "Google",
+      "type": "web2"
+    },
+    {
+      "IdName": "linkedin",
+      "IdNameDesc": "Linkedin",
+      "type": "web2"
+    },
+
+    {
+      "IdName": "reddit",
+      "IdNameDesc": "Reddit",
+      "type": "web2"
+    },
+    {
+      "IdName": "twitter",
+      "IdNameDesc": "Twitter",
+      "type": "web2"
+    },
+    {
+      "IdName": "nearTokens",
+      "IdNameDesc": "Near tokens",
+      "IdDescription": "Near tokens possession and transaction verification.",
+      "type": "web3"
+    },
+    {
+      "IdName": "nearNFT",
+      "IdNameDesc": "Near NFT's",
+      "IdDescription": "Connect to NEAR wallet and validate your ID by retrieving an NFT.",
+      "type": "web3"
+    }
+  ]
+}

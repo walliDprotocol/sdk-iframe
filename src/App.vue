@@ -48,3 +48,13 @@ export default {
   }),
 };
 </script>
+
+<style>
+@import "./assets/css/main.scss";
+</style>
+<style>
+#app {
+  background: url("./assets/background/gradient@3x.webp");
+  background-size: contain;
+}
+</style>
