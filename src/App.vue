@@ -1,40 +1,30 @@
 <template>
-  <v-app>
-    <v-app-bar app color="primary" dark>
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
-
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
-      </div>
-
-      <v-spacer></v-spacer>
-
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
+  <v-app class="verification-iframe">
+    <v-app-bar
+      class="iframe-app-bar"
+      app
+      elevation="0"
+      color="transparent"
+      height="74"
+    >
+      <v-container>
+        <v-row>
+          <v-col>
+            <v-img
+              alt="Vuetify Logo"
+              class="shrink mr-2"
+              contain
+              :src="require('./assets/logos/wallid.webp')"
+              transition="scale-transition"
+              width="115"
+            />
+          </v-col>
+        </v-row>
+      </v-container>
     </v-app-bar>
 
     <v-main>
-      <router-view />
+      <router-view class="px-7 pt-7" />
     </v-main>
   </v-app>
 </template>
@@ -49,12 +39,20 @@ export default {
 };
 </script>
 
-<style>
-@import "./assets/css/main.scss";
-</style>
-<style>
+<style></style>
+<style lang="scss">
 #app {
   background: url("./assets/background/gradient@3x.webp");
-  background-size: contain;
+  background-size: cover;
+}
+.iframe-app-bar .v-toolbar__content {
+  border-bottom: solid 2px #f4f4f4;
+  justify-content: center;
+
+  padding: 0;
+
+  .container {
+    padding: 4px 30px;
+  }
 }
 </style>

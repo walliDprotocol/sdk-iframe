@@ -1,7 +1,7 @@
 <template>
   <v-container class="id-card-container">
     <v-row class="text-left id-card-row">
-      <v-col cols="auto" class="id-card-col">
+      <v-col cols="3" class="id-card-col">
         <v-img
           :src="`./logos/${item.IdName}.webp`"
           contain

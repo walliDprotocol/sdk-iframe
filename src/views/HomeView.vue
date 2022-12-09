@@ -4,7 +4,7 @@
       <v-col cols="12">
         <h1 class="title-h1">Select the IDs you'd like to verify</h1>
       </v-col>
-      <v-col cols="12">
+      <v-col cols="12" class="pt-5">
         <IdCardWrapper :items="accountIds" />
       </v-col>
 

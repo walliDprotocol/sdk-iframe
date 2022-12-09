@@ -5,6 +5,7 @@ import store from "./store";
 import vuetify from "./plugins/vuetify";
 import "@babel/polyfill";
 
+import "./assets/css/vars.scss";
 import "./assets/css/main.scss";
 
 Vue.config.productionTip = false;
