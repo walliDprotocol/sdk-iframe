@@ -41,7 +41,7 @@
         >
         </FormButton>
         <FormButton
-          :text="userData.username ? 'VERIFY' : 'CONNECT AND VERIFY'"
+          :text="nearAccount ? 'VERIFY' : 'CONNECT'"
           @click="connectAccount"
         >
         </FormButton>
@@ -58,21 +58,31 @@ import ConnectAccount from "@/components/ConnectAccount.vue";
 import * as nearAPI from "near-api-js";
 import axios from "axios";
 
+import { mapState } from "vuex";
+
 export default {
   name: "HomeView",
   data() {
     return { accountIds: [], step: 1, selectedAccount: {}, userData: {} };
   },
+  computed: {
+    ...mapState(["nearAccount"]),
+  },
   methods: {
     async connectAccount() {
       console.log("Call connectAccount");
-      await this.wallet.requestSignIn(
-        "example-contract.testnet", // contract requesting access
-        "Verification iframe", // optional title
-        "http://127.0.0.1:8080", // optional redirect URL on success
-        "http://127.0.0.1:8080" // optional redirect URL on failure
-      );
-      // await this.$store.dispatch("twitterConnect");
+
+      if (this.nearAccount) {
+        await this.$store.dispatch("twitterConnect");
+      } else {
+        localStorage.setItem("selectedAccount", this.selectedAccount.IdName);
+        await this.wallet.requestSignIn(
+          "example-contract.testnet", // contract requesting access
+          "Verification iframe", // optional title
+          `http://127.0.0.1:8080/`, // optional redirect URL on success
+          "http://127.0.0.1:8080" // optional redirect URL on failure
+        );
+      }
     },
   },
   async mounted() {
@@ -100,8 +110,16 @@ export default {
     console.log(urlParams);
 
     if (urlParams.has("account_id")) {
-      this.$store.commit("nearAccount", urlParams.get("account_id"));
+      localStorage.setItem("nearAccount", urlParams.get("account_id"));
+      if (localStorage.getItem("selectedAccount")) {
+        this.selectedAccount = this.accountIds.find(
+          (e) => e.IdName == localStorage.getItem("selectedAccount")
+        );
+        this.step = 2;
+      }
     }
+
+    this.$store.commit("nearAccount", localStorage.getItem("nearAccount"));
 
     let preAuth = JSON.parse(localStorage.getItem("twitter_preAuth"));
     console.log("pre Auth tokens ", preAuth);
@@ -127,6 +145,7 @@ export default {
       this.selectedAccount = this.accountIds.find((e) => e.IdName == "twitter");
       let objIndex = this.accountIds.findIndex((e) => e.IdName == "twitter");
       this.accountIds[objIndex].userData = this.userData;
+      await this.$forceUpdate();
     }
   },
   components: {
