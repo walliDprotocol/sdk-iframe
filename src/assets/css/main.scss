@@ -32,7 +32,40 @@
     color: var(--midnight);
     margin-bottom: 0;
   }
+
+  .bold-text-p {
+    font-size: 13px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.51;
+    letter-spacing: normal;
+    color: var(--midnight);
+    margin-bottom: 0;
+  }
+
+  /// GENERAL DiSPLAY CSS
+  ///
+  .form-switch {
+    color: var(--turquoise-blue) !important;
+    caret-color: var(--turquoise-blue) !important;
+
+    .v-input--switch__track {
+      color: var(--light-blue-grey) !important;
+    }
+
+    .v-input--switch__thumb {
+      color: var(--grey) !important;
+    }
+    &.v-input--is-label-active {
+      .v-input--switch__track {
+        color: var(--light-sky-blue) !important;
+      }
+      .v-input--switch__thumb {
+        color: var(--turquoise-blue) !important;
+      }
+    }
+  }
 }
 
 ///
-/// GENERAL DiSPLAY CSS

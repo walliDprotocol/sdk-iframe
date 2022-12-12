@@ -24,7 +24,7 @@
     </v-app-bar>
 
     <v-main>
-      <router-view class="px-7 pt-7" />
+      <router-view class="px-7" />
     </v-main>
   </v-app>
 </template>
@@ -39,7 +39,6 @@ export default {
 };
 </script>
 
-<style></style>
 <style lang="scss">
 #app {
   background: url("./assets/background/gradient@3x.webp");

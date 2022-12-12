@@ -34,18 +34,35 @@
     {
       "IdName": "twitter",
       "IdNameDesc": "Twitter",
-      "type": "web2"
+      "type": "web2",
+      "options": [
+        {
+          "field": "Account name",
+          "description": ["(Encrypted)"],
+          "state": false
+        },
+        {
+          "field": "Tweets",
+          "description": ["• More than 10"],
+          "state": false
+        },
+        {
+          "field": "Followers",
+          "description": ["• More than 100", "• More than 1000"],
+          "state": false
+        }
+      ]
     },
     {
       "IdName": "nearTokens",
       "IdNameDesc": "Near tokens",
-      "IdDescription": "Near tokens possession and transaction verification.",
+      "IdDescription": "Verify a NEAR ERC20 Token",
       "type": "web3"
     },
     {
       "IdName": "nearNFT",
       "IdNameDesc": "Near NFT's",
-      "IdDescription": "Connect to NEAR wallet and validate your ID by retrieving an NFT.",
+      "IdDescription": "Verify a NEAR NFT",
       "type": "web3"
     }
   ]

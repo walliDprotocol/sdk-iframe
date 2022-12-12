@@ -1,7 +1,7 @@
 <template>
   <v-container class="id-card-container">
     <v-row class="text-left id-card-row">
-      <v-col cols="3" class="id-card-col">
+      <v-col cols="3" class="id-card-col pr-0">
         <v-img
           :src="`./logos/${item.IdName}.webp`"
           contain
@@ -9,7 +9,10 @@
           max-width="40"
         />
       </v-col>
-      <v-col cols="9" class="id-card-col">
+      <v-col cols="9" class="id-card-col pl-0 d-flex flex-column align-start">
+        <p class="bold-text-p text-uppercase mb-2">
+          {{ item.IdNameDesc }}
+        </p>
         <p class="normal-text-p">
           {{ idDescription[item.type](item) }}
         </p>
@@ -25,8 +28,7 @@ export default {
   data() {
     return {
       idDescription: {
-        web2: ({ IdNameDesc }) =>
-          `Connect your existing ${IdNameDesc} account to verify.`,
+        web2: ({ IdNameDesc }) => `Connect your ${IdNameDesc} account`,
         web3: ({ IdDescription }) => `${IdDescription}`,
       },
     };
@@ -39,11 +41,19 @@ export default {
   border: solid 1px #fff;
   border-radius: 16px;
   background-color: rgba(255, 255, 255, 0.31);
+  cursor: pointer;
 
-  height: 106px;
+  height: auto;
 
   display: flex;
   align-items: center;
+  padding-top: 24px;
+  padding-bottom: 24px;
+
+  &:hover,
+  &.selected {
+    background-color: var(--white);
+  }
   .id-card-row.row {
     .id-card-col.col {
       display: flex;
