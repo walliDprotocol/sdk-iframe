@@ -19,6 +19,11 @@
               width="115"
             />
           </v-col>
+          <v-spacer />
+          <v-col v-if="nearAccount">
+            <p class="bold-text-p">AccountId</p>
+            {{ nearAccount }}
+          </v-col>
         </v-row>
       </v-container>
     </v-app-bar>
@@ -30,12 +35,14 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   name: "App",
 
-  data: () => ({
-    //
-  }),
+  computed: {
+    ...mapState(["nearAccount"]),
+  },
 };
 </script>
 

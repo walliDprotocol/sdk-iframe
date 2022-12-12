@@ -1,5 +1,5 @@
 <template>
-  <v-container class="id-card-container">
+  <v-container class="id-card-container fill-height">
     <v-row class="text-left id-card-row">
       <v-col cols="3" class="id-card-col pr-0">
         <v-img
@@ -10,11 +10,22 @@
         />
       </v-col>
       <v-col cols="9" class="id-card-col pl-0 d-flex flex-column align-start">
-        <p class="bold-text-p text-uppercase mb-2">
+        <p
+          class="bold-text-p text-uppercase"
+          :class="{ 'mb-2': !userData.username }"
+        >
           {{ item.IdNameDesc }}
+          <v-icon v-if="userData.username" :color="'green'" right :size="16">
+            mdi-checkbox-marked-circle
+          </v-icon>
         </p>
-        <p class="normal-text-p">
+        <p v-if="!userData.username" class="normal-text-p">
           {{ idDescription[item.type](item) }}
+        </p>
+
+        <p v-if="userData.username" class="mb-0">@{{ userData.username }}</p>
+        <p v-if="userData.username" class="bold-text-p mb-0">
+          {{ userData.name }}
         </p>
       </v-col>
     </v-row>
@@ -25,6 +36,11 @@
 export default {
   name: "HelloWorld",
   props: ["item"],
+  computed: {
+    userData() {
+      return this.item?.userData || {};
+    },
+  },
   data() {
     return {
       idDescription: {
@@ -42,8 +58,6 @@ export default {
   border-radius: 16px;
   background-color: rgba(255, 255, 255, 0.31);
   cursor: pointer;
-
-  height: auto;
 
   display: flex;
   align-items: center;

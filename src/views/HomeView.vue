@@ -29,10 +29,7 @@
         </h1>
       </v-col>
       <v-col cols="12" class="pt-5">
-        <ConnectAccount
-          :selectedAccount="selectedAccount"
-          :userData="userData"
-        />
+        <ConnectAccount :selectedAccount="selectedAccount" />
       </v-col>
 
       <v-col class="d-flex justify-end">
@@ -58,6 +55,7 @@ import FormButton from "@/components/FormButton.vue";
 import IdCardWrapper from "@/components/IdCardWrapper.vue";
 import ConnectAccount from "@/components/ConnectAccount.vue";
 
+import * as nearAPI from "near-api-js";
 import axios from "axios";
 
 export default {
@@ -68,15 +66,42 @@ export default {
   methods: {
     async connectAccount() {
       console.log("Call connectAccount");
-      await this.$store.dispatch("twitterConnect");
+      await this.wallet.requestSignIn(
+        "example-contract.testnet", // contract requesting access
+        "Verification iframe", // optional title
+        "http://127.0.0.1:8080", // optional redirect URL on success
+        "http://127.0.0.1:8080" // optional redirect URL on failure
+      );
+      // await this.$store.dispatch("twitterConnect");
     },
   },
   async mounted() {
-    await axios
-      .get("userData.json")
-      .then(({ data }) => (this.accountIds = data.accountIds));
+    // this will store a wallet access keys in browser's local  storage
+    const keyStore = new nearAPI.keyStores.BrowserLocalStorageKeyStore();
+    // configuration object
+    const config = {
+      networkId: "testnet",
+      keyStore,
+      nodeUrl: "https://rpc.testnet.near.org",
+      walletUrl: "https://wallet.testnet.near.org",
+      helperUrl: "https://helper.testnet.near.org",
+      explorerUrl: "https://explorer.testnet.near.org",
+    };
+    // connect to NEAR
+    this.near = await nearAPI.connect(config);
+    // create wallet connection
+    this.wallet = new nearAPI.WalletConnection(this.near);
+
+    console.log(this.wallet);
+
+    this.accountIds = (await axios.get("userData.json")).data.accountIds;
 
     let urlParams = new URLSearchParams(window.location.search);
+    console.log(urlParams);
+
+    if (urlParams.has("account_id")) {
+      this.$store.commit("nearAccount", urlParams.get("account_id"));
+    }
 
     let preAuth = JSON.parse(localStorage.getItem("twitter_preAuth"));
     console.log("pre Auth tokens ", preAuth);
@@ -98,8 +123,10 @@ export default {
     }
 
     if (this.userData.username) {
-      this.step = 2;
+      // this.step = 2;
       this.selectedAccount = this.accountIds.find((e) => e.IdName == "twitter");
+      let objIndex = this.accountIds.findIndex((e) => e.IdName == "twitter");
+      this.accountIds[objIndex].userData = this.userData;
     }
   },
   components: {

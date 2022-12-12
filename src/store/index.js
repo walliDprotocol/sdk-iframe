@@ -12,9 +12,13 @@ console.log(TWITTER_LOGIN);
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  state: {},
+  state: { nearAccount: null },
   getters: {},
-  mutations: {},
+  mutations: {
+    nearAccount(state, value) {
+      state.nearAccount = value;
+    },
+  },
   actions: {
     async twitterConnect() {
       // const headers = {

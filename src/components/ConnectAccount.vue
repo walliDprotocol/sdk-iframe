@@ -77,7 +77,12 @@
 <script>
 export default {
   name: "HelloWorld",
-  props: ["selectedAccount", "userData"],
+  props: ["selectedAccount"],
+  computed: {
+    userData() {
+      return this.selectedAccount?.userData || {};
+    },
+  },
   methods: {
     setAll() {
       this.selectedAccount?.options.map((e) => (e.state = true));
