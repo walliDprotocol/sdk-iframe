@@ -1,0 +1,69 @@
+{
+  "accountIds": [
+    {
+      "IdName": "discord",
+      "IdNameDesc": "Discord",
+      "type": "web2"
+    },
+    {
+      "IdName": "facebook",
+      "IdNameDesc": "Facebook",
+      "type": "web2"
+    },
+    {
+      "IdName": "github",
+      "IdNameDesc": "Github",
+      "type": "web2"
+    },
+    {
+      "IdName": "google",
+      "IdNameDesc": "Google",
+      "type": "web2"
+    },
+    {
+      "IdName": "linkedin",
+      "IdNameDesc": "Linkedin",
+      "type": "web2"
+    },
+
+    {
+      "IdName": "reddit",
+      "IdNameDesc": "Reddit",
+      "type": "web2"
+    },
+    {
+      "IdName": "twitter",
+      "IdNameDesc": "Twitter",
+      "type": "web2",
+      "options": [
+        {
+          "field": "Account name",
+          "description": ["(Encrypted)"],
+          "state": false
+        },
+        {
+          "field": "Tweets",
+          "description": ["• More than 10"],
+          "state": false
+        },
+        {
+          "field": "Followers",
+          "description": ["• More than 100", "• More than 1000"],
+          "state": false
+        }
+      ]
+    },
+    {
+      "IdName": "nearTokens",
+      "IdNameDesc": "Near tokens",
+      "IdDescription": "Verify a NEAR ERC20 Token",
+      "type": "web3"
+    },
+    {
+      "IdName": "nearNFT",
+      "IdNameDesc": "Near NFT's",
+      "IdDescription": "Verify a NEAR NFT",
+      "type": "web3"
+    }
+  ]
+}
