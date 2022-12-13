@@ -9,6 +9,9 @@
     "lint": "vue-cli-service lint",
     "postinstall": "vue-cli-service build"
   },
+  "engines": {
+    "node": "16.6.2"
+  },
   "dependencies": {
     "@babel/polyfill": "^7.4.4",
     "axios": "^1.2.1",
