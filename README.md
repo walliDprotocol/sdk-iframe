@@ -2,9 +2,7 @@
 
 ## Live URL for testing
 
-```
-[npm install](https://sdk-iframe.herokuapp.com/)
-```
+https://sdk-iframe.herokuapp.com/
 
 Frontend code to support user interactions over authentications flow
 
