@@ -1,4 +1,3 @@
-var port = process.env.PORT || 8080;
 const path = require("path");
 const express = require("express");
 let log = console;
@@ -26,6 +25,8 @@ app.get("*", (req, res) =>
   res.sendFile(path.resolve(__dirname, "./dist", "index.html"))
 );
 
+var port = process.env.PORT || 3000;
+console.log("PORT SUPLLIED : ", port);
 app.listen(port, () => {
   log.log("**** ->  App listening on port : ", port);
 });
