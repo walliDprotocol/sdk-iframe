@@ -23,7 +23,10 @@ export default {
   props: ["items"],
   watch: {
     selected() {
-      this.$emit("update:selected", this.items[this.selected]);
+      this.$store.commit(
+        "selectedAccountId",
+        this.items[this.selected]?.IdName
+      );
     },
   },
   data() {

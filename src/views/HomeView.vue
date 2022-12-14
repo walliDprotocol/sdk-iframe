@@ -5,17 +5,14 @@
         <h1 class="title-h1">Select the IDs you'd like to verify</h1>
       </v-col>
       <v-col cols="12" class="pt-5">
-        <IdCardWrapper
-          @update:selected="selectedAccount = $event"
-          :items="accountIds"
-        />
+        <IdCardWrapper :items="accountIds" />
       </v-col>
 
       <v-col class="d-flex justify-end">
         <FormButton
           :text="'Next'"
-          :disabled="!selectedAccount.IdNameDesc"
-          @click="step = 2"
+          :disabled="!selectedAccountId"
+          @click="setSelectedAccount(), (step = 2)"
         >
         </FormButton>
       </v-col>
@@ -46,6 +43,7 @@
         >
         </FormButton>
       </v-col>
+      <FormButton :text="'Sign'" @click="verifySignature"> </FormButton>
     </v-row>
   </v-container>
 </template>
@@ -55,97 +53,68 @@ import FormButton from "@/components/FormButton.vue";
 import IdCardWrapper from "@/components/IdCardWrapper.vue";
 import ConnectAccount from "@/components/ConnectAccount.vue";
 
-import * as nearAPI from "near-api-js";
 import axios from "axios";
+
+import Vue from "vue";
 
 import { mapState } from "vuex";
 
 export default {
   name: "HomeView",
   data() {
-    return { accountIds: [], step: 1, selectedAccount: {}, userData: {} };
+    return { accountIds: [], step: 1, userData: {}, selectedAccount: {} };
   },
   computed: {
-    ...mapState(["nearAccount"]),
+    ...mapState(["nearAccount", "selectedAccountId"]),
   },
   methods: {
+    setSelectedAccount() {
+      console.log(this.selectedAccountId);
+      this.selectedAccount = this.accountIds.find(
+        (e) => e.IdName == this.selectedAccountId
+      );
+    },
     async connectAccount() {
       console.log("Call connectAccount");
+      sessionStorage.setItem("selectedAccountId", this.selectedAccount.IdName);
 
       if (this.nearAccount) {
         await this.$store.dispatch("twitterConnect");
       } else {
-        localStorage.setItem("selectedAccount", this.selectedAccount.IdName);
-        await this.wallet.requestSignIn(
-          "example-contract.testnet", // contract requesting access
-          "Verification iframe", // optional title
-          `http://127.0.0.1:8080/`, // optional redirect URL on success
-          "http://127.0.0.1:8080" // optional redirect URL on failure
-        );
+        await this.$store.dispatch("near/connectNear");
       }
+    },
+
+    async verifySignature() {
+      console.log("Call verifySignature");
+
+      await this.$store.dispatch("near/verifySignature");
     },
   },
   async mounted() {
-    // this will store a wallet access keys in browser's local  storage
-    const keyStore = new nearAPI.keyStores.BrowserLocalStorageKeyStore();
-    // configuration object
-    const config = {
-      networkId: "testnet",
-      keyStore,
-      nodeUrl: "https://rpc.testnet.near.org",
-      walletUrl: "https://wallet.testnet.near.org",
-      helperUrl: "https://helper.testnet.near.org",
-      explorerUrl: "https://explorer.testnet.near.org",
-    };
-    // connect to NEAR
-    this.near = await nearAPI.connect(config);
-    // create wallet connection
-    this.wallet = new nearAPI.WalletConnection(this.near);
-
-    console.log(this.wallet);
-
     this.accountIds = (await axios.get("userData.json")).data.accountIds;
 
-    let urlParams = new URLSearchParams(window.location.search);
-    console.log(urlParams);
+    // this will store a wallet access keys in browser's local  storage
+    await this.$store.dispatch("near/initNear");
 
-    if (urlParams.has("account_id")) {
-      localStorage.setItem("nearAccount", urlParams.get("account_id"));
-      if (localStorage.getItem("selectedAccount")) {
-        this.selectedAccount = this.accountIds.find(
-          (e) => e.IdName == localStorage.getItem("selectedAccount")
-        );
-        this.step = 2;
-      }
-    }
+    const { userData } = await this.$store.dispatch("getURLSearchParams");
 
-    this.$store.commit("nearAccount", localStorage.getItem("nearAccount"));
+    console.log("Home", userData);
 
-    let preAuth = JSON.parse(localStorage.getItem("twitter_preAuth"));
-    console.log("pre Auth tokens ", preAuth);
-    let localUserData = JSON.parse(localStorage.getItem("twitter_user"));
-    if (localUserData) {
-      this.userData = localUserData;
-    } else if (urlParams.has("state") && urlParams.has("code") && preAuth) {
-      let state = urlParams.get("state");
-      let code = urlParams.get("code");
-      console.log("oauth_state: ", state);
-      console.log("oauth_code: ", code);
-
-      console.log("twitter_preAuth : ", preAuth);
-      this.userData = await this.$store.dispatch("getTwitterUsername", {
-        state,
-        code,
-        codeVerifier: preAuth.codeVerifier,
-      });
-    }
-
-    if (this.userData.username) {
+    if ("username" in userData) {
+      console.log("Home", this.accountIds);
       // this.step = 2;
-      this.selectedAccount = this.accountIds.find((e) => e.IdName == "twitter");
-      let objIndex = this.accountIds.findIndex((e) => e.IdName == "twitter");
-      this.accountIds[objIndex].userData = this.userData;
-      await this.$forceUpdate();
+
+      let objIndex = this.accountIds.findIndex(
+        (e) => e.IdName == this.selectedAccountId
+      );
+
+      Vue.set(this.accountIds, objIndex, {
+        ...this.accountIds[objIndex],
+        userData,
+      });
+      // this.accountIds[objIndex].userData = userData;
+      // await this.$forceUpdate();
     }
   },
   components: {
