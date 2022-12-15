@@ -1,7 +1,7 @@
 <template>
   <v-container class="id-card-container fill-height">
     <v-row class="text-left id-card-row">
-      <v-col cols="3" class="id-card-col pr-0">
+      <v-col cols="auto" class="id-card-col pr-0 pl-5">
         <v-img
           :src="`./logos/${item.IdName}.webp`"
           contain
@@ -9,10 +9,10 @@
           max-width="40"
         />
       </v-col>
-      <v-col cols="9" class="id-card-col pl-0 d-flex flex-column align-start">
+      <v-col cols="9" class="id-card-col pl-3 d-flex flex-column align-start">
         <p
           class="bold-text-p text-uppercase"
-          :class="{ 'mb-2': !userData.username }"
+          :class="{ 'mb-1': !userData.username }"
         >
           {{ item.IdNameDesc }}
           <v-icon v-if="userData.username" :color="'green'" right :size="16">
@@ -58,7 +58,7 @@ export default {
   border-radius: 16px;
   background-color: rgba(255, 255, 255, 0.31);
   cursor: pointer;
-
+  height: 106px;
   display: flex;
   align-items: center;
   padding-top: 24px;

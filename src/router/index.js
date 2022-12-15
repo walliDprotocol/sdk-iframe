@@ -1,14 +1,27 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import HomeView from "../views/HomeView.vue";
+import ConnectView from "../views/ConnectView.vue";
+import SuccessView from "../views/SuccessView.vue";
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: "/",
+    name: "connect",
+    component: ConnectView,
+  },
+
+  {
+    path: "/home",
     name: "home",
     component: HomeView,
+  },
+  {
+    path: "/success",
+    name: "success",
+    component: SuccessView,
   },
   {
     path: "/about",

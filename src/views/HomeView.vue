@@ -22,7 +22,7 @@
       <v-col cols="12">
         <h1 class="title-h1">
           Connect to your {{ selectedAccount.IdNameDesc }} account and select
-          the levels you want to verify
+          the attributes you want to verify
         </h1>
       </v-col>
       <v-col cols="12" class="pt-5">
@@ -38,12 +38,13 @@
         >
         </FormButton>
         <FormButton
-          :text="nearAccount ? 'VERIFY' : 'CONNECT'"
+          :text="'CONNECT'"
+          :disabled="isDisabled"
           @click="connectAccount"
         >
         </FormButton>
       </v-col>
-      <FormButton :text="'Sign'" @click="verifySignature"> </FormButton>
+      <!-- <FormButton :text="'Sign'" @click="verifySignature"> </FormButton> -->
     </v-row>
   </v-container>
 </template>
@@ -66,20 +67,30 @@ export default {
   },
   computed: {
     ...mapState(["nearAccount", "selectedAccountId"]),
+    isDisabled() {
+      console.log(this.selectedAccount);
+
+      return !this.selectedAccount?.options?.some((value) => value.state);
+    },
   },
   methods: {
     setSelectedAccount() {
       console.log(this.selectedAccountId);
+      // this.$router.push("/success");
+
       this.selectedAccount = this.accountIds.find(
         (e) => e.IdName == this.selectedAccountId
       );
     },
     async connectAccount() {
       console.log("Call connectAccount");
+
       sessionStorage.setItem("selectedAccountId", this.selectedAccount.IdName);
 
       if (this.nearAccount) {
-        await this.$store.dispatch("twitterConnect");
+        await this.$store.dispatch("connectAccount", {
+          accountId: this.selectedAccount.IdName,
+        });
       } else {
         await this.$store.dispatch("near/connectNear");
       }
@@ -113,6 +124,7 @@ export default {
         ...this.accountIds[objIndex],
         userData,
       });
+
       // this.accountIds[objIndex].userData = userData;
       // await this.$forceUpdate();
     }

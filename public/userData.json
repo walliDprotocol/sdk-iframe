@@ -3,7 +3,14 @@
     {
       "IdName": "discord",
       "IdNameDesc": "Discord",
-      "type": "web2"
+      "type": "web2",
+      "options": [
+        {
+          "field": "Account name",
+          "description": ["(Encrypted)"],
+          "state": false
+        }
+      ]
     },
     {
       "IdName": "facebook",

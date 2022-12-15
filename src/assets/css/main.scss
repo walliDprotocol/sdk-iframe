@@ -14,6 +14,8 @@
 
   .title-h1 {
     font-size: 17px;
+    font-family: "Montserrat";
+
     font-weight: bold;
     font-stretch: normal;
     font-style: normal;
@@ -64,6 +66,27 @@
       .v-input--switch__thumb {
         color: var(--turquoise-blue) !important;
       }
+    }
+  }
+
+  .connect-account .row {
+    border: solid 1px var(--border-color);
+    border-bottom: none;
+
+    background-color: rgba(255, 255, 255, 0.3);
+    //   .row {
+    //     border: solid 1px red;
+    //   }
+
+    &:first-child {
+      border-top-left-radius: 16px;
+      border-top-right-radius: 16px;
+    }
+
+    &:last-child {
+      border-end-start-radius: 16px;
+      border-end-end-radius: 16px;
+      border-bottom: solid 1px var(--border-color);
     }
   }
 }

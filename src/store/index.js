@@ -27,6 +27,8 @@ const mutations = {
 const actions = {
   async getURLSearchParams({ commit, dispatch }) {
     let urlParams = new URLSearchParams(window.location.search);
+    let userData = {},
+      nearAccountId;
 
     console.log(urlParams);
     // get near account id
@@ -34,8 +36,8 @@ const actions = {
       localStorage.setItem("nearAccount", urlParams.get("account_id"));
     }
 
-    commit("nearAccount", localStorage.getItem("nearAccount"));
-
+    nearAccountId = localStorage.getItem("nearAccount");
+    commit("nearAccount", nearAccountId);
     // get current selectedAccount
 
     const selectedAccountId = sessionStorage.getItem("selectedAccountId");
@@ -43,7 +45,6 @@ const actions = {
     commit("selectedAccountId", selectedAccountId);
 
     console.log(selectedAccountId);
-    let userData = {};
     switch (selectedAccountId) {
       case "twitter":
         userData = await dispatch("oauth/getTwitterUserData");
@@ -53,7 +54,22 @@ const actions = {
         break;
     }
 
-    return { userData };
+    return { userData, nearAccountId };
+  },
+
+  async connectAccount({ dispatch }, { accountId }) {
+    console.log("connectAccount", accountId);
+    switch (accountId) {
+      case "twitter":
+        await dispatch("twitterConnect");
+        break;
+      case "discord":
+        await dispatch("oauth/discordConnect");
+        break;
+
+      default:
+        throw "Not Implemented";
+    }
   },
 
   async twitterConnect() {

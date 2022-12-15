@@ -9,7 +9,7 @@
     >
       <v-container>
         <v-row>
-          <v-col>
+          <v-col class="d-flex justify-start">
             <v-img
               alt="Vuetify Logo"
               class="shrink mr-2"
@@ -29,7 +29,7 @@
     </v-app-bar>
 
     <v-main>
-      <router-view class="px-7" />
+      <router-view class="router-view px-7" />
     </v-main>
   </v-app>
 </template>
@@ -43,12 +43,15 @@ export default {
   computed: {
     ...mapState(["nearAccount"]),
   },
+  async mounted() {
+    await this.$store.dispatch("near/initNear");
+  },
 };
 </script>
 
 <style lang="scss">
 #app {
-  background: url("./assets/background/gradient@3x.webp");
+  background: url("./assets/background/background-gradient.jpg");
   background-size: cover;
 }
 .iframe-app-bar .v-toolbar__content {

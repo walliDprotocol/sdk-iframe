@@ -27,8 +27,15 @@
         <v-spacer />
 
         <v-col cols="2" class="d-flex flex-column align-center justify-center">
-          <p class="bold-text-p text-uppercase mb-0" @click="setAll">
-            Select all
+          <p
+            class="bold-text-p text-uppercase mb-0"
+            :style="{
+              cursor: 'pointer',
+              color: allSelected ? '#01022E' : '#00AFC5',
+            }"
+            @click="setAll"
+          >
+            {{ allSelected ? "Selected!" : "Select all" }}
           </p>
         </v-col>
       </v-col>
@@ -79,13 +86,20 @@ export default {
   name: "HelloWorld",
   props: ["selectedAccount"],
   computed: {
+    allSelected() {
+      return this.selectedAccount?.options.every((e) => e.state);
+    },
     userData() {
       return this.selectedAccount?.userData || {};
     },
   },
   methods: {
     setAll() {
-      this.selectedAccount?.options.map((e) => (e.state = true));
+      if (this.allSelected) {
+        this.selectedAccount?.options.map((e) => (e.state = false));
+      } else {
+        this.selectedAccount?.options.map((e) => (e.state = true));
+      }
     },
   },
   data() {
@@ -95,25 +109,4 @@ export default {
   },
 };
 </script>
-<style scoped lang="scss">
-.connect-account .row {
-  border: solid 1px var(--border-color);
-  border-bottom: none;
-
-  background-color: rgba(255, 255, 255, 0.3);
-  //   .row {
-  //     border: solid 1px red;
-  //   }
-
-  &:first-child {
-    border-top-left-radius: 16px;
-    border-top-right-radius: 16px;
-  }
-
-  &:last-child {
-    border-end-start-radius: 16px;
-    border-end-end-radius: 16px;
-    border-bottom: solid 1px var(--border-color);
-  }
-}
-</style>
+<style lang="scss"></style>
