@@ -5,12 +5,18 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "static": "node server.js",
+    "lint": "vue-cli-service lint",
+    "postinstall": "vue-cli-service build"
+  },
+  "engines": {
+    "node": "16.6.2"
   },
   "dependencies": {
     "@babel/polyfill": "^7.4.4",
     "axios": "^1.2.1",
     "core-js": "^3.8.3",
+    "express": "^4.18.2",
     "near-api-js": "^1.1.0",
     "vue": "^2.6.14",
     "vue-router": "^3.5.1",
