@@ -12,6 +12,7 @@ export default {
     try {
       let { data } = await axios.post(FACEBOOK_INFO, {
         code,
+        redirectUrl: redirectUrl,
       });
       console.log("response facebook login: ", data);
 

@@ -6,12 +6,13 @@ const LINKEDIN_INFO =
   process.env.VUE_APP_BACKEND_URL + "/api/v1/linkedin/authcode";
 
 export default {
-  async getLinkedinData(_, { code }) {
+  async getLinkedinData(_, { code, redirectUrl }) {
     console.log("*** get linkedin data");
     let userData = {};
     try {
       let { data } = await axios.post(LINKEDIN_INFO, {
         code,
+        redirectUrl: redirectUrl,
       });
       console.log("response linkedin login: ", data);
 
