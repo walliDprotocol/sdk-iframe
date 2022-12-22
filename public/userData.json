@@ -15,28 +15,85 @@
     {
       "IdName": "facebook",
       "IdNameDesc": "Facebook",
-      "type": "web2"
+      "type": "web2",
+      "options": [
+        {
+          "field": "Account name",
+          "description": ["(Encrypted)"],
+          "state": true
+        }, 
+        {
+          "field": "Friends",
+          "description": ["Greater then 100"],
+          "state": true
+        },  {
+          "field": "Profile",
+          "description": ["Profile Picture attached"],
+          "state": true
+        }]
     },
     {
       "IdName": "github",
       "IdNameDesc": "Github",
-      "type": "web2"
+      "type": "web2",
+      "options": [
+        {
+          "field": "Account name",
+          "description": ["(Encrypted)"],
+          "state": true
+        }, 
+        {
+          "field": "Repositories",
+          "description": ["Five or more Githubs repos", "At least 1 Github repo forked by another user", "At least 1 Github repo starred by another user"],
+          "state": true
+        },  {
+          "field": "Followers",
+          "description": ["Ten more Github followers", "Fifty or more Github followers"],
+          "state": true
+        }]
     },
     {
       "IdName": "google",
       "IdNameDesc": "Google",
-      "type": "web2"
+      "type": "web2",
+      "options": [
+        {
+          "field": "Email account",
+          "description": ["Google"],
+          "state": true
+        }]
     },
     {
       "IdName": "linkedin",
       "IdNameDesc": "Linkedin",
-      "type": "web2"
+      "type": "web2",
+      "options": [
+        {
+          "field": "Account name",
+          "description": ["(Encrypted)"],
+          "state": true
+        }]
     },
 
     {
       "IdName": "reddit",
       "IdNameDesc": "Reddit",
-      "type": "web2"
+      "type": "web2",
+      "options": [
+        {
+          "field": "Account name",
+          "description": ["(Encrypted)"],
+          "state": true
+        }, 
+        {
+          "field": "Karma",
+          "description": ["At least 10 Post Karma", "At least 2 comment Karma", "At least 2 Awardee Karma" ],
+          "state": true
+        },  {
+          "field": "Followers",
+          "description": ["Ten or more Reddit followers", "Fifty or more Reddit followers"],
+          "state": true
+        }]
     },
     {
       "IdName": "twitter",
@@ -64,13 +121,27 @@
       "IdName": "nearTokens",
       "IdNameDesc": "Near tokens",
       "IdDescription": "Verify a NEAR ERC20 Token",
-      "type": "web3"
+      "type": "web3",
+      "options": [
+        {
+          "field": "Near possessions",
+          "description": ["At least 10 NEAR tokens", "At least 100 NEAR tokens"],
+          "state": false
+        }
+      ]
     },
     {
       "IdName": "nearNFT",
       "IdNameDesc": "Near NFT's",
       "IdDescription": "Verify a NEAR NFT",
-      "type": "web3"
+      "type": "web3",
+      "options": [
+        {
+          "field": "NEAR NFT Holder",
+          "description": ["Holds at least 1 NFT"],
+          "state": false
+        }
+      ]
     }
   ]
 }

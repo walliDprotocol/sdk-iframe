@@ -25,7 +25,7 @@ export default {
     return userData;
   },
   async discordConnect() {
-    console.log("***** Get discord auth url *****  ");
+    console.log("***** Get discord auth url ***** from store  ");
 
     try {
       let { data } = await axios.get(DISCORD_AUTH, {

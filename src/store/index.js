@@ -41,6 +41,7 @@ const actions = {
     // get current selectedAccount
 
     const selectedAccountId = sessionStorage.getItem("selectedAccountId");
+    console.log("select account id ", selectedAccountId);
 
     commit("selectedAccountId", selectedAccountId);
 
@@ -48,6 +49,18 @@ const actions = {
     switch (selectedAccountId) {
       case "twitter":
         userData = await dispatch("oauth/getTwitterUserData");
+        break;
+      case "reddit":
+        userData = await dispatch("oauth/getRedditData");
+        break;
+      case "github":
+        userData = await dispatch("oauth/getGithubData");
+        break;
+      case "facebook":
+        userData = await dispatch("oauth/getFacebookData");
+        break;
+      case "google":
+        userData = await dispatch("oauth/getGoogleData");
         break;
 
       default:
@@ -65,6 +78,21 @@ const actions = {
         break;
       case "discord":
         await dispatch("oauth/discordConnect");
+        break;
+      case "reddit":
+        await dispatch("oauth/redditConnect");
+        break;
+      case "linkedin":
+        await dispatch("oauth/linkedinConnect");
+        break;
+      case "google":
+        await dispatch("oauth/googleConnect");
+        break;
+      case "github":
+        await dispatch("oauth/githubConnect");
+        break;
+      case "facebook":
+        await dispatch("oauth/facebookConnect");
         break;
 
       default:
