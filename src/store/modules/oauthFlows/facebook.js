@@ -6,7 +6,7 @@ const FACEBOOK_INFO =
   process.env.VUE_APP_BACKEND_URL + "/api/v1/facebook/authcode";
 
 export default {
-  async getFacebookData(_, { code }) {
+  async getFacebookData(_, { code, redirectUrl }) {
     console.log("*** get facebook data");
     let userData = {};
     try {

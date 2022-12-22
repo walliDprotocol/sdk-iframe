@@ -46,12 +46,6 @@ export default {
       step: 1,
       userData: {},
       selectedAccount: {},
-      nearAccountItem: {
-        IdName: "nearTokens",
-        IdNameDesc: "Near Wallet",
-        IdDescription: "Connect to your NEAR wallet",
-        type: "web3",
-      },
     };
   },
   computed: {

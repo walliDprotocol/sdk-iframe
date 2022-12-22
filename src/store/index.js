@@ -28,7 +28,7 @@ const actions = {
   async getURLSearchParams({ commit, dispatch }) {
     let urlParams = new URLSearchParams(window.location.search);
     let userData = {},
-      nearAccountId;
+      nearAccountId = "";
 
     console.log(urlParams);
     // get near account id
@@ -46,27 +46,30 @@ const actions = {
     commit("selectedAccountId", selectedAccountId);
 
     console.log(selectedAccountId);
-    switch (selectedAccountId) {
-      case "twitter":
-        userData = await dispatch("oauth/getTwitterUserData");
-        break;
-      case "reddit":
-        userData = await dispatch("oauth/getRedditData");
-        break;
-      case "github":
-        userData = await dispatch("oauth/getGithubData");
-        break;
-      case "facebook":
-        userData = await dispatch("oauth/getFacebookData");
-        break;
-      case "google":
-        userData = await dispatch("oauth/getGoogleData");
-        break;
+    try {
+      switch (selectedAccountId) {
+        case "twitter":
+          userData = await dispatch("oauth/getTwitterUserData");
+          break;
+        case "reddit":
+          userData = await dispatch("oauth/getRedditData");
+          break;
+        case "github":
+          userData = await dispatch("oauth/getGithubData");
+          break;
+        case "facebook":
+          userData = await dispatch("oauth/getFacebookData");
+          break;
+        case "google":
+          userData = await dispatch("oauth/getGoogleData");
+          break;
 
-      default:
-        break;
+        default:
+          break;
+      }
+    } catch (error) {
+      console.log("Error getting data :", error);
     }
-
     return { userData, nearAccountId };
   },
 
