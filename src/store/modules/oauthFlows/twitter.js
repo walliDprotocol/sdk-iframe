@@ -4,19 +4,19 @@ const TWITTER_INFO =
   process.env.VUE_APP_BACKEND_URL + "/api/v1/redirect/twitter";
 
 export default {
-  async getTwitterUserData({ dispatch }) {
+  async getTwitterUserData({ dispatch }, { code, state }) {
     console.log("*** getTwitterUserData");
     let urlParams = new URLSearchParams(window.location.search);
     let userData = {};
 
     // get twitter oauth params
     const preAuth = JSON.parse(localStorage.getItem("twitter_preAuth"));
-    // console.log("pre Auth tokens ", preAuth);
+    console.log("pre Auth tokens ", preAuth, code, state);
 
     const localUserData = JSON.parse(localStorage.getItem("twitter_user"));
-    if (localUserData) {
+    if ("username" in localUserData) {
       userData = localUserData;
-    } else if (urlParams.has("state") && urlParams.has("code") && preAuth) {
+    } else if (state && code && preAuth) {
       let state = urlParams.get("state");
       let code = urlParams.get("code");
       console.log("oauth_state: ", state);

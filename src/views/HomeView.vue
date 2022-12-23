@@ -56,7 +56,7 @@ import ConnectAccount from "@/components/ConnectAccount.vue";
 
 import axios from "axios";
 
-import Vue from "vue";
+// import Vue from "vue";
 
 import { mapState } from "vuex";
 
@@ -85,8 +85,6 @@ export default {
     async connectAccount() {
       console.log("Call connectAccount");
 
-      sessionStorage.setItem("selectedAccountId", this.selectedAccount.IdName);
-
       if (this.nearAccount) {
         await this.$store.dispatch("connectAccount", {
           accountId: this.selectedAccount.IdName,
@@ -105,29 +103,21 @@ export default {
   async mounted() {
     this.accountIds = (await axios.get("userData.json")).data.accountIds;
 
-    // this will store a wallet access keys in browser's local  storage
     await this.$store.dispatch("near/initNear");
 
-    const { userData } = await this.$store.dispatch("getURLSearchParams");
+    // this.step = 2;
 
-    console.log("Home", userData);
+    // let objIndex = this.accountIds.findIndex(
+    //   (e) => e.IdName == this.selectedAccountId
+    // );
 
-    if ("username" in userData) {
-      console.log("Home", this.accountIds);
-      // this.step = 2;
+    // Vue.set(this.accountIds, objIndex, {
+    //   ...this.accountIds[objIndex],
+    //   userData,
+    // });
 
-      let objIndex = this.accountIds.findIndex(
-        (e) => e.IdName == this.selectedAccountId
-      );
-
-      Vue.set(this.accountIds, objIndex, {
-        ...this.accountIds[objIndex],
-        userData,
-      });
-
-      // this.accountIds[objIndex].userData = userData;
-      // await this.$forceUpdate();
-    }
+    // this.accountIds[objIndex].userData = userData;
+    // await this.$forceUpdate();
   },
   components: {
     IdCardWrapper,

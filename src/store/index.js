@@ -20,6 +20,7 @@ const mutations = {
     state.nearAccount = value;
   },
   selectedAccountId(state, value) {
+    sessionStorage.setItem("selectedAccountId", value);
     state.selectedAccountId = value;
   },
 };
@@ -47,15 +48,25 @@ const actions = {
 
     console.log(selectedAccountId);
     try {
+      let state = urlParams.get("state");
+      let code = urlParams.get("code");
       switch (selectedAccountId) {
         case "twitter":
-          userData = await dispatch("oauth/getTwitterUserData");
+          userData = await dispatch("oauth/getTwitterUserData", {
+            state,
+            code,
+          });
           break;
         case "reddit":
-          userData = await dispatch("oauth/getRedditData");
+          userData = await dispatch("oauth/getRedditData", {
+            code: urlParams.get("code"),
+            redirectUrl: window.location.origin,
+          });
           break;
         case "github":
-          userData = await dispatch("oauth/getGithubData");
+          userData = await dispatch("oauth/getGithubData", {
+            code: urlParams.get("code"),
+          });
           break;
         case "facebook":
           userData = await dispatch("oauth/getFacebookData");

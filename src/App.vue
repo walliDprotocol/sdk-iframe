@@ -44,7 +44,28 @@ export default {
     ...mapState(["nearAccount"]),
   },
   async mounted() {
+    // this will store a wallet access keys in browser's local  storage
     await this.$store.dispatch("near/initNear");
+
+    const { userData, nearAccountId } = await this.$store.dispatch(
+      "getURLSearchParams"
+    );
+
+    console.log("Home", userData);
+
+    if ("username" in userData) {
+      console.log("Home", this.accountIds);
+
+      // Push success screen
+      this.$router.push("/success");
+      return;
+    }
+
+    console.log("Connect", userData, nearAccountId);
+
+    if (nearAccountId) {
+      this.$router.push("/home");
+    }
   },
 };
 </script>
