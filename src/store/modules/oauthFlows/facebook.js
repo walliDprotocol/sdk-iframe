@@ -6,9 +6,14 @@ const FACEBOOK_INFO =
   process.env.VUE_APP_BACKEND_URL + "/api/v1/facebook/authcode";
 
 export default {
-  async getFacebookData(_, { code }) {
-    let redirectUrl = window.location.origin;
+  async getFacebookData(_, { code, redirectUrl }) {
     console.log("*** get facebook data : ", code);
+    console.log("*** get facebook reddirect_url : ", redirectUrl);
+
+    // hard fix facebook / on the end of string
+    if (redirectUrl && redirectUrl[redirectUrl.length] != "/") {
+      redirectUrl += "/";
+    }
 
     let userData = {};
     try {
@@ -16,6 +21,7 @@ export default {
         code,
         redirectUrl: redirectUrl,
       });
+
       console.log("response facebook login: ", data);
 
       userData = data;

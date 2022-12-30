@@ -41,12 +41,12 @@ const actions = {
     commit("nearAccount", nearAccountId);
 
     const selectedAccountId = sessionStorage.getItem("selectedAccountId");
-    console.log("select account id ", selectedAccountId);
     commit("selectedAccountId", selectedAccountId);
 
-    console.log("Get url ", urlParams.get("code"));
+    console.log("Get url c0de ", urlParams.get("code"));
 
-    console.log(selectedAccountId);
+    console.log("provider ", selectedAccountId);
+
     try {
       let state = urlParams.get("state");
       let code = urlParams.get("code");
@@ -72,6 +72,7 @@ const actions = {
         case "facebook":
           userData = await dispatch("oauth/getFacebookData", {
             code: decodeURIComponent(urlParams.get("code")),
+            redirectUrl: window.location.origin,
           });
           break;
         case "google":
