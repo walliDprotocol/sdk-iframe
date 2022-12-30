@@ -6,7 +6,7 @@ const GITHUB_INFO = process.env.VUE_APP_BACKEND_URL + "/api/v1/github/authcode";
 
 export default {
   async getGithubData(_, { code }) {
-    console.log("*** get github data");
+    console.log("*** get github data code : ", code);
     let userData = {};
     try {
       let { data } = await axios.post(GITHUB_INFO, {

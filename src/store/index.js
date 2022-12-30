@@ -30,7 +30,7 @@ const actions = {
     let userData = {},
       nearAccountId = "";
 
-    console.log(urlParams);
+    console.log("url paramters : ", urlParams);
     // get near account id
     if (urlParams.has("account_id")) {
       localStorage.setItem("nearAccount", urlParams.get("account_id"));
@@ -38,33 +38,49 @@ const actions = {
 
     nearAccountId = localStorage.getItem("nearAccount");
     commit("nearAccount", nearAccountId);
-    // get current selectedAccount
 
     const selectedAccountId = sessionStorage.getItem("selectedAccountId");
     console.log("select account id ", selectedAccountId);
-
     commit("selectedAccountId", selectedAccountId);
+
+    console.log("Get url ", urlParams.get("code"));
 
     console.log(selectedAccountId);
     try {
       switch (selectedAccountId) {
         case "twitter":
-          userData = await dispatch("oauth/getTwitterUserData");
+          userData = await dispatch("oauth/getTwitterUserData", {
+            code: decodeURIComponent(urlParams.get("code")),
+          });
           break;
         case "reddit":
-          userData = await dispatch("oauth/getRedditData");
+          userData = await dispatch("oauth/getRedditData", {
+            code: decodeURIComponent(urlParams.get("code")),
+          });
           break;
         case "github":
-          userData = await dispatch("oauth/getGithubData");
+          userData = await dispatch("oauth/getGithubData", {
+            code: decodeURIComponent(urlParams.get("code")),
+          });
           break;
         case "facebook":
-          userData = await dispatch("oauth/getFacebookData");
+          userData = await dispatch("oauth/getFacebookData", {
+            code: decodeURIComponent(urlParams.get("code")),
+          });
           break;
         case "google":
-          userData = await dispatch("oauth/getGoogleData");
+          userData = await dispatch("oauth/getGoogleData", {
+            code: decodeURIComponent(urlParams.get("code")),
+          });
+          break;
+        case "linkedin":
+          userData = await dispatch("oauth/getLinkedinData", {
+            code: decodeURIComponent(urlParams.get("code")),
+          });
           break;
 
         default:
+          console.log("getURLSearchParams switch : ", selectedAccountId);
           break;
       }
     } catch (error) {
@@ -74,7 +90,7 @@ const actions = {
   },
 
   async connectAccount({ dispatch }, { accountId }) {
-    console.log("connectAccount", accountId);
+    console.log("connectAccount provider", accountId);
     switch (accountId) {
       case "twitter":
         await dispatch("twitterConnect");
@@ -99,6 +115,7 @@ const actions = {
         break;
 
       default:
+        console.log("connect account switch : ", accountId);
         throw "Not Implemented";
     }
   },

@@ -6,13 +6,23 @@ const LINKEDIN_INFO =
   process.env.VUE_APP_BACKEND_URL + "/api/v1/linkedin/authcode";
 
 export default {
-  async getLinkedinData(_, { code, redirectUrl }) {
+  async getLinkedinData(_, { code }) {
+    let redirectUrl = window.location.origin;
     console.log("*** get linkedin data");
+    console.log("*** code ", code);
+    console.log("*** redirect url  ", redirectUrl);
+    let savedData = localStorage.getItem("linkedin_user");
+
+    if (savedData && savedData != {}) {
+      console.log("there is already data for that provider ");
+      return savedData;
+    }
+
     let userData = {};
     try {
       let { data } = await axios.post(LINKEDIN_INFO, {
         code,
-        redirectUrl: redirectUrl,
+        redirectUrl: window.location.origin,
       });
       console.log("response linkedin login: ", data);
 
@@ -26,7 +36,7 @@ export default {
     return userData;
   },
   async linkedinConnect() {
-    console.log("***** Get linkedin auth url *****  ");
+    console.log("***** Get linkedin auth url *****  ", window.location.origin);
 
     try {
       let { data } = await axios.get(LINKEDIN_AUTH, {

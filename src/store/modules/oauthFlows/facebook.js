@@ -6,8 +6,10 @@ const FACEBOOK_INFO =
   process.env.VUE_APP_BACKEND_URL + "/api/v1/facebook/authcode";
 
 export default {
-  async getFacebookData(_, { code, redirectUrl }) {
-    console.log("*** get facebook data");
+  async getFacebookData(_, { code }) {
+    let redirectUrl = window.location.origin;
+    console.log("*** get facebook data : ", code);
+
     let userData = {};
     try {
       let { data } = await axios.post(FACEBOOK_INFO, {
@@ -26,7 +28,7 @@ export default {
     return userData;
   },
   async facebookConnect() {
-    console.log("***** Get facebook auth url *****  ");
+    console.log("***** facebookConnect auth url *****  ");
 
     try {
       let { data } = await axios.get(FACEBOOK_AUTH, {
