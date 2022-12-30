@@ -6,12 +6,12 @@ const REDDIT_INFO = process.env.VUE_APP_BACKEND_URL + "/api/v1/reddit/authcode";
 
 export default {
   async getRedditData(_, { code, redirectUrl }) {
-    console.log("*** get reddit data");
+    console.log("*** get reddit data", code);
     let userData = {};
     try {
       let { data } = await axios.post(REDDIT_INFO, {
         code,
-        redirectUrl: redirectUrl,
+        redirectUrl,
       });
       console.log("response reddit login: ", data);
 

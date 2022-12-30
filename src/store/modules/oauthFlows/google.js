@@ -5,15 +5,18 @@ const GOOGLE_AUTH =
 const GOOGLE_INFO = process.env.VUE_APP_BACKEND_URL + "/api/v1/google/authcode";
 
 export default {
-  async getGoogleData() {
-    console.log("*** get google data");
+  async getGoogleData(_, { code, redirectUrl }) {
+    console.log("*** get google data ", code);
+    console.log("*** get google redirect_url ", redirectUrl);
+
     let userData = {};
 
-    const preAuthToken = JSON.parse(localStorage.getItem("preAuthToken"));
+    //const preAuthToken = JSON.parse(localStorage.getItem("preAuthToken"));
 
     try {
       let { data } = await axios.post(GOOGLE_INFO, {
-        code: preAuthToken,
+        code: code,
+        redirectUrl: redirectUrl,
       });
       console.log("response google login: ", data);
 

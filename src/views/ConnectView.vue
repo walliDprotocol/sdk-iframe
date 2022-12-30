@@ -64,16 +64,6 @@ export default {
   },
   async mounted() {
     // this will store a wallet access keys in browser's local  storage
-
-    const { userData, nearAccountId } = await this.$store.dispatch(
-      "getURLSearchParams"
-    );
-
-    console.log("Connect", userData, nearAccountId);
-
-    if (nearAccountId) {
-      this.$router.push("/home");
-    }
   },
   components: {
     FormButton,
