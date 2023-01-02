@@ -1,6 +1,16 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
+import PubNub from "pubnub";
+
+var pubnub = new PubNub({
+  userId: "verification-sdk-iframe",
+  subscribeKey: "sub-c-b36746ec-a4bf-11ec-8a23-de1bbb7835db",
+  publishKey: "pub-c-db6abb24-ed6e-41a2-b2f2-2322e2dcf786",
+  logVerbosity: true,
+  ssl: true,
+  presenceTimeout: 130,
+});
 
 import * as modules from "./modules";
 
@@ -26,6 +36,29 @@ const mutations = {
 };
 
 const actions = {
+  async publishData() {
+    console.log("publishData Action");
+
+    let message = {
+      content: {
+        type: "text",
+        message: "This is a message!",
+      },
+      sender: "Thomas Anderson",
+    };
+
+    pubnub.publish(
+      {
+        channel: "verification-iframe",
+        message,
+      },
+      function (status, response) {
+        console.log(status);
+        console.log(response);
+      }
+    );
+  },
+
   async getURLSearchParams({ commit, dispatch }) {
     let urlParams = new URLSearchParams(window.location.search);
     let userData = {},
@@ -87,7 +120,12 @@ const actions = {
             redirectUrl: window.location.origin,
           });
           break;
-
+        case "discord":
+          userData = await dispatch("oauth/getDiscordData", {
+            code: decodeURIComponent(urlParams.get("code")),
+            redirectUrl: window.location.origin,
+          });
+          break;
         default:
           console.log("getURLSearchParams switch : ", selectedAccountId);
           break;
@@ -100,33 +138,46 @@ const actions = {
 
   async connectAccount({ dispatch }, { accountId }) {
     console.log("connectAccount provider", accountId);
+    let redirectUrl;
     switch (accountId) {
       case "twitter":
-        await dispatch("twitterConnect");
+        redirectUrl = await dispatch("twitterConnect");
         break;
       case "discord":
-        await dispatch("oauth/discordConnect");
+        redirectUrl = await dispatch("oauth/discordConnect");
         break;
       case "reddit":
-        await dispatch("oauth/redditConnect");
+        redirectUrl = await dispatch("oauth/redditConnect");
         break;
       case "linkedin":
-        await dispatch("oauth/linkedinConnect");
+        redirectUrl = await dispatch("oauth/linkedinConnect");
         break;
       case "google":
-        await dispatch("oauth/googleConnect");
+        redirectUrl = await dispatch("oauth/googleConnect");
         break;
       case "github":
-        await dispatch("oauth/githubConnect");
+        redirectUrl = await dispatch("oauth/githubConnect");
         break;
       case "facebook":
-        await dispatch("oauth/facebookConnect");
+        redirectUrl = await dispatch("oauth/facebookConnect");
         break;
 
       default:
         console.log("connect account switch : ", accountId);
         throw "Not Implemented";
     }
+
+    // const CLIENT_URL = window.location.origin;
+    const popup = window.open(redirectUrl, "popup", "popup=true");
+    const checkPopup = setInterval(() => {
+      if (popup.window.location.href.includes("success")) {
+        popup.close();
+      }
+      if (!popup || !popup.closed) return;
+      clearInterval(checkPopup);
+      console.log("popup close check fo data");
+    }, 1000);
+    // window.location.replace(redirectUrl);
   },
 
   async twitterConnect() {

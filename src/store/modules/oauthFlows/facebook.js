@@ -24,7 +24,7 @@ export default {
 
       console.log("response facebook login: ", data);
 
-      userData = data;
+      userData = data?.userInfo;
       localStorage.setItem("facebook_user", JSON.stringify(userData));
     } catch (error) {
       console.log("error facebook login: ", error);
@@ -49,7 +49,7 @@ export default {
       if (!data.redirectURL) {
         throw "redirectURL not in response";
       }
-      window.location.replace(data?.redirectURL);
+      return data?.redirectURL;
     } catch (error) {
       console.log("error facebook auth: ", error);
       throw error;

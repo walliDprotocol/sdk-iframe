@@ -30,6 +30,13 @@
 
     <v-row>
       <v-col cols="12" class="d-flex justify-end pb-4">
+        <FormButton
+          class="mr-5"
+          :text="'Done'"
+          :type="'back'"
+          @click="publishData"
+        >
+        </FormButton>
         <FormButton :text="'VERIFY ANOTHER ID'" @click="$router.push('/home')">
         </FormButton>
       </v-col>
@@ -65,6 +72,9 @@ export default {
       console.log("Call connectAccount");
 
       await this.$store.dispatch("near/connectNear");
+    },
+    async publishData() {
+      await this.$store.dispatch("publishData");
     },
   },
   async mounted() {

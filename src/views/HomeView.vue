@@ -10,6 +10,13 @@
 
       <v-col class="d-flex justify-end">
         <FormButton
+          class="mr-5"
+          :text="'publishData'"
+          :type="'back'"
+          @click="publishData"
+        >
+        </FormButton>
+        <FormButton
           :text="'Next'"
           :disabled="!selectedAccountId"
           @click="setSelectedAccount(), (step = 2)"
@@ -98,6 +105,10 @@ export default {
       console.log("Call verifySignature");
 
       await this.$store.dispatch("near/verifySignature");
+    },
+
+    async publishData() {
+      await this.$store.dispatch("publishData");
     },
   },
   async mounted() {

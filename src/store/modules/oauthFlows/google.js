@@ -42,7 +42,7 @@ export default {
       if (!data.redirectURL) {
         throw "redirectURL not in response";
       }
-      window.location.replace(data?.redirectURL);
+      return data?.redirectURL;
     } catch (error) {
       console.log("error google auth: ", error);
       throw error;

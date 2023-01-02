@@ -54,12 +54,13 @@ export default {
     console.log("Home", userData, this.selectedAccountId);
 
     const userDataQuery = {
+      discord: "id",
+      facebook: "id",
       reddit: "name",
       github: "login",
       twitter: "username",
       linkedin: "localizedFirstName",
       google: "id",
-      discord: "id",
     };
 
     console.log("###test query### ", userDataQuery[this.selectedAccountId]);

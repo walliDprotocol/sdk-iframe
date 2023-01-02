@@ -6,12 +6,13 @@ const DISCORD_INFO =
   process.env.VUE_APP_BACKEND_URL + "/api/v1/discord/authcode";
 
 export default {
-  async getDiscordData(_, { code }) {
+  async getDiscordData(_, { code, redirectUrl }) {
     console.log("*** getDiscordData");
     let userData = {};
     try {
       let { data } = await axios.post(DISCORD_INFO, {
         code,
+        redirectUrl,
       });
       console.log("response getDiscordData login: ", data);
 
@@ -37,7 +38,7 @@ export default {
       if (!data.redirectURL) {
         throw "redirectURL not in response";
       }
-      window.location.replace(data?.redirectURL);
+      return data?.redirectURL;
     } catch (error) {
       console.log("error discord auth: ", error);
       throw error;
