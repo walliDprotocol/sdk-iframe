@@ -15,7 +15,7 @@ export default {
       });
       console.log("response getDiscordData login: ", data);
 
-      userData = data;
+      userData = data?.userInfo;
       localStorage.setItem("discord_user", JSON.stringify(userData));
     } catch (error) {
       console.log("error twitter login: ", error);

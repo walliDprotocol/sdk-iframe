@@ -14,7 +14,7 @@ export default {
       });
       console.log("response github login: ", data);
 
-      userData = data;
+      userData = data?.userInfo;
       localStorage.setItem("github_user", JSON.stringify(userData));
     } catch (error) {
       console.log("error github login: ", error);

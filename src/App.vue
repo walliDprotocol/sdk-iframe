@@ -41,7 +41,7 @@ export default {
   name: "App",
 
   computed: {
-    ...mapState(["nearAccount"]),
+    ...mapState(["nearAccount", "selectedAccountId"]),
   },
   async mounted() {
     // this will store a wallet access keys in browser's local  storage
@@ -51,10 +51,21 @@ export default {
       "getURLSearchParams"
     );
 
-    console.log("Home", userData);
+    console.log("Home", userData, this.selectedAccountId);
 
-    if ("username" in userData) {
-      console.log("Home", this.accountIds);
+    const userDataQuery = {
+      reddit: "name",
+      github: "login",
+      twitter: "username",
+      linkedin: "localizedFirstName",
+      google: "id",
+      discord: "id",
+    };
+
+    console.log("###test query### ", userDataQuery[this.selectedAccountId]);
+
+    if (userDataQuery[this.selectedAccountId] in userData) {
+      console.log("Push route success", userData);
 
       // Push success screen
       this.$router.push("/success");

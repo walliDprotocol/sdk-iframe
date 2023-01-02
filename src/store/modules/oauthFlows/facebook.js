@@ -35,11 +35,14 @@ export default {
   },
   async facebookConnect() {
     console.log("***** facebookConnect auth url *****  ");
-
+    let redirectUrl = window.location.origin;
     try {
+      if (redirectUrl && redirectUrl[redirectUrl.length - 1] != "/") {
+        redirectUrl += "/";
+      }
       let { data } = await axios.get(FACEBOOK_AUTH, {
         params: {
-          redirectUrl: window.location.origin,
+          redirectUrl,
         },
       });
       console.log("response facebook auth url : ", data);

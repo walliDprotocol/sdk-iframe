@@ -15,7 +15,7 @@ export default {
       });
       console.log("response reddit login: ", data);
 
-      userData = data;
+      userData = data?.userInfo;
       localStorage.setItem("reddit_user", JSON.stringify(userData));
     } catch (error) {
       console.log("error reddit login: ", error);

@@ -31,7 +31,7 @@ const actions = {
     let userData = {},
       nearAccountId = "";
 
-    console.log("url paramters : ", urlParams);
+    console.log("url parameters : ", urlParams);
     // get near account id
     if (urlParams.has("account_id")) {
       localStorage.setItem("nearAccount", urlParams.get("account_id"));

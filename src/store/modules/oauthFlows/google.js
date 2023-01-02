@@ -20,7 +20,7 @@ export default {
       });
       console.log("response google login: ", data);
 
-      userData = data;
+      userData = data?.userInfo;
       localStorage.setItem("google_user", JSON.stringify(userData));
     } catch (error) {
       console.log("error google login: ", error);

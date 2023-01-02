@@ -16,7 +16,11 @@
 
             <v-col cols="8" class="pt-5">
               <h1 class="title-h1 text-center">
-                Your {{ selectedAccountId }} account was successfully verified!
+                Your
+                <span style="text-transform: lowercase; font-family: inherit">
+                  {{ getSelectedAccountIdName }}
+                </span>
+                account was successfully verified!
               </h1>
             </v-col>
           </v-row>
@@ -37,6 +41,7 @@
 import FormButton from "@/components/FormButton.vue";
 
 import { mapState } from "vuex";
+import axios from "axios";
 
 export default {
   name: "ConnectView",
@@ -50,21 +55,21 @@ export default {
   },
   computed: {
     ...mapState(["nearAccount", "selectedAccountId"]),
+    getSelectedAccountIdName() {
+      return this.accountIds.find((e) => e.IdName == this.selectedAccountId)
+        ?.IdNameDesc;
+    },
   },
   methods: {
-    setSelectedAccount() {
-      console.log(this.selectedAccountId);
-      this.selectedAccount = this.accountIds.find(
-        (e) => e.IdName == this.selectedAccountId
-      );
-    },
     async connectAccount() {
       console.log("Call connectAccount");
 
       await this.$store.dispatch("near/connectNear");
     },
   },
-  mounted() {},
+  async mounted() {
+    this.accountIds = (await axios.get("userData.json")).data.accountIds;
+  },
   components: {
     FormButton,
   },
