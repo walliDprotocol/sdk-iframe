@@ -166,18 +166,25 @@ const actions = {
         console.log("connect account switch : ", accountId);
         throw "Not Implemented";
     }
+    return new Promise((resolve) => {
+      // const CLIENT_URL = window.location.origin;
+      const popup = window.open(redirectUrl, "popup", "popup=true");
+      const checkPopup = setInterval(() => {
+        if (popup.window.location.href.includes("success")) {
+          popup.close();
+        }
+        if (!popup || !popup.closed) return;
+        clearInterval(checkPopup);
+        console.log("popup close check fo data");
 
-    // const CLIENT_URL = window.location.origin;
-    const popup = window.open(redirectUrl, "popup", "popup=true");
-    const checkPopup = setInterval(() => {
-      if (popup.window.location.href.includes("success")) {
-        popup.close();
-      }
-      if (!popup || !popup.closed) return;
-      clearInterval(checkPopup);
-      console.log("popup close check fo data");
-    }, 1000);
-    // window.location.replace(redirectUrl);
+        let userData = localStorage.getItem(accountId + "_user");
+        console.log("userData", userData);
+        if (userData) {
+          resolve({ state: "success" });
+        }
+      }, 1000);
+      // window.location.replace(redirectUrl);
+    });
   },
 
   async twitterConnect() {

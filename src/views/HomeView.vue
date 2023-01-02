@@ -93,9 +93,13 @@ export default {
       console.log("Call connectAccount");
 
       if (this.nearAccount) {
-        await this.$store.dispatch("connectAccount", {
+        const { state } = await this.$store.dispatch("connectAccount", {
           accountId: this.selectedAccount.IdName,
         });
+
+        if (state == "success") {
+          this.$router.push("/success");
+        }
       } else {
         await this.$store.dispatch("near/connectNear");
       }
