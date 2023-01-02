@@ -3,15 +3,6 @@ import Vuex from "vuex";
 import axios from "axios";
 import PubNub from "pubnub";
 
-var pubnub = new PubNub({
-  userId: "verification-sdk-iframe",
-  subscribeKey: "sub-c-b36746ec-a4bf-11ec-8a23-de1bbb7835db",
-  publishKey: "pub-c-db6abb24-ed6e-41a2-b2f2-2322e2dcf786",
-  logVerbosity: true,
-  ssl: true,
-  presenceTimeout: 130,
-});
-
 import * as modules from "./modules";
 
 const TWITTER_LOGIN =
@@ -39,17 +30,42 @@ const actions = {
   async publishData() {
     console.log("publishData Action");
 
+    var pubnub = new PubNub({
+      userId: "verification-sdk-iframe",
+      subscribeKey: "sub-c-b36746ec-a4bf-11ec-8a23-de1bbb7835db",
+      publishKey: "pub-c-db6abb24-ed6e-41a2-b2f2-2322e2dcf786",
+      logVerbosity: true,
+      ssl: true,
+      presenceTimeout: 130,
+    });
+
+    const accounts = [
+      "discord",
+      "facebook",
+      "reddit",
+      "github",
+      "twitter",
+      "linkedin",
+      "google",
+    ];
+
+    let userData = {};
+
+    accounts.forEach(
+      (a) => (userData[a] = JSON.parse(localStorage.getItem(a + "_user")))
+    );
+
     let message = {
       content: {
         type: "text",
-        message: "This is a message!",
+        message: userData,
       },
       sender: "Thomas Anderson",
     };
 
     pubnub.publish(
       {
-        channel: "verification-iframe",
+        channel: "verification-iframe" + sessionStorage.getItem("uuid"),
         message,
       },
       function (status, response) {
@@ -68,6 +84,10 @@ const actions = {
     // get near account id
     if (urlParams.has("account_id")) {
       localStorage.setItem("nearAccount", urlParams.get("account_id"));
+    }
+
+    if (urlParams.has("uuid")) {
+      sessionStorage.setItem("uuid", urlParams.get("uuid"));
     }
 
     nearAccountId = localStorage.getItem("nearAccount");
