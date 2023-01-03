@@ -1,58 +1,73 @@
 <template>
-  <v-container>
-    <v-row v-if="step == 1">
-      <v-col cols="12">
-        <h1 class="title-h1">Select the IDs you'd like to verify</h1>
-      </v-col>
-      <v-col cols="12" class="pt-5">
-        <IdCardWrapper :items="accountIds" />
-      </v-col>
+  <v-container fill-height class="pt-7 align-content-start">
+    <v-container
+      v-if="step == 1"
+      fill-height
+      class="pa-0 align-content-space-between"
+    >
+      <v-row>
+        <v-col cols="12">
+          <h1 class="title-h1">Select the IDs you'd like to verify</h1>
+        </v-col>
+        <v-col cols="12" class="pt-5">
+          <IdCardWrapper :items="accountIds" />
+        </v-col>
+      </v-row>
+      <v-row class="pb-2">
+        <v-col class="d-flex justify-end">
+          <FormButton
+            class="mr-5"
+            :text="'publishData'"
+            :type="'back'"
+            @click="publishData"
+          >
+          </FormButton>
+          <FormButton
+            :text="'Next'"
+            :disabled="!selectedAccountId"
+            @click="setSelectedAccount(), (step = 2)"
+          >
+          </FormButton>
+        </v-col>
+      </v-row>
+    </v-container>
 
-      <v-col class="d-flex justify-end">
-        <FormButton
-          class="mr-5"
-          :text="'publishData'"
-          :type="'back'"
-          @click="publishData"
-        >
-        </FormButton>
-        <FormButton
-          :text="'Next'"
-          :disabled="!selectedAccountId"
-          @click="setSelectedAccount(), (step = 2)"
-        >
-        </FormButton>
-      </v-col>
-    </v-row>
+    <v-container
+      v-if="step == 2"
+      fill-height
+      class="pa-0 align-content-space-between"
+    >
+      <v-row>
+        <v-col cols="12">
+          <h1 class="title-h1">
+            Connect to your {{ selectedAccount.IdNameDesc }} account and select
+            the attributes you want to verify
+          </h1>
+        </v-col>
+        <v-col cols="12" class="pt-5">
+          <ConnectAccount :selectedAccount="selectedAccount" />
+        </v-col>
+      </v-row>
 
-    <v-row v-if="step == 2">
-      <v-col cols="12">
-        <h1 class="title-h1">
-          Connect to your {{ selectedAccount.IdNameDesc }} account and select
-          the attributes you want to verify
-        </h1>
-      </v-col>
-      <v-col cols="12" class="pt-5">
-        <ConnectAccount :selectedAccount="selectedAccount" />
-      </v-col>
-
-      <v-col class="d-flex justify-end">
-        <FormButton
-          class="mr-5"
-          :text="'Back'"
-          :type="'back'"
-          @click="step = 1"
-        >
-        </FormButton>
-        <FormButton
-          :text="'CONNECT'"
-          :disabled="isDisabled"
-          @click="connectAccount"
-        >
-        </FormButton>
-      </v-col>
+      <v-row class="pb-2">
+        <v-col class="d-flex justify-end">
+          <FormButton
+            class="mr-5"
+            :text="'Back'"
+            :type="'back'"
+            @click="step = 1"
+          >
+          </FormButton>
+          <FormButton
+            :text="'CONNECT'"
+            :disabled="isDisabled"
+            @click="connectAccount"
+          >
+          </FormButton>
+        </v-col>
+      </v-row>
       <!-- <FormButton :text="'Sign'" @click="verifySignature"> </FormButton> -->
-    </v-row>
+    </v-container>
   </v-container>
 </template>
 
