@@ -10,7 +10,7 @@ const actions = {
   },
   async connectNear() {
     await NearAPI.wallet.requestSignIn({
-      successUrl: `http://127.0.0.1:8080/near?success=1`, // optional redirect URL on success
+      successUrl: `${window.location.origin}/near?success=1`, // optional redirect URL on success
     });
   },
   async verifySignature() {
