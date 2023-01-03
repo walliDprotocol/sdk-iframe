@@ -29,7 +29,7 @@
     </v-app-bar>
 
     <v-main>
-      <router-view class="router-view px-7" />
+      <router-view class="router-view px-7" :class="{ loading }" />
     </v-main>
   </v-app>
 </template>
@@ -42,6 +42,11 @@ export default {
 
   computed: {
     ...mapState(["nearAccount", "selectedAccountId"]),
+  },
+  data() {
+    return {
+      loading: true,
+    };
   },
   async mounted() {
     // this will store a wallet access keys in browser's local  storage
@@ -73,7 +78,7 @@ export default {
       console.log("Push route success", userData);
 
       // Push success screen
-      this.$router.push("/success");
+      this.$router.push("/?success=" + this.selectedAccountId);
       return;
     }
 
@@ -82,6 +87,7 @@ export default {
     if (nearAccountId) {
       this.$router.push("/home");
     }
+    this.loading = false;
   },
 };
 </script>
@@ -100,5 +106,11 @@ export default {
   .container {
     padding: 4px 30px;
   }
+}
+.router-view {
+  transition: opacity 0.25s ease-in-out;
+}
+.router-view.loading {
+  opacity: 0;
 }
 </style>

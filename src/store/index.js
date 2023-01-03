@@ -195,7 +195,7 @@ const actions = {
       );
       console.log(popup);
       const checkPopup = setInterval(() => {
-        if (popup.window.location.href.includes("success")) {
+        if (popup.window.location.href.includes("?success=" + accountId)) {
           popup.close();
         }
         if (!popup || !popup.closed) return;
@@ -231,11 +231,32 @@ const actions = {
           JSON.stringify(twitterPreAuthURL)
         );
         console.log("twitterPreAuthURL: ", twitterPreAuthURL);
-        // window.location = response.data.redirect;
-        window.location.replace(twitterPreAuthURL.redirect);
-        // win
-        //  this.redirect_url = response.data.redirect;
-        //  this.dialog=true;
+
+        return new Promise((resolve) => {
+          console.log("## redirectUrl : ", twitterPreAuthURL);
+
+          const popup = window.open(
+            twitterPreAuthURL.redirect,
+            "popup",
+            "width=600,height=600,toolbar=no,menubar=no"
+          );
+          console.log(popup);
+          const checkPopup = setInterval(() => {
+            if (popup.window.location.href.includes("?success=twitter")) {
+              popup.close();
+            }
+            if (!popup || !popup.closed) return;
+            clearInterval(checkPopup);
+            console.log("popup close check for data");
+
+            let userData = localStorage.getItem("twitter_user");
+            console.log("userData", userData);
+            if (userData) {
+              resolve({ state: "success" });
+            }
+          }, 1000);
+          // window.location.replace(redirectUrl);
+        });
       }
     } catch (error) {
       console.log("error twitter login: ", error);
