@@ -65,7 +65,7 @@ const actions = {
 
     pubnub.publish(
       {
-        channel: "verification-iframe" + sessionStorage.getItem("uuid"),
+        channel: "verification-iframe-" + sessionStorage.getItem("uuid"),
         message,
       },
       function (status, response) {
