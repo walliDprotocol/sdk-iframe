@@ -1,24 +1,26 @@
 <template>
   <v-container class="id-card-container fill-height">
     <v-row class="text-left id-card-row">
-      <v-col cols="auto" class="id-card-col pr-0 pl-5">
-        <v-img
+      <v-col cols="auto" class="id-card-col pr-2 pl-3">
+        <img
           :src="`./logos/${item.IdName}.webp`"
           contain
-          max-height="40"
-          max-width="40"
+          style="width: 100%; height: auto; max-width: 40px; max-height: 40px"
         />
       </v-col>
       <v-col cols="9" class="id-card-col pl-3 d-flex flex-column align-start">
-        <p
-          class="bold-text-p text-uppercase"
-          :class="{ 'mb-1': !userData.username }"
-        >
-          {{ item.IdNameDesc }}
-          <v-icon v-if="userData.username" :color="'green'" right :size="16">
-            mdi-checkbox-marked-circle
-          </v-icon>
-        </p>
+        <div class="d-flex fluid">
+          <p class="bold-text-p text-uppercase">
+            {{ item.IdNameDesc }}
+          </p>
+          <img
+            v-if="isVerified"
+            class="d-flex ml-2"
+            :src="require(`../assets/icons/connected.webp`)"
+            contain
+            style="width: 100%; height: auto; max-width: 70px; max-height: 15px"
+          />
+        </div>
         <p v-if="!userData.username" class="normal-text-p">
           {{ idDescription[item.type](item) }}
         </p>
@@ -41,8 +43,15 @@ export default {
       return this.item?.userData || {};
     },
   },
+  mounted() {
+    this.isVerified =
+      Object.entries(
+        JSON.parse(localStorage.getItem(this.item.IdName + "_user")) || {}
+      ).length > 0;
+  },
   data() {
     return {
+      isVerified: false,
       idDescription: {
         web2: ({ IdNameDesc }) => `Connect your ${IdNameDesc} account`,
         web3: ({ IdDescription }) => `${IdDescription}`,
@@ -58,7 +67,8 @@ export default {
   border-radius: 16px;
   background-color: rgba(255, 255, 255, 0.31);
   cursor: pointer;
-  height: 106px;
+  min-height: 106px;
+  // max-height: 106px;
   display: flex;
   align-items: center;
   padding-top: 24px;
