@@ -21,8 +21,7 @@
           </v-col>
           <v-spacer />
           <v-col v-if="nearAccount">
-            <p class="bold-text-p">AccountId</p>
-            {{ nearAccount }}
+            <p class="account-id"><span>&bull;</span>{{ nearAccount }}</p>
           </v-col>
         </v-row>
       </v-container>
@@ -112,5 +111,28 @@ export default {
 }
 .router-view.loading {
   opacity: 0;
+}
+
+.account-id {
+  display: inline;
+  padding: 2px 8px 2px 18px;
+  border-radius: 11px;
+  background-color: var(--light-grey);
+  font-size: 11px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: var(--midnight);
+  position: relative;
+  span {
+    font-size: 30px;
+    color: #00e284;
+    position: absolute;
+    top: -12px;
+    left: 6px;
+  }
 }
 </style>
