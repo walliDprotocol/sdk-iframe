@@ -9,12 +9,9 @@ const actions = {
     await NearAPI.init();
   },
   async connectNear() {
-    await NearAPI.wallet.requestSignIn(
-      "example-contract.testnet", // contract requesting access
-      "Verification iframe", // optional title
-      `http://127.0.0.1:8080/`, // optional redirect URL on success
-      "http://127.0.0.1:8080" // optional redirect URL on failure
-    );
+    await NearAPI.wallet.requestSignIn({
+      successUrl: `http://127.0.0.1:8080/near?success=1`, // optional redirect URL on success
+    });
   },
   async verifySignature() {
     console.log("Action verifySignature");

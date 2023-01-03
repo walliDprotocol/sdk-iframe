@@ -85,13 +85,12 @@ const actions = {
     if (urlParams.has("account_id")) {
       localStorage.setItem("nearAccount", urlParams.get("account_id"));
     }
+    nearAccountId = localStorage.getItem("nearAccount");
+    commit("nearAccount", nearAccountId);
 
     if (urlParams.has("uuid")) {
       sessionStorage.setItem("uuid", urlParams.get("uuid"));
     }
-
-    nearAccountId = localStorage.getItem("nearAccount");
-    commit("nearAccount", nearAccountId);
 
     const selectedAccountId = sessionStorage.getItem("selectedAccountId");
     commit("selectedAccountId", selectedAccountId);

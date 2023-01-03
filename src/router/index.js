@@ -3,6 +3,7 @@ import VueRouter from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import ConnectView from "../views/ConnectView.vue";
 import SuccessView from "../views/SuccessView.vue";
+import NearPopup from "../views/nearPopup.vue";
 
 Vue.use(VueRouter);
 
@@ -22,6 +23,11 @@ const routes = [
     path: "/success",
     name: "success",
     component: SuccessView,
+  },
+  {
+    path: "/near",
+    name: "NearPopup",
+    component: NearPopup,
   },
   {
     path: "/about",

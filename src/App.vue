@@ -47,6 +47,10 @@ export default {
     // this will store a wallet access keys in browser's local  storage
     await this.$store.dispatch("near/initNear");
 
+    if (this.$route.name == "NearPopup") {
+      return;
+    }
+
     const { userData, nearAccountId } = await this.$store.dispatch(
       "getURLSearchParams"
     );

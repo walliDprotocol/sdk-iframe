@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunkverification_sdk_iframe"]=self["webpackChunkverification_sdk_iframe"]||[]).push([[443],{5399:function(i,n,t){t.r(n),t.d(n,{default:function(){return f}});var e=function(){var i=this;i._self._c;return i._m(0)},s=[function(){var i=this,n=i._self._c;return n("div",{staticClass:"about"},[n("h1",[i._v("This is an about page")])])}],u=t(1001),a={},r=(0,u.Z)(a,e,s,!1,null,null,null),f=r.exports}}]);
+//# sourceMappingURL=about.715a7ee6.js.map

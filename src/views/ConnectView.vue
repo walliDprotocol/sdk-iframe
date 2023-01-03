@@ -59,7 +59,23 @@ export default {
     async connectAccount() {
       console.log("Call connectAccount");
 
-      await this.$store.dispatch("near/connectNear");
+      const popup = window.open("/near", "popup", "popup=true");
+      const checkPopup = setInterval(async () => {
+        // if (popup.window.location.href.includes("success=1")) {
+        //   popup.close();
+        // }
+        if (!popup || !popup.closed) return;
+        clearInterval(checkPopup);
+        const { nearAccountId } = await this.$store.dispatch(
+          "getURLSearchParams"
+        );
+
+        console.log("popup close check fo data", nearAccountId);
+        if (nearAccountId) {
+          this.$router.push("/home");
+        }
+      }, 1000);
+      // await this.$store.dispatch("near/connectNear");
     },
   },
   async mounted() {
