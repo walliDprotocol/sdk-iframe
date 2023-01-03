@@ -16,10 +16,14 @@
 
 <script>
 import IdCard from "./IdCard.vue";
+import { mapState } from "vuex";
 
 export default {
   name: "HelloWorld",
   components: { IdCard },
+  computed: {
+    ...mapState(["nearAccount", "selectedAccountId"]),
+  },
   props: ["items"],
   watch: {
     selected() {
@@ -28,6 +32,11 @@ export default {
         this.items[this.selected]?.IdName
       );
     },
+  },
+  mounted() {
+    this.selected = this.items.findIndex(
+      (i) => i.IdName == this.selectedAccountId
+    );
   },
   data() {
     return {

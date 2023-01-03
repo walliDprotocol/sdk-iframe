@@ -55,7 +55,7 @@
             class="mr-5"
             :text="'Back'"
             :type="'back'"
-            @click="step = 1"
+            @click="backStep"
           >
           </FormButton>
           <FormButton
@@ -90,14 +90,11 @@ export default {
   computed: {
     ...mapState(["nearAccount", "selectedAccountId"]),
     isDisabled() {
-      console.log(this.selectedAccount);
-
       return !this.selectedAccount?.options?.some((value) => value.state);
     },
   },
   methods: {
     setSelectedAccount() {
-      console.log(this.selectedAccountId);
       // this.$router.push("/success");
 
       this.selectedAccount = this.accountIds.find(
@@ -128,6 +125,11 @@ export default {
 
     async publishData() {
       await this.$store.dispatch("publishData");
+    },
+    backStep() {
+      this.step = 1;
+      // uncomment this line to remove selected value on back
+      // this.$store.commit("selectedAccountId");
     },
   },
   async mounted() {
