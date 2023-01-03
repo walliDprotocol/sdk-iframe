@@ -8,9 +8,6 @@ import * as modules from "./modules";
 const TWITTER_LOGIN =
   process.env.VUE_APP_BACKEND_URL + "/api/v1/redirect/login/twitter";
 
-const DISCORD_AUTH =
-  process.env.VUE_APP_BACKEND_URL + "/api/v1/authcode/discord";
-
 console.log(TWITTER_LOGIN);
 
 Vue.use(Vuex);
@@ -54,6 +51,8 @@ const actions = {
     accounts.forEach(
       (a) => (userData[a] = JSON.parse(localStorage.getItem(a + "_user")))
     );
+
+    console.log("UserData to send to client:", userData);
 
     let message = {
       content: {
@@ -186,15 +185,22 @@ const actions = {
         throw "Not Implemented";
     }
     return new Promise((resolve) => {
+      console.log("## redirectUrl : ", redirectUrl);
+
       // const CLIENT_URL = window.location.origin;
-      const popup = window.open(redirectUrl, "popup", "popup=true");
+      const popup = window.open(
+        redirectUrl,
+        "popup",
+        "width=600,height=600,toolbar=no,menubar=no"
+      );
+      console.log(popup);
       const checkPopup = setInterval(() => {
         if (popup.window.location.href.includes("success")) {
           popup.close();
         }
         if (!popup || !popup.closed) return;
         clearInterval(checkPopup);
-        console.log("popup close check fo data");
+        console.log("popup close check for data");
 
         let userData = localStorage.getItem(accountId + "_user");
         console.log("userData", userData);
@@ -217,38 +223,6 @@ const actions = {
 
     try {
       let response = await axios.get(TWITTER_LOGIN);
-      console.log("get from axios ", response.data);
-      if (response?.data?.redirect) {
-        twitterPreAuthURL = response.data;
-        localStorage.setItem(
-          "twitter_preAuth",
-          JSON.stringify(twitterPreAuthURL)
-        );
-        console.log("twitterPreAuthURL: ", twitterPreAuthURL);
-        // window.location = response.data.redirect;
-        window.location.replace(twitterPreAuthURL.redirect);
-        // win
-        //  this.redirect_url = response.data.redirect;
-        //  this.dialog=true;
-      }
-    } catch (error) {
-      console.log("error twitter login: ", error);
-      throw error;
-    }
-    return twitterPreAuthURL;
-  },
-
-  async discordConnect() {
-    // const headers = {
-    //   "Access-Control-Allow-Origin": "*",
-    //   "Access-Control-Allow-Methods": "GET,POST,DELETE",
-    //   "Access-Control-Allow-Headers":
-    //     "Origin, X-Requested With, Content-Type, Accept",
-    // };
-    let twitterPreAuthURL;
-
-    try {
-      let response = await axios.get(DISCORD_AUTH);
       console.log("get from axios ", response.data);
       if (response?.data?.redirect) {
         twitterPreAuthURL = response.data;

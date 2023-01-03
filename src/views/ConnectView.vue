@@ -59,7 +59,11 @@ export default {
     async connectAccount() {
       console.log("Call connectAccount");
 
-      const popup = window.open("/near", "popup", "popup=true");
+      const popup = window.open(
+        "/near",
+        "popup",
+        "width=600,height=600,toolbar=no,menubar=no"
+      );
       const checkPopup = setInterval(async () => {
         // if (popup.window.location.href.includes("success=1")) {
         //   popup.close();
@@ -70,7 +74,7 @@ export default {
           "getURLSearchParams"
         );
 
-        console.log("popup close check fo data", nearAccountId);
+        console.log("popup close check near account", nearAccountId);
         if (nearAccountId) {
           this.$router.push("/home");
         }
