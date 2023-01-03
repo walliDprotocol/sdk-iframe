@@ -69,7 +69,7 @@
     }
   }
 
-  .connect-account .row {
+  .connect-account .row:not(.id-card-row) {
     border: solid 1px var(--border-color);
     border-bottom: none;
 

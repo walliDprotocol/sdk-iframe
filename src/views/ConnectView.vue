@@ -14,8 +14,8 @@
                 connect to your wallet
               </p>
             </v-col>
-            <v-col cols="7" class="pb-10" @click="connectAccount">
-              <IdCard class="pb-3" :item="nearAccountItem" />
+            <v-col cols="8" class="pb-10" @click="connectAccount">
+              <IdCard class="pb-3 connect-near" :item="nearAccountItem" />
             </v-col>
           </v-row>
         </v-container>
@@ -91,3 +91,17 @@ export default {
   },
 };
 </script>
+<style lang="scss">
+.connect-near {
+  padding-top: 12px !important;
+  padding-bottom: 12px !important;
+  min-height: 85px !important;
+
+  // border: none !important;
+  // background-color: transparent !important;
+}
+
+// * {
+//   outline: solid 1px rgba($color: red, $alpha: 0.2);
+// }
+</style>

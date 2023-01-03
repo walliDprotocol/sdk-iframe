@@ -21,13 +21,8 @@
             style="width: 100%; height: auto; max-width: 70px; max-height: 15px"
           />
         </div>
-        <p v-if="!userData.username" class="normal-text-p">
+        <p class="normal-text-p">
           {{ idDescription[item.type](item) }}
-        </p>
-
-        <p v-if="userData.username" class="mb-0">@{{ userData.username }}</p>
-        <p v-if="userData.username" class="bold-text-p mb-0">
-          {{ userData.name }}
         </p>
       </v-col>
     </v-row>
