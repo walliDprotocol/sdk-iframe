@@ -1,5 +1,9 @@
 <template>
-  <v-container class="id-card-container fill-height">
+  <v-container
+    class="id-card-container fill-height"
+    :class="item.status"
+    @click="$emit('selected')"
+  >
     <v-row class="text-left id-card-row">
       <v-col cols="auto" class="id-card-col pr-2 pl-3">
         <img
@@ -69,6 +73,10 @@ export default {
   padding-top: 24px;
   padding-bottom: 24px;
 
+  &.INACTIVE {
+    opacity: 0.3;
+    pointer-events: none;
+  }
   &:hover,
   &.selected {
     background-color: var(--white);
