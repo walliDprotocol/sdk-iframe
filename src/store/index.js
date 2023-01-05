@@ -101,6 +101,7 @@ const actions = {
     try {
       let state = urlParams.get("state");
       let code = urlParams.get("code");
+
       switch (selectedAccountId) {
         case "twitter":
           userData = await dispatch("oauth/getTwitterUserData", {

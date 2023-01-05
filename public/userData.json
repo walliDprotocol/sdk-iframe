@@ -66,6 +66,7 @@
     {
       "IdName": "facebook",
       "IdNameDesc": "Facebook",
+      "status": "INACTIVE",
       "type": "web2",
       "options": [
         {

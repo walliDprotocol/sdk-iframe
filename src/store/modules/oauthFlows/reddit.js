@@ -9,6 +9,8 @@ export default {
     console.log("*** get reddit data", code);
     let userData = {};
     try {
+      if (code == null || !code) return { userData: {} };
+
       let { data } = await axios.post(REDDIT_INFO, {
         code,
         redirectUrl,
