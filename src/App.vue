@@ -14,7 +14,7 @@
               alt="Vuetify Logo"
               class="shrink mr-2"
               contain
-              :src="require('./assets/logos/wallid.webp')"
+              :src="'./logos/wallid.webp'"
               transition="scale-transition"
               width="115"
             />
