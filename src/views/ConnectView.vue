@@ -14,8 +14,13 @@
                 connect to your wallet
               </p>
             </v-col>
-            <v-col cols="8" class="pb-10 px-1" @click="connectAccount">
-              <IdCard class="pb-3 connect-near" :item="nearAccountItem" />
+            <v-col cols="8" class="pb-10 px-1">
+              <IdCard
+                class="pb-3 connect-near"
+                :item="nearAccountItem"
+                :class="{ selected: selected }"
+                @selected="selected = !selected"
+              />
             </v-col>
           </v-row>
         </v-container>
@@ -24,7 +29,11 @@
 
     <v-row>
       <v-col cols="12" class="d-flex justify-end pb-5">
-        <FormButton :text="'Connect Wallet'" @click="connectAccount">
+        <FormButton
+          :text="'Connect Wallet'"
+          @click="connectAccount"
+          :disabled="!selected"
+        >
         </FormButton>
       </v-col>
     </v-row>
@@ -42,6 +51,7 @@ export default {
   data() {
     return {
       step: 1,
+      selected: false,
       userData: {},
       selectedAccount: {},
       nearAccountItem: {
