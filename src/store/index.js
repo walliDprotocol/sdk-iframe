@@ -194,7 +194,7 @@ const actions = {
         throw "Not Implemented";
     }
 
-    sessionStorage.setItem("@wallid:oauth:state", 1);
+    localStorage.setItem("@wallid:oauth:state", 1);
     return new Promise((resolve) => {
       console.log("## redirectUrl : ", redirectUrl);
 
@@ -219,9 +219,10 @@ const actions = {
         console.log("userData", userData);
         if (
           userData !== null &&
-          sessionStorage.getItem("@wallid:oauth:state") == 2
+          localStorage.getItem("@wallid:oauth:state") == 2
         ) {
           clearInterval(checkPopup);
+          popup.close();
           resolve({ state: "success" });
         }
       }, 1000);
