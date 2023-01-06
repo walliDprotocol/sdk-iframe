@@ -5,6 +5,7 @@ import reddit from "./oauthFlows/reddit";
 import linkedin from "./oauthFlows/linkedin";
 import google from "./oauthFlows/google";
 import github from "./oauthFlows/github";
+import authConnect from "./oauthFlows/auth";
 
 const state = {};
 const getters = {};
@@ -17,6 +18,8 @@ const actions = {
   ...linkedin,
   ...google,
   ...github,
+
+  ...authConnect,
 };
 const mutations = {};
 

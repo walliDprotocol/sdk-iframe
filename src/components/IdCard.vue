@@ -43,10 +43,8 @@ export default {
     },
   },
   mounted() {
-    this.isVerified =
-      Object.entries(
-        JSON.parse(localStorage.getItem(this.item.IdName + "_user")) || {}
-      ).length > 0;
+    let data = localStorage.getItem(this.item.IdName + "_user");
+    this.isVerified = Object.entries(JSON.parse(data) || {}).length > 0;
   },
   data() {
     return {

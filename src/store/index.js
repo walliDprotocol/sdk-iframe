@@ -102,11 +102,19 @@ const actions = {
       let state = urlParams.get("state");
       let code = urlParams.get("code");
 
+      // For twitter we need this code
+      let { codeVerifier } = JSON.parse(
+        localStorage.getItem("twitter_preAuth")
+      );
+      console.log("codeVerifier ", codeVerifier);
+
       switch (selectedAccountId) {
         case "twitter":
-          userData = await dispatch("oauth/getTwitterUserData", {
+          userData = await dispatch("oauth/getOauthData", {
             state,
             code,
+            account: selectedAccountId,
+            codeVerifier,
           });
           break;
         case "reddit":
@@ -160,7 +168,7 @@ const actions = {
     let redirectUrl;
     switch (accountId) {
       case "twitter":
-        redirectUrl = await dispatch("twitterConnect");
+        redirectUrl = await dispatch("oauth/getRedirectURL", accountId);
         break;
       case "discord":
         redirectUrl = await dispatch("oauth/discordConnect");
