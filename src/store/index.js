@@ -209,11 +209,12 @@ const actions = {
         }
         if (!popup || !popup.closed) return;
         clearInterval(checkPopup);
-        console.log("popup close check for data");
+        console.log("popup close check for data " + accountId);
 
         let userData = localStorage.getItem(accountId + "_user");
         console.log("userData", userData);
         if (userData) {
+          popup.close();
           resolve({ state: "success" });
         }
       }, 1000);

@@ -21,6 +21,9 @@ export default {
       console.log("response getOauthDataURL login: ", data);
 
       userData = data?.userInfo;
+
+      if (!userData) throw "No data to store";
+
       localStorage.setItem(`${account}_user`, JSON.stringify(userData));
     } catch (error) {
       console.log("error getOauthDataURL login: ", error);

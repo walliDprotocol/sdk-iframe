@@ -59,7 +59,7 @@ export default {
       "getURLSearchParams"
     );
 
-    console.log("Home", userData, this.selectedAccountId);
+    console.log("APP", userData, this.selectedAccountId);
 
     const userDataQuery = {
       discord: "id",
