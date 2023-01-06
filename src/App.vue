@@ -73,11 +73,19 @@ export default {
 
     console.log("###test query### ", userDataQuery[this.selectedAccountId]);
 
-    if (userDataQuery[this.selectedAccountId] in userData) {
+    if (
+      userDataQuery[this.selectedAccountId] in userData &&
+      sessionStorage.getItem("@wallid:oauth:state") == 1
+    ) {
       console.log("Push route success", userData);
 
       // Push success screen
       this.$router.push("/?success=" + this.selectedAccountId);
+      sessionStorage.setItem("@wallid:oauth:state", 2);
+
+      setTimeout(() => {
+        window.close();
+      }, 2000);
       return;
     }
 

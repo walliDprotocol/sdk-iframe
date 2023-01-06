@@ -193,6 +193,8 @@ const actions = {
         console.log("connect account switch : ", accountId);
         throw "Not Implemented";
     }
+
+    sessionStorage.setItem("@wallid:oauth:state", 1);
     return new Promise((resolve) => {
       console.log("## redirectUrl : ", redirectUrl);
 
@@ -203,18 +205,23 @@ const actions = {
         "width=600,height=600,toolbar=no,menubar=no"
       );
       console.log(popup);
+
       const checkPopup = setInterval(() => {
         if (popup.window.location.href.includes("?success=" + accountId)) {
           popup.close();
         }
-        if (!popup || !popup.closed) return;
-        clearInterval(checkPopup);
+
+        if (!popup || !popup.closed || popup.location.host.includes("twitter"))
+          return;
         console.log("popup close check for data " + accountId);
 
         let userData = localStorage.getItem(accountId + "_user");
         console.log("userData", userData);
-        if (userData) {
-          popup.close();
+        if (
+          userData !== null &&
+          sessionStorage.getItem("@wallid:oauth:state") == 2
+        ) {
+          clearInterval(checkPopup);
           resolve({ state: "success" });
         }
       }, 1000);
