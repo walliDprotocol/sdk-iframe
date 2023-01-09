@@ -98,7 +98,7 @@ export default {
 
 <style lang="scss">
 #app {
-  background: url("./assets/background/background-gradient.jpg");
+  background-image: url("../public/background/background-gradient.jpg");
   background-size: cover;
 }
 .iframe-app-bar .v-toolbar__content {

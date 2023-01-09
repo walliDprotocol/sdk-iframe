@@ -216,11 +216,11 @@ const actions = {
         console.log("popup close check for data " + accountId);
 
         let userData = localStorage.getItem(accountId + "_user");
-        console.log("userData", userData);
         if (
           userData !== null &&
           localStorage.getItem("@wallid:oauth:state") == 2
         ) {
+          console.log("userData", userData);
           clearInterval(checkPopup);
           popup.close();
           resolve({ state: "success" });
