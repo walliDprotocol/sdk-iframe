@@ -30,11 +30,18 @@
     <v-main>
       <router-view class="router-view px-7" :class="{ loading }" />
     </v-main>
+    <div class="popup-info" v-if="hasData">
+      <p class="normal-text-p">
+        To proceed, please close this window and return to the verification
+        page.
+      </p>
+    </div>
   </v-app>
 </template>
 
 <script>
 import { mapState } from "vuex";
+import { getJSONStorage } from "./plugins/utils";
 
 export default {
   name: "App",
@@ -45,6 +52,7 @@ export default {
   data() {
     return {
       loading: true,
+      hasData: true,
     };
   },
   async mounted() {
@@ -82,6 +90,7 @@ export default {
       // Push success screen
       this.$router.push("/?success=" + this.selectedAccountId);
       localStorage.setItem("@wallid:oauth:state", 2);
+      this.hasData = getJSONStorage("local", this.selectedAccountId + "_user");
 
       return;
     }
@@ -91,12 +100,20 @@ export default {
     if (nearAccountId) {
       this.$router.push("/home");
     }
-    this.loading = false;
+    // this.loading = false;
   },
 };
 </script>
 
 <style lang="scss">
+.popup-info {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%);
+  max-width: 260px;
+  text-align: center;
+}
 #app {
   background-image: url("../public/background/background-gradient.jpg");
   background-size: cover;
