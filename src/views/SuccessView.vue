@@ -79,6 +79,8 @@ export default {
   },
   async mounted() {
     this.accountIds = (await axios.get("userData.json")).data.accountIds;
+
+    await this.publishData();
   },
   components: {
     FormButton,

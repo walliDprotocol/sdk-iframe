@@ -16,13 +16,6 @@
       <v-row class="pb-2">
         <v-col class="d-flex justify-end">
           <FormButton
-            class="mr-5"
-            :text="'publishData'"
-            :type="'back'"
-            @click="publishData"
-          >
-          </FormButton>
-          <FormButton
             :text="'Next'"
             :disabled="!selectedAccountId"
             @click="setSelectedAccount(), (step = 2)"
@@ -123,9 +116,6 @@ export default {
       await this.$store.dispatch("near/verifySignature");
     },
 
-    async publishData() {
-      await this.$store.dispatch("publishData");
-    },
     backStep() {
       this.step = 1;
       // uncomment this line to remove selected value on back

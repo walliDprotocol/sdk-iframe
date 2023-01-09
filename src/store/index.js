@@ -8,6 +8,16 @@ import * as modules from "./modules";
 const TWITTER_LOGIN =
   process.env.VUE_APP_BACKEND_URL + "/api/v1/redirect/login/twitter";
 
+const ACCOUNTS_LIST = [
+  "discord",
+  "facebook",
+  "reddit",
+  "github",
+  "twitter",
+  "linkedin",
+  "google",
+];
+
 console.log(TWITTER_LOGIN);
 
 Vue.use(Vuex);
@@ -24,6 +34,7 @@ const mutations = {
 };
 
 const actions = {
+  // Send localStorage data trough pubnub to iframe opener
   async publishData() {
     console.log("publishData Action");
 
@@ -36,19 +47,9 @@ const actions = {
       presenceTimeout: 130,
     });
 
-    const accounts = [
-      "discord",
-      "facebook",
-      "reddit",
-      "github",
-      "twitter",
-      "linkedin",
-      "google",
-    ];
-
     let userData = {};
 
-    accounts.forEach(
+    ACCOUNTS_LIST.forEach(
       (a) => (userData[a] = JSON.parse(localStorage.getItem(a + "_user")))
     );
 
@@ -94,71 +95,29 @@ const actions = {
     const selectedAccountId = sessionStorage.getItem("selectedAccountId");
     commit("selectedAccountId", selectedAccountId);
 
-    console.log("Get url c0de ", urlParams.get("code"));
-
     console.log("provider ", selectedAccountId);
 
     try {
       let state = urlParams.get("state");
       let code = urlParams.get("code");
 
-      // For twitter we need this code
-      let { codeVerifier } = JSON.parse(
-        localStorage.getItem("twitter_preAuth")
-      );
-      console.log("codeVerifier ", codeVerifier);
-
-      switch (selectedAccountId) {
-        case "twitter":
-          userData = await dispatch("oauth/getOauthData", {
-            state,
-            code,
-            account: selectedAccountId,
-            codeVerifier,
-          });
-          break;
-        case "reddit":
-          userData = await dispatch("oauth/getRedditData", {
-            code: decodeURIComponent(urlParams.get("code")),
-            redirectUrl: window.location.origin,
-          });
-          break;
-        case "github":
-          userData = await dispatch("oauth/getGithubData", {
-            code: decodeURIComponent(urlParams.get("code")),
-            redirectUrl: window.location.origin,
-          });
-          break;
-        case "facebook":
-          userData = await dispatch("oauth/getFacebookData", {
-            code: decodeURIComponent(urlParams.get("code")),
-            redirectUrl: window.location.origin,
-          });
-          break;
-        case "google":
-          userData = await dispatch("oauth/getGoogleData", {
-            code: decodeURIComponent(urlParams.get("code")),
-            redirectUrl: window.location.origin,
-          });
-          break;
-        case "linkedin":
-          userData = await dispatch("oauth/getLinkedinData", {
-            code: decodeURIComponent(urlParams.get("code")),
-            redirectUrl: window.location.origin,
-          });
-          break;
-        case "discord":
-          userData = await dispatch("oauth/getDiscordData", {
-            code: decodeURIComponent(urlParams.get("code")),
-            redirectUrl: window.location.origin,
-          });
-          break;
-        default:
-          console.log("getURLSearchParams switch : ", selectedAccountId);
-          break;
+      if (!ACCOUNTS_LIST.includes(selectedAccountId)) {
+        throw (
+          "Error getURLSearchParams : Not Implemented => " + selectedAccountId
+        );
       }
+
+      // Get the user Oauth url from API using oauth tokens
+      userData = await dispatch("oauth/getOauthData", {
+        state,
+        code,
+        account: selectedAccountId,
+        redirectUrl: window.location.origin,
+      });
     } catch (error) {
       console.log("Error getting data :", error);
+      // Fail silently
+      // throw error;
     }
     return { userData, nearAccountId };
   },
@@ -166,35 +125,18 @@ const actions = {
   async connectAccount({ dispatch }, { accountId }) {
     console.log("connectAccount provider", accountId);
     let redirectUrl;
-    switch (accountId) {
-      case "twitter":
-        redirectUrl = await dispatch("oauth/getRedirectURL", accountId);
-        break;
-      case "discord":
-        redirectUrl = await dispatch("oauth/discordConnect");
-        break;
-      case "reddit":
-        redirectUrl = await dispatch("oauth/redditConnect");
-        break;
-      case "linkedin":
-        redirectUrl = await dispatch("oauth/linkedinConnect");
-        break;
-      case "google":
-        redirectUrl = await dispatch("oauth/googleConnect");
-        break;
-      case "github":
-        redirectUrl = await dispatch("oauth/githubConnect");
-        break;
-      case "facebook":
-        redirectUrl = await dispatch("oauth/facebookConnect");
-        break;
 
-      default:
-        console.log("connect account switch : ", accountId);
-        throw "Not Implemented";
+    if (!ACCOUNTS_LIST.includes(accountId)) {
+      console.log("Error connectAccount : Not Implemented => ", accountId);
+      throw "Not Implemented";
     }
 
+    // Get the redirect url from API
+    redirectUrl = await dispatch("oauth/getRedirectURL", accountId);
+
+    //Set localstorage state to know when to check data
     localStorage.setItem("@wallid:oauth:state", 1);
+
     return new Promise((resolve) => {
       console.log("## redirectUrl : ", redirectUrl);
 
@@ -226,61 +168,7 @@ const actions = {
           resolve({ state: "success" });
         }
       }, 1000);
-      // window.location.replace(redirectUrl);
     });
-  },
-
-  async twitterConnect() {
-    // const headers = {
-    //   "Access-Control-Allow-Origin": "*",
-    //   "Access-Control-Allow-Methods": "GET,POST,DELETE",
-    //   "Access-Control-Allow-Headers":
-    //     "Origin, X-Requested With, Content-Type, Accept",
-    // };
-    let twitterPreAuthURL;
-
-    try {
-      let response = await axios.get(TWITTER_LOGIN);
-      console.log("get from axios ", response.data);
-      if (response?.data?.redirect) {
-        twitterPreAuthURL = response.data;
-        localStorage.setItem(
-          "twitter_preAuth",
-          JSON.stringify(twitterPreAuthURL)
-        );
-        console.log("twitterPreAuthURL: ", twitterPreAuthURL);
-
-        return new Promise((resolve) => {
-          console.log("## redirectUrl : ", twitterPreAuthURL);
-
-          const popup = window.open(
-            twitterPreAuthURL.redirect,
-            "popup",
-            "width=600,height=600,toolbar=no,menubar=no"
-          );
-          console.log(popup);
-          const checkPopup = setInterval(() => {
-            if (popup.window.location.href.includes("?success=twitter")) {
-              popup.close();
-            }
-            if (!popup || !popup.closed) return;
-            clearInterval(checkPopup);
-            console.log("popup close check for data");
-
-            let userData = localStorage.getItem("twitter_user");
-            console.log("userData", userData);
-            if (userData) {
-              resolve({ state: "success" });
-            }
-          }, 1000);
-          // window.location.replace(redirectUrl);
-        });
-      }
-    } catch (error) {
-      console.log("error twitter login: ", error);
-      throw error;
-    }
-    return twitterPreAuthURL;
   },
 };
 export default new Vuex.Store({
