@@ -1,9 +1,9 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import axios from "axios";
 import PubNub from "pubnub";
 
 import * as modules from "./modules";
+import { getJSONStorage } from "@/plugins/utils";
 
 const TWITTER_LOGIN =
   process.env.VUE_APP_BACKEND_URL + "/api/v1/redirect/login/twitter";
@@ -50,7 +50,7 @@ const actions = {
     let userData = {};
 
     ACCOUNTS_LIST.forEach(
-      (a) => (userData[a] = JSON.parse(localStorage.getItem(a + "_user")))
+      (a) => (userData[a] = getJSONStorage("local", a + "_user"))
     );
 
     console.log("UserData to send to client:", userData);

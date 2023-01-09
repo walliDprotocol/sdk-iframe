@@ -1,3 +1,4 @@
+import { getJSONStorage } from "@/plugins/utils";
 import axios from "axios";
 
 const redirectURL = (account) =>
@@ -6,11 +7,16 @@ const oauthDataURL = (account) =>
   process.env.VUE_APP_BACKEND_URL + `/api/v1/${account}/authcode`;
 
 export default {
-  async getOauthData(_, { code, state, redirectUrl, account, codeVerifier }) {
+  async getOauthData(_, { code, state, redirectUrl, account }) {
     console.log("***  getOauthDataURL data", arguments);
     let userData = {};
     try {
       if (code == null || !code) return { userData: {} };
+
+      // For twitter we need this code
+      let { codeVerifier } = getJSONStorage("local", "twitter_preAuth");
+
+      console.log("codeVerifier ", codeVerifier);
 
       let { data } = await axios.post(oauthDataURL(account), {
         code,

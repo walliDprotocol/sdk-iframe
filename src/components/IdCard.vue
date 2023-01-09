@@ -34,6 +34,8 @@
 </template>
 
 <script>
+import { getJSONStorage } from "@/plugins/utils";
+
 export default {
   name: "HelloWorld",
   props: ["item"],
@@ -43,8 +45,8 @@ export default {
     },
   },
   mounted() {
-    let data = localStorage.getItem(this.item.IdName + "_user");
-    this.isVerified = Object.entries(JSON.parse(data) || {}).length > 0;
+    let data = getJSONStorage("local", this.item.IdName + "_user");
+    this.isVerified = Object.entries(data).length > 0;
   },
   data() {
     return {
