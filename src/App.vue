@@ -52,7 +52,7 @@ export default {
   data() {
     return {
       loading: true,
-      hasData: true,
+      hasData: false,
     };
   },
   async mounted() {
@@ -100,7 +100,7 @@ export default {
     if (nearAccountId) {
       this.$router.push("/home");
     }
-    // this.loading = false;
+    this.loading = false;
   },
 };
 </script>
