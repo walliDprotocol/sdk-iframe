@@ -73,8 +73,10 @@ export default {
 
       await this.$store.dispatch("near/connectNear");
     },
-    async publishData() {
-      await this.$store.dispatch("publishData");
+    publishData() {
+      setTimeout(() => {
+        this.$store.dispatch("publishData");
+      }, 3 * 1000);
     },
   },
   async mounted() {
