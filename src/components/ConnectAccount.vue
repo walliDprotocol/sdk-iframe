@@ -85,6 +85,20 @@
 export default {
   name: "HelloWorld",
   props: ["selectedAccount"],
+  beforeDestroy() {
+    this.selectedAccount?.options.map((e) => (e.state = false));
+  },
+  async mounted() {
+    if (this.selectedAccount.IdName == "nearTokens") {
+      const { available: nearBalance } = await this.$store.dispatch(
+        "near/getAccountBalance"
+      );
+
+      if (nearBalance > 0) {
+        this.selectedAccount?.options.map((e) => (e.state = true));
+      }
+    }
+  },
   computed: {
     allSelected() {
       return this.selectedAccount?.options.every((e) => e.state);

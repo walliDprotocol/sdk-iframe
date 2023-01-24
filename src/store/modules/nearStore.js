@@ -13,6 +13,9 @@ const actions = {
       successUrl: `${window.location.origin}/near?success=1`, // optional redirect URL on success
     });
   },
+  async getAccountBalance() {
+    return await NearAPI.wallet.account().getAccountBalance();
+  },
   async verifySignature() {
     console.log("Action verifySignature");
 

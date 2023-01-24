@@ -8,10 +8,7 @@
       "options": [
         {
           "field": "Near possessions",
-          "description": [
-            "At least 10 NEAR tokens",
-            "At least 100 NEAR tokens"
-          ],
+          "description": ["Positive balance"],
           "state": false
         }
       ]
