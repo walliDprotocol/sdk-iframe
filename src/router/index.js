@@ -1,7 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import HomeView from "../views/HomeView.vue";
-import ConnectView from "../views/ConnectView.vue";
+import ConnectView from "../views/ConnectWalletView.vue";
 import SuccessView from "../views/SuccessView.vue";
 import NearPopup from "../views/nearPopup.vue";
 

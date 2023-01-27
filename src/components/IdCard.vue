@@ -13,7 +13,7 @@
         />
       </v-col>
       <v-col cols="9" class="id-card-col pl-3 d-flex flex-column align-start">
-        <div class="d-flex fluid">
+        <div class="d-flex fluid" style="width: 100%">
           <p class="bold-text-p text-uppercase">
             {{ item.IdNameDesc }}
           </p>

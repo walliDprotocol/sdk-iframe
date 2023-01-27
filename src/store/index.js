@@ -16,6 +16,7 @@ const ACCOUNTS_LIST = [
   "twitter",
   "linkedin",
   "google",
+  "nearTokens",
 ];
 
 console.log(TWITTER_LOGIN);
@@ -131,6 +132,11 @@ const actions = {
       throw "Not Implemented";
     }
 
+    if ("nearTokens" == accountId) {
+      dispatch("setNearTokensUserData", { accountId });
+      return { state: "success" };
+    }
+
     // Get the redirect url from API
     redirectUrl = await dispatch("oauth/getRedirectURL", accountId);
 
@@ -169,6 +175,15 @@ const actions = {
         }
       }, 1000);
     });
+  },
+  async setNearTokensUserData({ state, dispatch }, { accountId }) {
+    const { available: nearBalance } = await dispatch("near/getAccountBalance");
+
+    const userData = {
+      accountId: state.nearAccount,
+      balance: nearBalance,
+    };
+    localStorage.setItem(`${accountId}_user`, JSON.stringify(userData));
   },
 };
 export default new Vuex.Store({
