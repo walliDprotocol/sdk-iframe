@@ -2,16 +2,54 @@ import NearAPI, { keyStore } from "@/plugins/near";
 
 var Buffer = require("buffer/").Buffer;
 
-const state = {};
-const getters = {};
+const state = { nearAccount: {}, walletSelector: null };
+const getters = {
+  walletSelector(state) {
+    return state.walletSelector;
+  },
+};
 const actions = {
-  async initNear() {
+  async initNear({ commit, dispatch }) {
     await NearAPI.init();
+    const selector = NearAPI.getWalletSelector();
+    commit("setSelector", selector);
+
+    if (selector.isSignedIn()) {
+      const account = await dispatch("getAccounts");
+      console.log("account", account);
+      dispatch("setAccount", { account: account?.[0] });
+    }
   },
   async connectNear() {
     await NearAPI.wallet.requestSignIn({
       successUrl: `${window.location.origin}/near?success=1`, // optional redirect URL on success
     });
+  },
+
+  async signOut({ state, commit }) {
+    const wallet = await state.walletSelector.wallet();
+    commit("setNearAccount");
+
+    wallet.signOut().catch((err) => {
+      console.log("Failed to sign out");
+      console.error(err);
+    });
+  },
+
+  async getAccounts({ state }) {
+    const wallet = await state.walletSelector.wallet();
+
+    return await wallet.getAccounts();
+  },
+  async setAccount({ state, commit }, { account }) {
+    if (!account) {
+      return;
+    }
+    await state.walletSelector.setActiveAccount(account?.accountId);
+
+    commit("setNearAccount", account);
+
+    return account;
   },
   async getAccountBalance() {
     return await NearAPI.wallet.account().getAccountBalance();
@@ -79,7 +117,14 @@ const actions = {
     // console.log("Signature Valid?:", signature);
   },
 };
-const mutations = {};
+const mutations = {
+  setSelector(state, value) {
+    state.walletSelector = value;
+  },
+  setNearAccount(state, value) {
+    state.nearAccount = value;
+  },
+};
 
 export default {
   namespaced: true,

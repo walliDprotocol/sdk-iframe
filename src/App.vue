@@ -20,9 +20,12 @@
             />
           </v-col>
           <v-spacer />
-          <v-col v-if="nearAccount">
-            <p class="account-id"><span>&bull;</span>{{ nearAccount }}</p>
+          <v-col v-if="nearAccountId">
+            <p class="account-id" @click="signOut">
+              <span>&bull;</span>{{ nearAccountId }}
+            </p>
           </v-col>
+          {{ isSignedIn }}
         </v-row>
       </v-container>
     </v-app-bar>
@@ -47,7 +50,14 @@ export default {
   name: "App",
 
   computed: {
-    ...mapState(["nearAccount", "selectedAccountId"]),
+    ...mapState(["selectedAccountId"]),
+    ...mapState("near", ["walletSelector", "nearAccount"]),
+    isSignedIn() {
+      return this.walletSelector?.isSignedIn();
+    },
+    nearAccountId() {
+      return this.nearAccount?.accountId;
+    },
   },
   data() {
     return {
@@ -55,9 +65,22 @@ export default {
       hasData: false,
     };
   },
+  methods: {
+    async signOut() {
+      await this.$store.dispatch("near/signOut");
+      this.$router.push("/");
+    },
+  },
   async mounted() {
     // this will store a wallet access keys in browser's local  storage
     await this.$store.dispatch("near/initNear");
+
+    console.log(this.nearAccount);
+    // },
+
+    // async mounted() {
+    // console.log(await this.walletSelector.wallet());
+    // console.log(this.walletSelector?.isSignedIn());
 
     if (this.$route.name == "NearPopup") {
       return;
@@ -97,7 +120,7 @@ export default {
 
     console.log("Connect", userData, nearAccountId);
 
-    if (nearAccountId) {
+    if (this.walletSelector?.isSignedIn()) {
       this.$router.push("/home");
     }
     this.loading = false;

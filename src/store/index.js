@@ -180,7 +180,7 @@ const actions = {
     const { available: nearBalance } = await dispatch("near/getAccountBalance");
 
     const userData = {
-      accountId: state.nearAccount,
+      accountId: state.near.nearAccount?.accountId,
       balance: nearBalance,
     };
     localStorage.setItem(`${accountId}_user`, JSON.stringify(userData));

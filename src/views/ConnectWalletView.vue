@@ -19,7 +19,7 @@
                 class="pb-3 connect-near"
                 :item="nearAccountItem"
                 :class="{ selected: selected }"
-                @selected="selected = !selected"
+                @selected="modal.show()"
               />
             </v-col>
           </v-row>
@@ -46,14 +46,15 @@ import IdCard from "@/components/IdCard.vue";
 
 import { mapState } from "vuex";
 
+import { setupModal } from "@near-wallet-selector/modal-ui";
+import "@near-wallet-selector/modal-ui/styles.css";
+
 export default {
   name: "ConnectView",
   data() {
     return {
-      step: 1,
+      modal: null,
       selected: false,
-      userData: {},
-      selectedAccount: {},
       nearAccountItem: {
         IdName: "nearTokens",
         IdNameDesc: "Near Wallet",
@@ -64,31 +65,44 @@ export default {
   },
   computed: {
     ...mapState(["nearAccount"]),
+    ...mapState("near", ["walletSelector", "nearAccount"]),
+  },
+  watch: {
+    walletSelector(value) {
+      if (!value.isSignedIn()) {
+        this.modal = setupModal(value, {
+          // contractId: "guest-book.testnet",
+        });
+        console.log(this.modal);
+        this.modal.show();
+      }
+    },
   },
   methods: {
     async connectAccount() {
       console.log("Call connectAccount");
+      this.modal.show();
 
-      const popup = window.open(
-        "/near",
-        "popup",
-        "width=600,height=600,toolbar=no,menubar=no"
-      );
-      const checkPopup = setInterval(async () => {
-        // if (popup.window.location.href.includes("success=1")) {
-        //   popup.close();
-        // }
-        if (!popup || !popup.closed) return;
-        clearInterval(checkPopup);
-        const { nearAccountId } = await this.$store.dispatch(
-          "getURLSearchParams"
-        );
+      // const popup = window.open(
+      //   "/near",
+      //   "popup",
+      //   "width=600,height=600,toolbar=no,menubar=no"
+      // );
+      // const checkPopup = setInterval(async () => {
+      //   // if (popup.window.location.href.includes("success=1")) {
+      //   //   popup.close();
+      //   // }
+      //   if (!popup || !popup.closed) return;
+      //   clearInterval(checkPopup);
+      //   const { nearAccountId } = await this.$store.dispatch(
+      //     "getURLSearchParams"
+      //   );
 
-        console.log("popup close check near account", nearAccountId);
-        if (nearAccountId) {
-          this.$router.push("/home");
-        }
-      }, 1000);
+      //   console.log("popup close check near account", nearAccountId);
+      //   if (nearAccountId) {
+      //     this.$router.push("/home");
+      //   }
+      // }, 1000);
       // await this.$store.dispatch("near/connectNear");
     },
   },
