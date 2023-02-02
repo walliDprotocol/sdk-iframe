@@ -69,12 +69,14 @@ export default {
   },
   watch: {
     walletSelector(value) {
+      this.modal = setupModal(value, {
+        contractId: "v1.social08.testnet",
+      });
       if (!value.isSignedIn()) {
-        this.modal = setupModal(value, {
-          // contractId: "guest-book.testnet",
-        });
         console.log(this.modal);
         this.modal.show();
+      } else {
+        this.modal.hide();
       }
     },
   },

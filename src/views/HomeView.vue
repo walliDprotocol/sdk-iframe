@@ -125,7 +125,7 @@ export default {
   async mounted() {
     this.accountIds = (await axios.get("userData.json")).data.accountIds;
 
-    await this.$store.dispatch("near/initNear");
+    // await this.$store.dispatch("near/initNear");
 
     // this.step = 2;
 

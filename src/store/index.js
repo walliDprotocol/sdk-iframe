@@ -87,7 +87,7 @@ const actions = {
       localStorage.setItem("nearAccount", urlParams.get("account_id"));
     }
     nearAccountId = localStorage.getItem("nearAccount");
-    commit("nearAccount", nearAccountId);
+    // commit("near/setNearAccount", { accountId: nearAccountId }, { root: true });
 
     if (urlParams.has("uuid")) {
       sessionStorage.setItem("uuid", urlParams.get("uuid"));

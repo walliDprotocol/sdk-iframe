@@ -13,7 +13,8 @@ const actions = {
   async initNear({ commit, dispatch }) {
     await NearAPI.init();
     const selector = NearAPI.getWalletSelector();
-    console.log(selector);
+    console.log("setSelector", selector);
+    console.log("setSelector isSignedIn", selector.isSignedIn());
     commit("setSelector", selector);
 
     if (selector.isSignedIn()) {
@@ -70,6 +71,7 @@ const actions = {
     console.log("Get Social DB response: ", profile);
 
     console.log("wallet", wallet);
+    console.log("account", account);
     return { ...account, ...profile };
   },
   async setAccount({ state, commit }, { account }) {

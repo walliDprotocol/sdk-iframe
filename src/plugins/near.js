@@ -51,6 +51,7 @@ export class NEAR {
 
     this.selector = await setupWalletSelector({
       network: "testnet",
+      // debug: true,
       modules: [
         ...(await setupDefaultWallets()),
         setupNearWallet(),
