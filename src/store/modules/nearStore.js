@@ -1,4 +1,5 @@
 import NearAPI, { keyStore } from "@/plugins/near";
+import { Contract } from "near-api-js";
 
 var Buffer = require("buffer/").Buffer;
 
@@ -12,12 +13,13 @@ const actions = {
   async initNear({ commit, dispatch }) {
     await NearAPI.init();
     const selector = NearAPI.getWalletSelector();
+    console.log(selector);
     commit("setSelector", selector);
 
     if (selector.isSignedIn()) {
       const account = await dispatch("getAccounts");
       console.log("account", account);
-      dispatch("setAccount", { account: account?.[0] });
+      dispatch("setAccount", { account });
     }
   },
   async connectNear() {
@@ -36,10 +38,39 @@ const actions = {
     });
   },
 
-  async getAccounts({ state }) {
-    const wallet = await state.walletSelector.wallet();
+  async getProfileName(_, { accountId }) {
+    console.log("accountid", accountId);
+    const contract = new Contract(
+      NearAPI.wallet.account(), // the account object that is connecting
+      "v1.social08.testnet",
+      { viewMethods: ["get"] }
+    );
 
-    return await wallet.getAccounts();
+    // const {
+    //   [account.accountId]: { profile },
+    // } =
+    let res = await contract.get({
+      keys: [`${accountId}/profile/name`],
+    });
+
+    if (Object.keys(res).length == 0) return { profile: {} };
+
+    return res[accountId];
+  },
+
+  async getAccounts({ state, dispatch }) {
+    const wallet = await state.walletSelector.wallet();
+    const accounts = await wallet.getAccounts();
+    const account = accounts[0];
+
+    // TODO: fix when value is missing
+    const { profile } = await dispatch("getProfileName", {
+      accountId: account.accountId,
+    });
+    console.log("Get Social DB response: ", profile);
+
+    console.log("wallet", wallet);
+    return { ...account, ...profile };
   },
   async setAccount({ state, commit }, { account }) {
     if (!account) {

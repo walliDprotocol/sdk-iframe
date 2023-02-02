@@ -56,7 +56,7 @@ export default {
       return this.walletSelector?.isSignedIn();
     },
     nearAccountId() {
-      return this.nearAccount?.accountId;
+      return this.nearAccount?.name || this.nearAccount?.accountId;
     },
   },
   data() {
