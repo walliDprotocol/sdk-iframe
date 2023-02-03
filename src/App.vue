@@ -32,12 +32,12 @@
     <v-main>
       <router-view class="router-view px-7" :class="{ loading }" />
     </v-main>
-    <div class="popup-info" v-if="hasData">
+    <!-- <div class="popup-info" v-if="hasData">
       <p class="normal-text-p">
         To proceed, please close this window and return to the verification
         page.
       </p>
-    </div>
+    </div> -->
   </v-app>
 </template>
 
@@ -114,6 +114,10 @@ export default {
       localStorage.setItem("@wallid:oauth:state", 2);
       this.hasData = getJSONStorage("local", this.selectedAccountId + "_user");
 
+      if (this.hasData) {
+        this.$router.push("/success");
+        this.loading = false;
+      }
       return;
     }
 
