@@ -8,6 +8,9 @@ const getters = {
   walletSelector(state) {
     return state.walletSelector;
   },
+  nearAccountId(state) {
+    return state.nearAccount.accountId;
+  },
 };
 const actions = {
   async initNear({ commit, dispatch }) {

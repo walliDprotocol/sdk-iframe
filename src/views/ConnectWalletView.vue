@@ -44,7 +44,7 @@
 import FormButton from "@/components/FormButton.vue";
 import IdCard from "@/components/IdCard.vue";
 
-import { mapState } from "vuex";
+import { mapGetters, mapState } from "vuex";
 
 import { setupModal } from "@near-wallet-selector/modal-ui";
 import "@near-wallet-selector/modal-ui/styles.css";
@@ -66,6 +66,7 @@ export default {
   computed: {
     ...mapState(["nearAccount"]),
     ...mapState("near", ["walletSelector", "nearAccount"]),
+    ...mapGetters("near", ["nearAccountId"]),
   },
   watch: {
     walletSelector(value) {

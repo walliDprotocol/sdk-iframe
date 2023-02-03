@@ -61,7 +61,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["nearAccount", "selectedAccountId"]),
+    ...mapState(["selectedAccountId"]),
     getSelectedAccountIdName() {
       return this.accountIds.find((e) => e.IdName == this.selectedAccountId)
         ?.IdNameDesc;

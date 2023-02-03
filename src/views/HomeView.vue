@@ -73,7 +73,7 @@ import axios from "axios";
 
 // import Vue from "vue";
 
-import { mapState } from "vuex";
+import { mapGetters, mapState } from "vuex";
 
 export default {
   name: "HomeView",
@@ -81,7 +81,8 @@ export default {
     return { accountIds: [], step: 1, userData: {}, selectedAccount: {} };
   },
   computed: {
-    ...mapState(["nearAccount", "selectedAccountId"]),
+    ...mapState(["selectedAccountId"]),
+    ...mapGetters("near", ["nearAccountId"]),
     isDisabled() {
       return !this.selectedAccount?.options?.some((value) => value.state);
     },
@@ -97,7 +98,7 @@ export default {
     async connectAccount() {
       console.log("Call connectAccount");
 
-      if (this.nearAccount) {
+      if (this.nearAccountId) {
         const { state } = await this.$store.dispatch("connectAccount", {
           accountId: this.selectedAccount.IdName,
         });
