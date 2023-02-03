@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from "vuex";
+import { mapState } from "vuex";
 import { getJSONStorage } from "./plugins/utils";
 
 export default {
@@ -51,13 +51,12 @@ export default {
   computed: {
     ...mapState(["selectedAccountId"]),
     ...mapState("near", ["walletSelector", "nearAccount"]),
-    ...mapGetters("near", ["nearAccountId"]),
     isSignedIn() {
       return this.walletSelector?.isSignedIn();
     },
-    // nearAccountId() {
-    //   return this.nearAccount?.name || this.nearAccount?.accountId;
-    // },
+    nearAccountId() {
+      return this.nearAccount?.name || this.nearAccount?.accountId;
+    },
   },
   data() {
     return {
