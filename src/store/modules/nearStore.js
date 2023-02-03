@@ -9,7 +9,7 @@ const getters = {
     return state.walletSelector;
   },
   nearAccountId(state) {
-    return state.nearAccount.accountId;
+    return state.nearAccount?.accountId;
   },
 };
 const actions = {
