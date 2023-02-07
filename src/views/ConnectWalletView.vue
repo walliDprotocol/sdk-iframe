@@ -2,7 +2,11 @@
   <v-container fill-height class="align-content-space-between">
     <v-row justify="center" class="pt-6">
       <v-col cols="6" class="pt-16">
-        <v-container class="connect-account" style="max-width: 700px">
+        <v-container
+          v-if="false"
+          class="connect-account"
+          style="max-width: 700px"
+        >
           <v-row justify="center" class="px-0">
             <v-col cols="8" class="pt-5 px-3">
               <h1 class="title-h1 text-center">Connect wallet</h1>
@@ -47,7 +51,6 @@ import IdCard from "@/components/IdCard.vue";
 import { mapGetters, mapState } from "vuex";
 
 import { setupModal } from "@near-wallet-selector/modal-ui";
-import "@near-wallet-selector/modal-ui/styles.css";
 
 export default {
   name: "ConnectView",
