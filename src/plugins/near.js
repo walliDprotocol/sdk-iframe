@@ -1,4 +1,6 @@
 import * as nearAPI from "near-api-js";
+import { providers } from "near-api-js";
+
 import { setupWalletSelector } from "@near-wallet-selector/core";
 import { setupNearWallet } from "@near-wallet-selector/near-wallet";
 import { setupMyNearWallet } from "@near-wallet-selector/my-near-wallet";
@@ -43,11 +45,32 @@ export class NEAR {
     return this.selector;
   }
 
+  // Make a read-only call to retrieve information from the network
+  async viewMethod({ contractId, method, args = {} }) {
+    const { network } = this.selector.options;
+    const provider = new providers.JsonRpcProvider({ url: network.nodeUrl });
+
+    let res = await provider.query({
+      request_type: "call_function",
+      account_id: contractId,
+      method_name: method,
+      args_base64: Buffer.from(JSON.stringify(args)).toString("base64"),
+      finality: "optimistic",
+    });
+    return JSON.parse(Buffer.from(res.result).toString());
+  }
+
   async init() {
     // connect to NEAR
-    this.near = await nearAPI.connect(this.config);
+    // this.near = await nearAPI.connect(this.config);
     // create wallet connection
-    this.wallet = new nearAPI.WalletConnection(this.near);
+    // this.wallet = new nearAPI.WalletConnection(this.near);
+
+    // Having the key enables to call non-payable methods without interrupting the user to sign
+    // this.wallet = new nearAPI.Wallet({
+    //   createAccessKeyFor: CONTRACT_ADDRESS,
+    //   network: this.config,
+    // });
 
     this.selector = await setupWalletSelector({
       network: "testnet",

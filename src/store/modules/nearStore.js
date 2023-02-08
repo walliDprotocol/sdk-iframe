@@ -1,5 +1,6 @@
 import NearAPI from "@/plugins/near";
-import { Contract } from "near-api-js";
+
+const CONTRACT_ADDRESS = process.env.VUE_APP_NEAR_SOCIAL_CONTRACT;
 
 const state = { nearAccount: {}, walletSelector: null };
 const getters = {
@@ -12,7 +13,10 @@ const getters = {
 };
 const actions = {
   async initNear({ commit, dispatch }) {
+    //setup near wallet
     await NearAPI.init();
+
+    //setup wallet selector
     const selector = NearAPI.getWalletSelector();
     console.log("setSelector", selector);
     console.log("setSelector isSignedIn", selector.isSignedIn());
@@ -43,18 +47,13 @@ const actions = {
   async getProfileName(_, { accountId }) {
     console.log("accountid", accountId);
 
-    const contract = new Contract(
-      NearAPI.wallet.account(), // the account object that is connecting
-      "v1.social08.testnet",
-      { viewMethods: ["get"] }
-    );
-
-    // const {
-    //   [account.accountId]: { profile },
-    // } =
-    let res = await contract.get({
-      keys: [`${accountId}/profile/name`],
+    const res = await NearAPI.viewMethod({
+      contractId: CONTRACT_ADDRESS,
+      method: "get",
+      args: { keys: [`${accountId}/profile/name`] },
     });
+
+    console.log("Method call result", res);
 
     if (Object.keys(res).length == 0) return { profile: {} };
 
