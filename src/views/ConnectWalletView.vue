@@ -2,6 +2,7 @@
   <v-container fill-height class="align-content-space-between">
     <v-row justify="center" class="pt-6">
       <v-col cols="6" class="pt-16">
+        <LoaderCircle :loading="loading"></LoaderCircle>
         <v-container
           v-if="false"
           class="connect-account"
@@ -47,6 +48,7 @@
 <script>
 import FormButton from "@/components/FormButton.vue";
 import IdCard from "@/components/IdCard.vue";
+import LoaderCircle from "@/components/LoaderCircle.vue";
 
 import { mapGetters, mapState } from "vuex";
 
@@ -56,6 +58,7 @@ export default {
   name: "ConnectView",
   data() {
     return {
+      loading: true,
       modal: null,
       selected: false,
       nearAccountItem: {
@@ -79,6 +82,7 @@ export default {
       if (!value.isSignedIn()) {
         console.log(this.modal);
         this.modal.show();
+        this.loading = false;
       } else {
         this.modal.hide();
       }
@@ -118,6 +122,7 @@ export default {
   components: {
     FormButton,
     IdCard,
+    LoaderCircle,
   },
 };
 </script>

@@ -30,7 +30,7 @@
     </v-app-bar>
 
     <v-main>
-      <router-view class="router-view px-7" :class="{ loading }" />
+      <router-view class="router-view px-7" />
     </v-main>
     <!-- <div class="popup-info" v-if="hasData">
       <p class="normal-text-p">

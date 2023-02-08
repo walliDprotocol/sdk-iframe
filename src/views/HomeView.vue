@@ -54,12 +54,12 @@
           <FormButton
             :text="'CONNECT'"
             :disabled="isDisabled"
+            :loading="loadingConnectAccount"
             @click="connectAccount"
           >
           </FormButton>
         </v-col>
       </v-row>
-      <!-- <FormButton :text="'Sign'" @click="verifySignature"> </FormButton> -->
     </v-container>
   </v-container>
 </template>
@@ -78,7 +78,13 @@ import { mapGetters, mapState } from "vuex";
 export default {
   name: "HomeView",
   data() {
-    return { accountIds: [], step: 1, userData: {}, selectedAccount: {} };
+    return {
+      accountIds: [],
+      step: 1,
+      userData: {},
+      selectedAccount: {},
+      loadingConnectAccount: false,
+    };
   },
   computed: {
     ...mapState(["selectedAccountId"]),
@@ -97,28 +103,30 @@ export default {
     },
     async connectAccount() {
       console.log("Call connectAccount");
+      this.loadingConnectAccount = true;
+      try {
+        if (this.nearAccountId) {
+          const { state } = await this.$store.dispatch("connectAccount", {
+            accountId: this.selectedAccount.IdName,
+          });
 
-      if (this.nearAccountId) {
-        const { state } = await this.$store.dispatch("connectAccount", {
-          accountId: this.selectedAccount.IdName,
-        });
-
-        if (state == "success") {
-          this.$router.push("/success");
+          if (state == "success") {
+            this.$router.push("/success");
+          }
+        } else {
+          await this.$store.dispatch("near/connectNear");
         }
-      } else {
-        await this.$store.dispatch("near/connectNear");
+      } catch (error) {
+        console.log("connectAccount", error);
+      } finally {
+        this.loadingConnectAccount = false;
       }
-    },
-
-    async verifySignature() {
-      console.log("Call verifySignature");
-
-      await this.$store.dispatch("near/verifySignature");
     },
 
     backStep() {
       this.step = 1;
+      this.loadingConnectAccount = false;
+
       // uncomment this line to remove selected value on back
       // this.$store.commit("selectedAccountId");
     },
