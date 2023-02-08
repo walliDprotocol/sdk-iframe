@@ -33,7 +33,7 @@
     </v-row>
 
     <v-row>
-      <v-col cols="12" class="d-flex justify-end pb-5">
+      <v-col v-if="false" cols="12" class="d-flex justify-end pb-5">
         <FormButton
           :text="'Connect Wallet'"
           @click="connectAccount"

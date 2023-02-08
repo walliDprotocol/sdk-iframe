@@ -79,10 +79,11 @@
   background: var(--wallet-selector-content-bg, var(--content-bg));
   width: 100%;
   max-width: 812px;
-  height: 555px;
+  height: 515px;
   border-radius: 16px;
   position: absolute;
   left: 50%;
+  top: 96px;
   transform: translate(-50%, 0px);
   transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
   background-color: var(--wallet-selector-content-bg, var(--content-bg));
