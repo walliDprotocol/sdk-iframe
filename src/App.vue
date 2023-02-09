@@ -66,8 +66,8 @@ export default {
   },
   methods: {
     async signOut() {
-      await this.$store.dispatch("near/signOut");
-      this.$router.push("/");
+      // await this.$store.dispatch("near/signOut");
+      // this.$router.push("/");
     },
   },
   async mounted() {

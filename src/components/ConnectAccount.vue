@@ -4,7 +4,11 @@
       <v-col cols="12" class="d-flex">
         <v-col cols="auto" class="d-flex align-center">
           <v-img
-            :src="`./logos/${selectedAccount.IdName}.webp`"
+            :src="
+              selectedAccount.imgType === 'url'
+                ? selectedAccount.imgUrl
+                : `./logos/${selectedAccount.IdName}.webp`
+            "
             contain
             max-height="40"
             max-width="40"
@@ -89,14 +93,13 @@ export default {
     this.selectedAccount?.options.map((e) => (e.state = false));
   },
   async mounted() {
-    if (this.selectedAccount.IdName == "nearTokens") {
-      const { available: nearBalance } = await this.$store.dispatch(
-        "near/getAccountBalance"
-      );
+    const availableBalance = await this.$store.dispatch(
+      "getAccountBalance",
+      this.selectedAccount
+    );
 
-      if (nearBalance > 0) {
-        this.selectedAccount?.options.map((e) => (e.state = true));
-      }
+    if (availableBalance > 0) {
+      this.selectedAccount?.options.map((e) => (e.state = true));
     }
   },
   computed: {

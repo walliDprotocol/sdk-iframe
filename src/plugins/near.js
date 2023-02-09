@@ -23,6 +23,13 @@ import { setupXDEFI } from "@near-wallet-selector/xdefi";
 
 export const keyStore = new nearAPI.keyStores.BrowserLocalStorageKeyStore();
 
+const NEAR_SOCIAL_CONTRACTS = {
+  mainnet: process.env.VUE_APP_NEAR_SOCIAL_CONTRACT,
+  testnet: process.env.VUE_APP_NEAR_SOCIAL_CONTRACT_TESTNET,
+};
+export const NEAR_SOCIAL_CONTRACT_ADDRESS =
+  NEAR_SOCIAL_CONTRACTS[process.env.VUE_APP_NEAR_NETWORK];
+
 export class NEAR {
   near;
   wallet;
@@ -73,7 +80,7 @@ export class NEAR {
     // });
 
     this.selector = await setupWalletSelector({
-      network: "testnet",
+      network: process.env.VUE_APP_NEAR_NETWORK,
       // debug: true,
       modules: [
         ...(await setupDefaultWallets()),

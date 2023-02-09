@@ -27,6 +27,23 @@
       ]
     },
     {
+      "IdName": "usdcToken",
+      "IdNameDesc": "USDC Token",
+      "imgType": "url",
+      "imgUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/3408.png",
+      "IdDescription": "Verify USDC Tokens",
+      "type": "web3",
+      "contractType": "ERC20",
+      "contractAddress": "a0b86991c6218b36c1d19d4a2e9eb0ce3606eb48.factory.bridge.near",
+      "options": [
+        {
+          "field": "Near chain possessions",
+          "description": ["Positive balance"],
+          "state": false
+        }
+      ]
+    },
+    {
       "IdName": "google",
       "IdNameDesc": "Google",
       "type": "web2",

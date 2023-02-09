@@ -10,7 +10,10 @@
           <h1 class="title-h1">Select the IDs you'd like to verify</h1>
         </v-col>
         <v-col cols="12" class="pt-5">
-          <IdCardWrapper :items="accountIds" />
+          <IdCardWrapper
+            :items="accountIds"
+            @selectedDblClick="setSelectedAccount(), (step = 2)"
+          />
         </v-col>
       </v-row>
       <v-row class="pb-2">
@@ -106,9 +109,10 @@ export default {
       this.loadingConnectAccount = true;
       try {
         if (this.nearAccountId) {
-          const { state } = await this.$store.dispatch("connectAccount", {
-            accountId: this.selectedAccount.IdName,
-          });
+          const { state } = await this.$store.dispatch(
+            "connectAccount",
+            this.selectedAccount
+          );
 
           if (state == "success") {
             this.$router.push("/success");

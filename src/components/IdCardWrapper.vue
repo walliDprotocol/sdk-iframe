@@ -1,10 +1,11 @@
 <template>
-  <v-container class="pa-0">
+  <v-container class="px-0 id-card-wrapper">
     <v-row class="text-center">
       <v-col cols="12" sm="4" v-for="(item, index) in items" :key="index">
         <IdCard
           :item="item"
           @selected="selected = index"
+          @selectedDblClick="(selected = index), $emit('selectedDblClick')"
           :class="{ selected: index == selected }"
         />
       </v-col>
@@ -43,3 +44,15 @@ export default {
   },
 };
 </script>
+<style lang="scss">
+.id-card-wrapper {
+  height: 390px;
+  overflow: hidden;
+
+  & > .row {
+    max-height: 395px;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+}
+</style>

@@ -1,6 +1,4 @@
-import NearAPI from "@/plugins/near";
-
-const CONTRACT_ADDRESS = process.env.VUE_APP_NEAR_SOCIAL_CONTRACT;
+import NearAPI, { NEAR_SOCIAL_CONTRACT_ADDRESS } from "@/plugins/near";
 
 const state = { nearAccount: {}, walletSelector: null };
 const getters = {
@@ -48,7 +46,7 @@ const actions = {
     console.log("accountid", accountId);
 
     const res = await NearAPI.viewMethod({
-      contractId: CONTRACT_ADDRESS,
+      contractId: NEAR_SOCIAL_CONTRACT_ADDRESS,
       method: "get",
       args: { keys: [`${accountId}/profile/name`] },
     });

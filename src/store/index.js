@@ -4,6 +4,7 @@ import PubNub from "pubnub";
 
 import * as modules from "./modules";
 import { getJSONStorage } from "@/plugins/utils";
+import near from "@/plugins/near";
 
 const TWITTER_LOGIN =
   process.env.VUE_APP_BACKEND_URL + "/api/v1/redirect/login/twitter";
@@ -17,6 +18,7 @@ const ACCOUNTS_LIST = [
   "linkedin",
   "google",
   "nearTokens",
+  "usdcToken",
 ];
 
 console.log(TWITTER_LOGIN);
@@ -35,6 +37,51 @@ const mutations = {
 };
 
 const actions = {
+  async getAccountBalance(
+    { dispatch, getters },
+    { accountIdName, contractType, contractAddress }
+  ) {
+    if (contractType == "ERC20") {
+      const accountId = getters["near/nearAccountId"];
+      console.log(accountId);
+      const res = await near.viewMethod({
+        contractId: contractAddress,
+        method: "ft_balance_of",
+        args: { account_id: accountId },
+      });
+
+      console.log("res", res);
+
+      return res;
+    }
+
+    if (accountIdName == "nearTokens") {
+      const { available: nearBalance } = await dispatch(
+        "near/getAccountBalance"
+      );
+      return nearBalance;
+    }
+  },
+
+  async setERC20TokensUserData(
+    { dispatch, getters },
+    { selectedAccount, contractType, contractAddress }
+  ) {
+    const accountId = getters["near/nearAccountId"];
+
+    const balance = await dispatch("getAccountBalance", {
+      accountId,
+      contractType,
+      contractAddress,
+    });
+
+    const userData = {
+      accountId,
+      balance: balance,
+    };
+    localStorage.setItem(`${selectedAccount}_user`, JSON.stringify(userData));
+  },
+
   // Send localStorage data trough pubnub to iframe opener
   async publishData() {
     console.log("publishData Action");
@@ -123,22 +170,32 @@ const actions = {
     return { userData, nearAccountId };
   },
 
-  async connectAccount({ dispatch }, { accountId }) {
-    console.log("connectAccount provider", accountId);
+  async connectAccount({ dispatch }, selectedAccount) {
+    const selectedId = selectedAccount.IdName;
+    const contractType = selectedAccount.contractType;
+    console.log("connectAccount provider", selectedId);
     let redirectUrl;
 
-    if (!ACCOUNTS_LIST.includes(accountId)) {
-      console.log("Error connectAccount : Not Implemented => ", accountId);
+    if (!ACCOUNTS_LIST.includes(selectedId)) {
+      console.log("Error connectAccount : Not Implemented => ", selectedId);
       throw "Not Implemented";
     }
 
-    if ("nearTokens" == accountId) {
-      dispatch("setNearTokensUserData", { accountId });
+    if ("ERC20" == contractType) {
+      dispatch("setERC20TokensUserData", {
+        ...selectedAccount,
+        selectedAccount: selectedId,
+      });
+      return { state: "success" };
+    }
+
+    if ("nearTokens" == selectedId) {
+      dispatch("setNearTokensUserData", { accountId: selectedId });
       return { state: "success" };
     }
 
     // Get the redirect url from API
-    redirectUrl = await dispatch("oauth/getRedirectURL", accountId);
+    redirectUrl = await dispatch("oauth/getRedirectURL", selectedId);
 
     //Set localstorage state to know when to check data
     localStorage.setItem("@wallid:oauth:state", 1);
@@ -155,15 +212,15 @@ const actions = {
       console.log(popup);
 
       const checkPopup = setInterval(() => {
-        if (popup.window.location.href.includes("?success=" + accountId)) {
+        if (popup.window.location.href.includes("?success=" + selectedId)) {
           popup.close();
         }
 
         if (!popup || !popup.closed || popup.location.host.includes("twitter"))
           return;
-        console.log("popup close check for data " + accountId);
+        console.log("popup close check for data " + selectedId);
 
-        let userData = localStorage.getItem(accountId + "_user");
+        let userData = localStorage.getItem(selectedId + "_user");
         if (
           userData !== null &&
           localStorage.getItem("@wallid:oauth:state") == 2
