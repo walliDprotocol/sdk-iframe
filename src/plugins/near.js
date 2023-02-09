@@ -20,15 +20,18 @@ import { setupCoin98Wallet } from "@near-wallet-selector/coin98-wallet";
 import { setupOptoWallet } from "@near-wallet-selector/opto-wallet";
 import { setupNeth } from "@near-wallet-selector/neth";
 import { setupXDEFI } from "@near-wallet-selector/xdefi";
+import { ethers } from "ethers";
 
 export const keyStore = new nearAPI.keyStores.BrowserLocalStorageKeyStore();
+
+// const NEAR_NETWORK = process.env.VUE_APP_NEAR_NETWORK_TESTNET;
+const NEAR_NETWORK = process.env.VUE_APP_NEAR_NETWORK;
 
 const NEAR_SOCIAL_CONTRACTS = {
   mainnet: process.env.VUE_APP_NEAR_SOCIAL_CONTRACT,
   testnet: process.env.VUE_APP_NEAR_SOCIAL_CONTRACT_TESTNET,
 };
-export const NEAR_SOCIAL_CONTRACT_ADDRESS =
-  NEAR_SOCIAL_CONTRACTS[process.env.VUE_APP_NEAR_NETWORK];
+export const NEAR_SOCIAL_CONTRACT_ADDRESS = NEAR_SOCIAL_CONTRACTS[NEAR_NETWORK];
 
 export class NEAR {
   near;
@@ -67,6 +70,21 @@ export class NEAR {
     return JSON.parse(Buffer.from(res.result).toString());
   }
 
+  // Get the account native token balance from the network
+  async getNativeBalance({ accountId }) {
+    const { network } = this.selector.options;
+    const provider = new providers.JsonRpcProvider({ url: network.nodeUrl });
+
+    let res = await provider.query({
+      request_type: "view_account",
+      account_id: accountId,
+      finality: "final",
+    });
+    const ethValue = ethers.utils.formatUnits(res.amount, 24);
+
+    return JSON.parse(Buffer.from(ethValue).toString());
+  }
+
   async init() {
     // connect to NEAR
     // this.near = await nearAPI.connect(this.config);
@@ -80,7 +98,7 @@ export class NEAR {
     // });
 
     this.selector = await setupWalletSelector({
-      network: process.env.VUE_APP_NEAR_NETWORK,
+      network: NEAR_NETWORK,
       // debug: true,
       modules: [
         ...(await setupDefaultWallets()),

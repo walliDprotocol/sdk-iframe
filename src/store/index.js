@@ -38,9 +38,10 @@ const mutations = {
 
 const actions = {
   async getAccountBalance(
-    { dispatch, getters },
-    { accountIdName, contractType, contractAddress }
+    { getters },
+    { IdName: selectedIdName, contractType, contractAddress }
   ) {
+    console.log({ selectedIdName, contractType, contractAddress });
     if (contractType == "ERC20") {
       const accountId = getters["near/nearAccountId"];
       console.log(accountId);
@@ -55,11 +56,12 @@ const actions = {
       return res;
     }
 
-    if (accountIdName == "nearTokens") {
-      const { available: nearBalance } = await dispatch(
-        "near/getAccountBalance"
-      );
-      return nearBalance;
+    if (selectedIdName == "nearTokens") {
+      const accountId = getters["near/nearAccountId"];
+      const res = await near.getNativeBalance({
+        accountId,
+      });
+      return res;
     }
   },
 
