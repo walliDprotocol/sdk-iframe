@@ -47,7 +47,7 @@ export default {
 <style lang="scss">
 .id-card-wrapper {
   height: 390px;
-  overflow: hidden;
+  // overflow: hidden;
 
   & > .row {
     max-height: 395px;
