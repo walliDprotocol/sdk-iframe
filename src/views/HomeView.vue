@@ -41,7 +41,10 @@
           </h1>
         </v-col>
         <v-col cols="12" class="pt-5">
-          <ConnectAccount :selectedAccount="selectedAccount" />
+          <ConnectAccount
+            :selectedAccount="selectedAccount"
+            @errorMessage="errorMessage = $event"
+          />
         </v-col>
       </v-row>
 
@@ -87,19 +90,23 @@ export default {
       userData: {},
       selectedAccount: {},
       loadingConnectAccount: false,
+      errorMessage: null,
     };
   },
   computed: {
     ...mapState(["selectedAccountId"]),
     ...mapGetters("near", ["nearAccountId"]),
     isDisabled() {
-      return !this.selectedAccount?.options?.some((value) => value.state);
+      return (
+        !!this.errorMessage ||
+        !this.selectedAccount?.options?.some((value) => value.state)
+      );
     },
   },
   methods: {
     setSelectedAccount() {
       // this.$router.push("/success");
-
+      this.errorMessage = null;
       this.selectedAccount = this.accountIds.find(
         (e) => e.IdName == this.selectedAccountId
       );

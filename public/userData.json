@@ -5,10 +5,12 @@
       "IdNameDesc": "Near tokens",
       "IdDescription": "Verify a NEAR ERC20 Token",
       "type": "web3",
+      "contractType": "native",
       "options": [
         {
           "field": "Near possessions",
           "description": ["Positive balance"],
+          "value": 0,
           "state": false
         }
       ]
@@ -38,7 +40,9 @@
       "options": [
         {
           "field": "USDC possessions",
+          "type": "balance",
           "description": ["Positive balance"],
+          "value": 0,
           "state": false
         }
       ]

@@ -82,6 +82,13 @@
         </v-col>
       </v-col>
     </v-row>
+    <v-row>
+      <v-col>
+        <p :class="{ 'error-message': errorMessage }">
+          {{ errorMessage || defaultMessage }}
+        </p>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -93,13 +100,26 @@ export default {
     this.selectedAccount?.options.map((e) => (e.state = false));
   },
   async mounted() {
-    const availableBalance = await this.$store.dispatch(
-      "getAccountBalance",
-      this.selectedAccount
-    );
-
-    if (availableBalance > 0) {
-      this.selectedAccount?.options.map((e) => (e.state = true));
+    try {
+      if (
+        this.selectedAccount.contractType == "native" ||
+        this.selectedAccount.contractType == "ERC20"
+      ) {
+        const availableBalance = await this.$store.dispatch(
+          "getAccountBalance",
+          this.selectedAccount
+        );
+        if (availableBalance > this.selectedAccount?.options?.[0]?.value) {
+          this.selectedAccount?.options.map((e) => (e.state = true));
+        } else {
+          throw new Error(
+            `Your  ${this.selectedAccount?.IdNameDesc}  balance doesn't meet the requirements`
+          );
+        }
+      }
+    } catch (error) {
+      this.$emit("errorMessage", error.message);
+      this.errorMessage = error.message;
     }
   },
   computed: {
@@ -108,6 +128,9 @@ export default {
     },
     userData() {
       return this.selectedAccount?.userData || {};
+    },
+    defaultMessage() {
+      return "After click in “verify” button please accept the signature request presented by NEAR wallet.";
     },
   },
   methods: {
@@ -122,8 +145,13 @@ export default {
   data() {
     return {
       selected: -1,
+      errorMessage: "",
     };
   },
 };
 </script>
-<style lang="scss"></style>
+<style lang="scss">
+.error-message {
+  color: red;
+}
+</style>

@@ -39,49 +39,52 @@ const mutations = {
 const actions = {
   async getAccountBalance(
     { getters },
-    { IdName: selectedIdName, contractType, contractAddress }
+    { IdName: selectedIdName, IdNameDesc, contractType, contractAddress }
   ) {
     console.log({ selectedIdName, contractType, contractAddress });
-    if (contractType == "ERC20") {
-      const accountId = getters["near/nearAccountId"];
-      console.log(accountId);
-      const res = await near.viewMethod({
-        contractId: contractAddress,
-        method: "ft_balance_of",
-        args: { account_id: accountId },
-      });
+    try {
+      if (contractType == "ERC20") {
+        const accountId = getters["near/nearAccountId"];
+        console.log(accountId);
+        const res = await near.viewMethod({
+          contractId: contractAddress,
+          method: "ft_balance_of",
+          args: { account_id: accountId },
+        });
 
-      console.log("res", res);
+        console.log("res", res);
 
-      return res;
-    }
+        return res;
+      }
 
-    if (selectedIdName == "nearTokens") {
-      const accountId = getters["near/nearAccountId"];
-      const res = await near.getNativeBalance({
-        accountId,
-      });
-      return res;
+      if (selectedIdName == "nearTokens") {
+        const accountId = getters["near/nearAccountId"];
+        const res = await near.getNativeBalance({
+          accountId,
+        });
+        return res;
+      }
+    } catch (error) {
+      console.error(error);
+      throw new Error(
+        `It was not possible to verify ${IdNameDesc} possessions`
+      );
     }
   },
 
-  async setERC20TokensUserData(
-    { dispatch, getters },
-    { selectedAccount, contractType, contractAddress }
-  ) {
+  async setERC20TokensUserData({ dispatch, getters }, selectedAccount) {
     const accountId = getters["near/nearAccountId"];
 
-    const balance = await dispatch("getAccountBalance", {
-      accountId,
-      contractType,
-      contractAddress,
-    });
+    const balance = await dispatch("getAccountBalance", selectedAccount);
 
     const userData = {
       accountId,
       balance: balance,
     };
-    localStorage.setItem(`${selectedAccount}_user`, JSON.stringify(userData));
+    localStorage.setItem(
+      `${selectedAccount.IdName}_user`,
+      JSON.stringify(userData)
+    );
   },
 
   // Send localStorage data trough pubnub to iframe opener
@@ -184,7 +187,7 @@ const actions = {
     }
 
     if ("ERC20" == contractType) {
-      dispatch("setERC20TokensUserData", {
+      await dispatch("setERC20TokensUserData", {
         ...selectedAccount,
         selectedAccount: selectedId,
       });
@@ -192,7 +195,7 @@ const actions = {
     }
 
     if ("nearTokens" == selectedId) {
-      dispatch("setNearTokensUserData", { accountId: selectedId });
+      await dispatch("setNearTokensUserData", selectedAccount);
       return { state: "success" };
     }
 
@@ -235,14 +238,19 @@ const actions = {
       }, 1000);
     });
   },
-  async setNearTokensUserData({ state, dispatch }, { accountId }) {
-    const { available: nearBalance } = await dispatch("near/getAccountBalance");
+  async setNearTokensUserData({ dispatch, getters }, selectedAccount) {
+    const balance = await dispatch("getAccountBalance", selectedAccount);
+
+    const accountId = getters["near/nearAccountId"];
 
     const userData = {
-      accountId: state.near.nearAccount?.accountId,
-      balance: nearBalance,
+      accountId: accountId,
+      balance,
     };
-    localStorage.setItem(`${accountId}_user`, JSON.stringify(userData));
+    localStorage.setItem(
+      `${selectedAccount.IdName}_user`,
+      JSON.stringify(userData)
+    );
   },
 };
 export default new Vuex.Store({
