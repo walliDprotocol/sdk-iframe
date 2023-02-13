@@ -20,6 +20,13 @@ const actions = {
     console.log("setSelector isSignedIn", selector.isSignedIn());
     commit("setSelector", selector);
 
+    selector.store.observable.subscribe((state) => {
+      console.log("State changed:", state);
+      dispatch("getAccounts").then((account) =>
+        dispatch("setAccount", { account })
+      );
+    });
+
     if (selector.isSignedIn()) {
       const account = await dispatch("getAccounts");
       console.log("account", account);
@@ -73,11 +80,11 @@ const actions = {
     console.log("account", account);
     return { ...account, ...profile };
   },
-  async setAccount({ state, commit }, { account }) {
+  async setAccount({ commit }, { account }) {
     if (!account) {
       return;
     }
-    await state.walletSelector.setActiveAccount(account?.accountId);
+    // await state.walletSelector.setActiveAccount(account?.accountId);
 
     commit("setNearAccount", account);
 

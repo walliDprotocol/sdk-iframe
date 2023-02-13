@@ -64,6 +64,13 @@ export default {
       hasData: false,
     };
   },
+  watch: {
+    nearAccountId(value) {
+      if (value) {
+        this.$router.push("/home");
+      }
+    },
+  },
   methods: {
     async signOut() {
       // await this.$store.dispatch("near/signOut");
@@ -162,7 +169,7 @@ export default {
 }
 
 .account-id {
-  display: inline;
+  display: inline-block;
   padding: 2px 8px 2px 18px;
   border-radius: 11px;
   background-color: var(--light-grey);
