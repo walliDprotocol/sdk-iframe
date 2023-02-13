@@ -12,8 +12,8 @@ import { setupMeteorWallet } from "@near-wallet-selector/meteor-wallet";
 import { setupNarwallets } from "@near-wallet-selector/narwallets";
 import { setupWelldoneWallet } from "@near-wallet-selector/welldone-wallet";
 import { setupLedger } from "@near-wallet-selector/ledger";
-import { setupWalletConnect } from "@near-wallet-selector/wallet-connect";
-import { setupNightlyConnect } from "@near-wallet-selector/nightly-connect";
+// import { setupWalletConnect } from "@near-wallet-selector/wallet-connect";
+// import { setupNightlyConnect } from "@near-wallet-selector/nightly-connect";
 import { setupDefaultWallets } from "@near-wallet-selector/default-wallets";
 import { setupNearFi } from "@near-wallet-selector/nearfi";
 import { setupCoin98Wallet } from "@near-wallet-selector/coin98-wallet";
@@ -117,24 +117,24 @@ export class NEAR {
         setupOptoWallet(),
         setupNeth(),
         setupXDEFI(),
-        setupWalletConnect({
-          projectId: "c4f79cc...",
-          metadata: {
-            name: "NEAR Wallet Selector",
-            description: "Example dApp used by NEAR Wallet Selector",
-            url: "https://github.com/near/wallet-selector",
-            icons: ["https://avatars.githubusercontent.com/u/37784886"],
-          },
-        }),
-        setupNightlyConnect({
-          url: "wss://relay.nightly.app/app",
-          appMetadata: {
-            additionalInfo: "",
-            application: "NEAR Wallet Selector",
-            description: "Example dApp used by NEAR Wallet Selector",
-            icon: "https://near.org/wp-content/uploads/2020/09/cropped-favicon-192x192.png",
-          },
-        }),
+        // setupWalletConnect({
+        //   projectId: "c4f79cc...",
+        //   metadata: {
+        //     name: "NEAR Wallet Selector",
+        //     description: "Example dApp used by NEAR Wallet Selector",
+        //     url: "https://github.com/near/wallet-selector",
+        //     icons: ["https://avatars.githubusercontent.com/u/37784886"],
+        //   },
+        // }),
+        // setupNightlyConnect({
+        //   url: "wss://relay.nightly.app/app",
+        //   appMetadata: {
+        //     additionalInfo: "",
+        //     application: "NEAR Wallet Selector",
+        //     description: "Example dApp used by NEAR Wallet Selector",
+        //     icon: "https://near.org/wp-content/uploads/2020/09/cropped-favicon-192x192.png",
+        //   },
+        // }),
       ],
     });
   }
