@@ -24,8 +24,8 @@ import { ethers } from "ethers";
 
 export const keyStore = new nearAPI.keyStores.BrowserLocalStorageKeyStore();
 
-const NEAR_NETWORK = process.env.VUE_APP_NEAR_NETWORK_TESTNET;
-// const NEAR_NETWORK = process.env.VUE_APP_NEAR_NETWORK;
+// const NEAR_NETWORK = process.env.VUE_APP_NEAR_NETWORK_TESTNET;
+const NEAR_NETWORK = process.env.VUE_APP_NEAR_NETWORK;
 
 const NEAR_SOCIAL_CONTRACTS = {
   mainnet: process.env.VUE_APP_NEAR_SOCIAL_CONTRACT,
