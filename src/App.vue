@@ -20,6 +20,7 @@
             />
           </v-col>
           <v-spacer />
+          <NetworkDropdown></NetworkDropdown>
           <v-col v-if="nearAccountId">
             <p class="account-id" @click="signOut">
               <span>&bull;</span>{{ nearAccountId }}
@@ -43,11 +44,11 @@
 
 <script>
 import { mapState } from "vuex";
+import NetworkDropdown from "./components/NetworkDropdown.vue";
 import { getJSONStorage } from "./plugins/utils";
 
 export default {
   name: "App",
-
   computed: {
     ...mapState(["selectedAccountId"]),
     ...mapState("near", ["walletSelector", "nearAccount"]),
@@ -80,24 +81,18 @@ export default {
   async mounted() {
     // this will store a wallet access keys in browser's local  storage
     await this.$store.dispatch("near/initNear");
-
     console.log(this.nearAccount);
     // },
-
     // async mounted() {
     // console.log(await this.walletSelector.wallet());
     // console.log(this.walletSelector?.isSignedIn());
-
     if (this.$route.name == "NearPopup") {
       return;
     }
-
     const { userData, nearAccountId } = await this.$store.dispatch(
       "getURLSearchParams"
     );
-
     console.log("APP", userData, this.selectedAccountId);
-
     const userDataQuery = {
       discord: "id",
       facebook: "id",
@@ -107,34 +102,31 @@ export default {
       linkedin: "localizedFirstName",
       google: "id",
     };
-
     console.log("###test query### ", userDataQuery[this.selectedAccountId]);
-
     if (
       userDataQuery[this.selectedAccountId] in userData &&
       localStorage.getItem("@wallid:oauth:state") == 1
     ) {
       console.log("Push route success", userData);
-
       // Push success screen
       this.$router.push("/?success=" + this.selectedAccountId);
       localStorage.setItem("@wallid:oauth:state", 2);
       this.hasData = getJSONStorage("local", this.selectedAccountId + "_user");
-
       if (this.hasData) {
         this.$router.push("/success");
         this.loading = false;
       }
       return;
     }
-
     console.log("Connect", userData, nearAccountId);
-
     if (this.walletSelector?.isSignedIn()) {
       this.$router.push("/home");
+    } else {
+      this.$router.push("/");
     }
     this.loading = false;
   },
+  components: { NetworkDropdown },
 };
 </script>
 

@@ -1,4 +1,5 @@
-import NearAPI, { NEAR_SOCIAL_CONTRACT_ADDRESS } from "@/plugins/near";
+import NearAPI from "@/plugins/near";
+import { getJSONStorage } from "@/plugins/utils";
 
 const state = { nearAccount: {}, walletSelector: null };
 const getters = {
@@ -11,8 +12,13 @@ const getters = {
 };
 const actions = {
   async initNear({ commit, dispatch }) {
+    let sessionNetwork = getJSONStorage("local", "selectedNetwork");
+    const selectedNetwork =
+      Object.entries(sessionNetwork).length > 0
+        ? sessionNetwork
+        : { id: "testnet" };
     //setup near wallet
-    await NearAPI.init();
+    await NearAPI.init(selectedNetwork.id);
 
     //setup wallet selector
     const selector = NearAPI.getWalletSelector();
@@ -53,7 +59,7 @@ const actions = {
     console.log("accountid", accountId);
 
     const res = await NearAPI.viewMethod({
-      contractId: NEAR_SOCIAL_CONTRACT_ADDRESS,
+      contractId: NearAPI.NEAR_SOCIAL_CONTRACT_ADDRESS,
       method: "get",
       args: { keys: [`${accountId}/profile/name`] },
     });

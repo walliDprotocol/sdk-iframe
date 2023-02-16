@@ -21,17 +21,17 @@ import { setupCoin98Wallet } from "@near-wallet-selector/coin98-wallet";
 import { setupNeth } from "@near-wallet-selector/neth";
 import { setupXDEFI } from "@near-wallet-selector/xdefi";
 import { ethers } from "ethers";
+// import { getJSONStorage } from "./utils";
 
 export const keyStore = new nearAPI.keyStores.BrowserLocalStorageKeyStore();
 
 // const NEAR_NETWORK = process.env.VUE_APP_NEAR_NETWORK_TESTNET;
-const NEAR_NETWORK = process.env.VUE_APP_NEAR_NETWORK;
+// const NEAR_NETWORK = process.env.VUE_APP_NEAR_NETWORK;
 
 const NEAR_SOCIAL_CONTRACTS = {
   mainnet: process.env.VUE_APP_NEAR_SOCIAL_CONTRACT,
   testnet: process.env.VUE_APP_NEAR_SOCIAL_CONTRACT_TESTNET,
 };
-export const NEAR_SOCIAL_CONTRACT_ADDRESS = NEAR_SOCIAL_CONTRACTS[NEAR_NETWORK];
 
 export class NEAR {
   near;
@@ -85,7 +85,7 @@ export class NEAR {
     return JSON.parse(Buffer.from(ethValue).toString());
   }
 
-  async init() {
+  async init(network) {
     // connect to NEAR
     // this.near = await nearAPI.connect(this.config);
     // create wallet connection
@@ -97,8 +97,17 @@ export class NEAR {
     //   network: this.config,
     // });
 
+    // let sessionNetwork = getJSONStorage("session", "selectedNetwork");
+    // const selectedNetwork =
+    //   Object.entries(sessionNetwork).length > 0
+    //     ? sessionNetwork
+    //     : this.networksList[0];
+    // const NEAR_NETWORK = selectedNetwork.id;
+
+    this.NEAR_SOCIAL_CONTRACT_ADDRESS = NEAR_SOCIAL_CONTRACTS[network];
+
     this.selector = await setupWalletSelector({
-      network: NEAR_NETWORK,
+      network: network,
       // debug: true,
       modules: [
         ...(await setupDefaultWallets()),

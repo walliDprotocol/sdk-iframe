@@ -54,7 +54,7 @@ import { mapGetters, mapState } from "vuex";
 
 import { setupModal } from "@near-wallet-selector/modal-ui";
 
-import { NEAR_SOCIAL_CONTRACT_ADDRESS } from "@/plugins/near";
+import NearAPI from "@/plugins/near";
 
 export default {
   name: "ConnectView",
@@ -80,7 +80,7 @@ export default {
     walletSelector(value) {
       this.modal = setupModal(value, {
         // contractId: process.env.VUE_APP_NEAR_SOCIAL_CONTRACT_TESTNET,
-        contractId: NEAR_SOCIAL_CONTRACT_ADDRESS,
+        contractId: NearAPI.NEAR_SOCIAL_CONTRACT_ADDRESS,
       });
       if (!value.isSignedIn()) {
         console.log(this.modal);

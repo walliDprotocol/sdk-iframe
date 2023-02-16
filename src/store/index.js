@@ -1,10 +1,13 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import PubNub from "pubnub";
+// import NearAPI from "@/plugins/near";
 
 import * as modules from "./modules";
 import { getJSONStorage } from "@/plugins/utils";
 import near from "@/plugins/near";
+
+// import router from "@/router";
 
 const TWITTER_LOGIN =
   process.env.VUE_APP_BACKEND_URL + "/api/v1/redirect/login/twitter";
@@ -25,7 +28,7 @@ console.log(TWITTER_LOGIN);
 
 Vue.use(Vuex);
 
-const state = { nearAccount: null, selectedAccountId: {} };
+const state = { nearAccount: null, selectedAccountId: {}, selectedNetwork: {} };
 const mutations = {
   nearAccount(state, value) {
     state.nearAccount = value;
@@ -34,9 +37,37 @@ const mutations = {
     sessionStorage.setItem("selectedAccountId", value);
     state.selectedAccountId = value;
   },
+  setNetwork(state, value) {
+    localStorage.setItem("selectedNetwork", JSON.stringify(value));
+    state.selectedNetwork = value;
+  },
 };
 
+const getters = {
+  selectedNetwork(state) {
+    return state.selectedNetwork;
+  },
+};
 const actions = {
+  async changeNetwork({ state, commit, getters }, selectedNetwork) {
+    const accountId = getters["near/nearAccountId"];
+
+    console.log("nearAccount", accountId);
+    console.log("state.selectedNetwork.id", state.selectedNetwork.id);
+    console.log("selectedNetwork.id", selectedNetwork.id);
+    if (selectedNetwork.id !== state.selectedNetwork.id && accountId) {
+      localStorage.removeItem("near_app_wallet_auth_key");
+
+      // await NearAPI.init(selectedNetwork.id);
+
+      // router.push("/");
+      window.location = "/";
+    }
+    commit("setNetwork", selectedNetwork);
+
+    //TODO: change near network (reload)
+  },
+
   async getAccountBalance(
     { getters },
     { IdName: selectedIdName, IdNameDesc, contractType, contractAddress }
@@ -255,7 +286,7 @@ const actions = {
 };
 export default new Vuex.Store({
   state,
-  getters: {},
+  getters,
   mutations,
   actions,
   modules,
