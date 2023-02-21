@@ -21,7 +21,7 @@
           </v-col>
           <v-spacer />
           <NetworkDropdown></NetworkDropdown>
-          <v-col v-if="nearAccountId">
+          <v-col cols="auto" v-if="nearAccountId">
             <p class="account-id mb-0" @click="signOut">
               <span>&bull;</span>{{ nearAccountId }}
             </p>

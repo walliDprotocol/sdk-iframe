@@ -1,5 +1,5 @@
 <template>
-  <v-col class="text-center d-flex align-center justify-end">
+  <v-col cols="auto" class="text-center d-flex align-center justify-end">
     <v-select
       class="network-dropdown"
       v-model="selectedNetwork"
