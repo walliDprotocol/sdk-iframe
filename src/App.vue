@@ -66,11 +66,11 @@ export default {
     };
   },
   watch: {
-    nearAccountId(value) {
-      if (value) {
-        this.$router.push("/home");
-      }
-    },
+    // nearAccountId(value) {
+    //   if (value) {
+    //     this.$router.push("/home");
+    //   }
+    // },
   },
   methods: {
     async signOut() {
@@ -81,7 +81,6 @@ export default {
   async mounted() {
     // this will store a wallet access keys in browser's local  storage
     await this.$store.dispatch("near/initNear");
-    console.log(this.nearAccount);
     // },
     // async mounted() {
     // console.log(await this.walletSelector.wallet());

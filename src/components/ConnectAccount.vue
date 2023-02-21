@@ -82,10 +82,10 @@
         </v-col>
       </v-col>
     </v-row>
-    <v-row>
+    <v-row v-if="errorMessage">
       <v-col>
         <p :class="{ 'error-message': errorMessage }">
-          {{ errorMessage || defaultMessage }}
+          {{ errorMessage }}
         </p>
       </v-col>
     </v-row>

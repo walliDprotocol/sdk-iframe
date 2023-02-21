@@ -236,38 +236,39 @@ const actions = {
     //Set localstorage state to know when to check data
     localStorage.setItem("@wallid:oauth:state", 1);
 
-    return new Promise((resolve) => {
-      console.log("## redirectUrl : ", redirectUrl);
+    // return new Promise((resolve) => {
+    console.log("## redirectUrl : ", redirectUrl);
+    window.location = redirectUrl;
 
-      // const CLIENT_URL = window.location.origin;
-      const popup = window.open(
-        redirectUrl,
-        "popup",
-        "width=600,height=600,toolbar=no,menubar=no"
-      );
-      console.log(popup);
+    // const CLIENT_URL = window.location.origin;
+    // const popup = window.open(
+    //   redirectUrl,
+    //   "popup",
+    //   "width=600,height=600,toolbar=no,menubar=no"
+    // );
+    // console.log(popup);
 
-      const checkPopup = setInterval(() => {
-        if (popup.window.location.href.includes("?success=" + selectedId)) {
-          popup.close();
-        }
+    // const checkPopup = setInterval(() => {
+    //   if (popup.window.location.href.includes("?success=" + selectedId)) {
+    //     popup.close();
+    //   }
 
-        if (!popup || !popup.closed || popup.location.host.includes("twitter"))
-          return;
-        console.log("popup close check for data " + selectedId);
+    //   if (!popup || !popup.closed || popup.location.host.includes("twitter"))
+    //     return;
+    //   console.log("popup close check for data " + selectedId);
 
-        let userData = localStorage.getItem(selectedId + "_user");
-        if (
-          userData !== null &&
-          localStorage.getItem("@wallid:oauth:state") == 2
-        ) {
-          console.log("userData", userData);
-          clearInterval(checkPopup);
-          popup.close();
-          resolve({ state: "success" });
-        }
-      }, 1000);
-    });
+    //   let userData = localStorage.getItem(selectedId + "_user");
+    //   if (
+    //     userData !== null &&
+    //     localStorage.getItem("@wallid:oauth:state") == 2
+    //   ) {
+    //     console.log("userData", userData);
+    //     clearInterval(checkPopup);
+    //     popup.close();
+    //     resolve({ state: "success" });
+    //   }
+    // }, 1000);
+    // });
   },
   async setNearTokensUserData({ dispatch, getters }, selectedAccount) {
     const balance = await dispatch("getAccountBalance", selectedAccount);
