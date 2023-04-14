@@ -9,8 +9,7 @@ import near from "@/plugins/near";
 
 // import router from "@/router";
 
-const TWITTER_LOGIN =
-  process.env.VUE_APP_BACKEND_URL + "/api/v1/redirect/login/twitter";
+const TWITTER_LOGIN = process.env.VUE_APP_BACKEND_URL + "/api/v1/redirect/login/twitter";
 
 const ACCOUNTS_LIST = [
   "discord",
@@ -97,9 +96,7 @@ const actions = {
       }
     } catch (error) {
       console.error(error);
-      throw new Error(
-        `It was not possible to verify ${IdNameDesc} possessions`
-      );
+      throw new Error(`It was not possible to verify ${IdNameDesc} possessions`);
     }
   },
 
@@ -112,10 +109,7 @@ const actions = {
       accountId,
       balance: balance,
     };
-    localStorage.setItem(
-      `${selectedAccount.IdName}_user`,
-      JSON.stringify(userData)
-    );
+    localStorage.setItem(`${selectedAccount.IdName}_user`, JSON.stringify(userData));
   },
 
   // Send localStorage data trough pubnub to iframe opener
@@ -133,9 +127,7 @@ const actions = {
 
     let userData = {};
 
-    ACCOUNTS_LIST.forEach(
-      (a) => (userData[a] = getJSONStorage("local", a + "_user"))
-    );
+    ACCOUNTS_LIST.forEach((a) => (userData[a] = getJSONStorage("local", a + "_user")));
 
     console.log("UserData to send to client:", userData);
 
@@ -159,51 +151,79 @@ const actions = {
     );
   },
 
-  async getURLSearchParams({ commit, dispatch }) {
+  async getURLSearchParams() {
     let urlParams = new URLSearchParams(window.location.search);
-    let userData = {},
-      nearAccountId = "";
+
+    const allowedParamsObj = {};
 
     console.log("url parameters : ", urlParams);
-    // get near account id
-    if (urlParams.has("account_id")) {
-      localStorage.setItem("nearAccount", urlParams.get("account_id"));
-    }
-    nearAccountId = localStorage.getItem("nearAccount");
-    // commit("near/setNearAccount", { accountId: nearAccountId }, { root: true });
 
-    if (urlParams.has("uuid")) {
-      sessionStorage.setItem("uuid", urlParams.get("uuid"));
+    const allowedParameters = ["account_id", "uuid", "state", "code"];
+    const localStorageParamsMap = { account_id: "nearAccount" };
+    const sessionStorageParamsMap = { uuid: "uuid" };
+
+    for (let param of urlParams.keys()) {
+      if (allowedParameters.includes(param)) {
+        allowedParamsObj[param] = urlParams.get(param);
+
+        if (param in localStorageParamsMap) {
+          localStorage.setItem(localStorageParamsMap[param], urlParams.get(param));
+        }
+        if (param in sessionStorageParamsMap) {
+          sessionStorage.setItem(sessionStorageParamsMap[param], urlParams.get(param));
+        }
+      }
     }
 
+    console.log("allowedParamsObj :", allowedParamsObj);
+
+    return allowedParamsObj;
+  },
+
+  async getOauthData({ dispatch, commit }, { state, code }) {
+    const userData = {};
     const selectedAccountId = sessionStorage.getItem("selectedAccountId");
     commit("selectedAccountId", selectedAccountId);
-
-    console.log("provider ", selectedAccountId);
+    console.log("selectedAccountId ", selectedAccountId);
 
     try {
-      let state = urlParams.get("state");
-      let code = urlParams.get("code");
-
       if (!ACCOUNTS_LIST.includes(selectedAccountId)) {
-        throw (
-          "Error getURLSearchParams : Not Implemented => " + selectedAccountId
-        );
+        throw "Error getURLSearchParams : Not Implemented => " + selectedAccountId;
       }
 
       // Get the user Oauth url from API using oauth tokens
-      userData = await dispatch("oauth/getOauthData", {
-        state,
-        code,
-        account: selectedAccountId,
-        redirectUrl: window.location.origin,
-      });
+      Object.assign(
+        userData,
+        await dispatch("oauth/getOauthData", {
+          state,
+          code,
+          account: selectedAccountId,
+          redirectUrl: window.location.origin,
+        })
+      );
     } catch (error) {
       console.log("Error getting data :", error);
       // Fail silently
       // throw error;
     }
-    return { userData, nearAccountId };
+
+    console.log("APP", userData, selectedAccountId);
+    const userDataQuery = {
+      discord: "id",
+      facebook: "id",
+      reddit: "name",
+      github: "login",
+      twitter: "username",
+      linkedin: "localizedFirstName",
+      google: "id",
+    };
+    console.log("###test query### ", userDataQuery[selectedAccountId]);
+
+    // return  userData;
+    return (
+      userDataQuery[selectedAccountId] in userData &&
+      localStorage.getItem("@wallid:oauth:state") == 1
+    );
   },
 
   async connectAccount({ dispatch }, selectedAccount) {
@@ -239,7 +259,7 @@ const actions = {
     // return new Promise((resolve) => {
     console.log("## redirectUrl : ", redirectUrl);
     window.location = redirectUrl;
-
+    return { state: "connecting" };
     // const CLIENT_URL = window.location.origin;
     // const popup = window.open(
     //   redirectUrl,
@@ -279,10 +299,7 @@ const actions = {
       accountId: accountId,
       balance,
     };
-    localStorage.setItem(
-      `${selectedAccount.IdName}_user`,
-      JSON.stringify(userData)
-    );
+    localStorage.setItem(`${selectedAccount.IdName}_user`, JSON.stringify(userData));
   },
 };
 export default new Vuex.Store({

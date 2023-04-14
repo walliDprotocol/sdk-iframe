@@ -55,6 +55,7 @@ export default {
     return {
       loading: true,
       hasData: false,
+      getOauthDataQuery: {},
     };
   },
   watch: {
@@ -70,6 +71,13 @@ export default {
       // this.$router.push("/");
     },
   },
+  async created() {
+    const { configId, nftPostId, state, code } = await this.$store.dispatch("getURLSearchParams");
+    console.log("configId, nftPostId", configId, nftPostId);
+
+    this.getOauthDataQuery = { state, code };
+  },
+
   async mounted() {
     // this will store a wallet access keys in browser's local  storage
     await this.$store.dispatch("near/initNear");
@@ -80,34 +88,24 @@ export default {
     if (this.$route.name == "NearPopup") {
       return;
     }
-    const { userData, nearAccountId } = await this.$store.dispatch("getURLSearchParams");
-    console.log("APP", userData, this.selectedAccountId);
-    const userDataQuery = {
-      discord: "id",
-      facebook: "id",
-      reddit: "name",
-      github: "login",
-      twitter: "username",
-      linkedin: "localizedFirstName",
-      google: "id",
-    };
-    console.log("###test query### ", userDataQuery[this.selectedAccountId]);
-    if (
-      userDataQuery[this.selectedAccountId] in userData &&
-      localStorage.getItem("@wallid:oauth:state") == 1
-    ) {
-      console.log("Push route success", userData);
+
+    // const { userData, nearAccountId } = await this.$store.dispatch("getURLSearchParams");
+    const hasUserData = await this.$store.dispatch("getOauthData", this.getOauthDataQuery);
+
+    if (hasUserData) {
+      console.log("Push route success");
       // Push success screen
       this.$router.push("/?success=" + this.selectedAccountId);
       localStorage.setItem("@wallid:oauth:state", 2);
       this.hasData = getJSONStorage("local", this.selectedAccountId + "_user");
+      console.log("hasData", this.hasData);
       if (this.hasData) {
         this.$router.push("/success");
         this.loading = false;
       }
       return;
     }
-    console.log("Connect", userData, nearAccountId);
+    console.log("Connect");
     if (this.walletSelector?.isSignedIn()) {
       this.$router.push("/home");
     } else {

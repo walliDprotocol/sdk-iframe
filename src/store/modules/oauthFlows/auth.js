@@ -7,7 +7,7 @@ const oauthDataURL = (account) => process.env.VUE_APP_BACKEND_URL + `/api/v1/${a
 export default {
   async getOauthData(_, { code, state, redirectUrl, account }) {
     console.log("***  getOauthDataURL data", arguments);
-    let userData = {};
+    const userData = {};
     try {
       if (code == null || !code) return { userData: {} };
 
@@ -24,9 +24,9 @@ export default {
       });
       console.log("response getOauthDataURL login: ", data);
 
-      userData = data?.userInfo;
+      Object.assign(userData, data?.userInfo);
 
-      if (!userData) throw "No data to store";
+      if (Object.keys(userData).length == 0) throw "No data to store";
 
       localStorage.setItem(`${account}_user`, JSON.stringify(userData));
     } catch (error) {
