@@ -1,12 +1,6 @@
 <template>
   <v-app class="verification-iframe">
-    <v-app-bar
-      class="iframe-app-bar"
-      app
-      elevation="0"
-      color="transparent"
-      height="74"
-    >
+    <v-app-bar class="iframe-app-bar" app elevation="0" color="transparent" height="74">
       <v-container>
         <v-row>
           <v-col class="d-flex justify-start">
@@ -22,9 +16,7 @@
           <v-spacer />
           <NetworkDropdown></NetworkDropdown>
           <v-col cols="auto" v-if="nearAccountId">
-            <p class="account-id mb-0" @click="signOut">
-              <span>&bull;</span>{{ nearAccountId }}
-            </p>
+            <p class="account-id mb-0" @click="signOut"><span>&bull;</span>{{ nearAccountId }}</p>
           </v-col>
         </v-row>
       </v-container>
@@ -88,9 +80,7 @@ export default {
     if (this.$route.name == "NearPopup") {
       return;
     }
-    const { userData, nearAccountId } = await this.$store.dispatch(
-      "getURLSearchParams"
-    );
+    const { userData, nearAccountId } = await this.$store.dispatch("getURLSearchParams");
     console.log("APP", userData, this.selectedAccountId);
     const userDataQuery = {
       discord: "id",

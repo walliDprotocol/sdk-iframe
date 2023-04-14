@@ -3,11 +3,7 @@
     <v-row justify="center" class="pt-6">
       <v-col cols="6" class="pt-16">
         <LoaderCircle :loading="loading"></LoaderCircle>
-        <v-container
-          v-if="false"
-          class="connect-account"
-          style="max-width: 700px"
-        >
+        <v-container v-if="false" class="connect-account" style="max-width: 700px">
           <v-row justify="center" class="px-0">
             <v-col cols="8" class="pt-5 px-3">
               <h1 class="title-h1 text-center">Connect wallet</h1>
@@ -15,8 +11,7 @@
 
             <v-col cols="9" class="pt-5 px-3">
               <p class="normal-text-p text-center">
-                To proceed and select the IDs you'd like to verify please
-                connect to your wallet
+                To proceed and select the IDs you'd like to verify please connect to your wallet
               </p>
             </v-col>
             <v-col cols="8" class="pb-10 px-1">
@@ -34,11 +29,7 @@
 
     <v-row>
       <v-col v-if="false" cols="12" class="d-flex justify-end pb-5">
-        <FormButton
-          :text="'Connect Wallet'"
-          @click="connectAccount"
-          :disabled="!selected"
-        >
+        <FormButton :text="'Connect Wallet'" @click="connectAccount" :disabled="!selected">
         </FormButton>
       </v-col>
     </v-row>

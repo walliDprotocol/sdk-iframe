@@ -3,11 +3,7 @@ module.exports = {
   env: {
     node: true,
   },
-  extends: [
-    "plugin:vue/essential",
-    "eslint:recommended",
-    "plugin:prettier/recommended",
-  ],
+  extends: ["plugin:vue/essential", "eslint:recommended", "plugin:prettier/recommended"],
   parserOptions: {
     parser: "@babel/eslint-parser",
   },
@@ -18,6 +14,17 @@ module.exports = {
       "error",
       {
         endOfLine: "auto",
+      },
+    ],
+    "max-len": [
+      "error",
+      {
+        code: 100,
+        tabWidth: 2,
+        ignoreComments: true, //"comments": 80
+        ignoreUrls: true,
+        ignoreStrings: true,
+        ignoreTemplateLiterals: true,
       },
     ],
   },

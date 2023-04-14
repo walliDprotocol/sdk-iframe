@@ -1,10 +1,5 @@
 <template>
-  <v-btn
-    class="form-button"
-    v-bind="$attrs"
-    :class="type"
-    @click="$emit('click')"
-  >
+  <v-btn class="form-button" v-bind="$attrs" :class="type" @click="$emit('click')">
     <div>
       {{ text }}
     </div>
@@ -50,13 +45,7 @@ export default {
 
   &.back {
     background-image: linear-gradient(white, white),
-      linear-gradient(
-        to bottom,
-        #64ffde -16%,
-        #73dde7 24%,
-        #7acefd 66%,
-        var(--midnight) 115%
-      );
+      linear-gradient(to bottom, #64ffde -16%, #73dde7 24%, #7acefd 66%, var(--midnight) 115%);
     background-origin: border-box;
     background-clip: content-box, border-box;
     color: var(--midnight) !important;

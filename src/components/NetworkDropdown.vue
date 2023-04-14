@@ -56,9 +56,7 @@ export default {
   mounted() {
     let sessionNetwork = getJSONStorage("local", "selectedNetwork");
     this.selectedNetwork =
-      Object.entries(sessionNetwork).length > 0
-        ? sessionNetwork
-        : this.networksList[0];
+      Object.entries(sessionNetwork).length > 0 ? sessionNetwork : this.networksList[0];
   },
   computed: {
     selectedNetwork: {

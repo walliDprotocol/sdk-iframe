@@ -26,16 +26,11 @@ export default {
   props: ["items"],
   watch: {
     selected() {
-      this.$store.commit(
-        "selectedAccountId",
-        this.items[this.selected]?.IdName
-      );
+      this.$store.commit("selectedAccountId", this.items[this.selected]?.IdName);
     },
   },
   mounted() {
-    this.selected = this.items.findIndex(
-      (i) => i.IdName == this.selectedAccountId
-    );
+    this.selected = this.items.findIndex((i) => i.IdName == this.selectedAccountId);
   },
   data() {
     return {

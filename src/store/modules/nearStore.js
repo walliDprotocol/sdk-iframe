@@ -14,9 +14,7 @@ const actions = {
   async initNear({ commit, dispatch }) {
     let sessionNetwork = getJSONStorage("local", "selectedNetwork");
     const selectedNetwork =
-      Object.entries(sessionNetwork).length > 0
-        ? sessionNetwork
-        : { id: "testnet" };
+      Object.entries(sessionNetwork).length > 0 ? sessionNetwork : { id: "testnet" };
     //setup near wallet
     await NearAPI.init(selectedNetwork.id);
 
@@ -28,9 +26,7 @@ const actions = {
 
     selector.store.observable.subscribe((state) => {
       console.log("State changed:", state);
-      dispatch("getAccounts").then((account) =>
-        dispatch("setAccount", { account })
-      );
+      dispatch("getAccounts").then((account) => dispatch("setAccount", { account }));
     });
 
     if (selector.isSignedIn()) {

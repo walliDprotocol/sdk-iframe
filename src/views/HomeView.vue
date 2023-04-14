@@ -1,19 +1,12 @@
 <template>
   <v-container fill-height class="pt-7 align-content-start">
-    <v-container
-      v-if="step == 1"
-      fill-height
-      class="pa-0 align-content-space-between"
-    >
+    <v-container v-if="step == 1" fill-height class="pa-0 align-content-space-between">
       <v-row>
         <v-col cols="12">
           <h1 class="title-h1">Select the IDs you'd like to verify</h1>
         </v-col>
         <v-col cols="12" class="pt-5">
-          <IdCardWrapper
-            :items="accountIds"
-            @selectedDblClick="setSelectedAccount(), (step = 2)"
-          />
+          <IdCardWrapper :items="accountIds" @selectedDblClick="setSelectedAccount(), (step = 2)" />
         </v-col>
       </v-row>
       <v-row class="pb-2">
@@ -28,16 +21,12 @@
       </v-row>
     </v-container>
 
-    <v-container
-      v-if="step == 2"
-      fill-height
-      class="pa-0 align-content-space-between"
-    >
+    <v-container v-if="step == 2" fill-height class="pa-0 align-content-space-between">
       <v-row>
         <v-col cols="12">
           <h1 class="title-h1">
-            Connect to your {{ selectedAccount.IdNameDesc }} account and select
-            the attributes you want to verify
+            Connect to your {{ selectedAccount.IdNameDesc }} account and select the attributes you
+            want to verify
           </h1>
         </v-col>
         <v-col cols="12" class="pt-5">
@@ -50,13 +39,7 @@
 
       <v-row class="pb-2">
         <v-col class="d-flex justify-end">
-          <FormButton
-            class="mr-5"
-            :text="'Back'"
-            :type="'back'"
-            @click="backStep"
-          >
-          </FormButton>
+          <FormButton class="mr-5" :text="'Back'" :type="'back'" @click="backStep"> </FormButton>
           <FormButton
             :text="'CONNECT'"
             :disabled="isDisabled"
@@ -97,29 +80,21 @@ export default {
     ...mapState(["selectedAccountId"]),
     ...mapGetters("near", ["nearAccountId"]),
     isDisabled() {
-      return (
-        !!this.errorMessage ||
-        !this.selectedAccount?.options?.some((value) => value.state)
-      );
+      return !!this.errorMessage || !this.selectedAccount?.options?.some((value) => value.state);
     },
   },
   methods: {
     setSelectedAccount() {
       // this.$router.push("/success");
       this.errorMessage = null;
-      this.selectedAccount = this.accountIds.find(
-        (e) => e.IdName == this.selectedAccountId
-      );
+      this.selectedAccount = this.accountIds.find((e) => e.IdName == this.selectedAccountId);
     },
     async connectAccount() {
       console.log("Call connectAccount");
       this.loadingConnectAccount = true;
       try {
         if (this.nearAccountId) {
-          const { state } = await this.$store.dispatch(
-            "connectAccount",
-            this.selectedAccount
-          );
+          const { state } = await this.$store.dispatch("connectAccount", this.selectedAccount);
 
           if (state == "success") {
             this.$router.push("/success");

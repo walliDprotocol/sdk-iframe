@@ -1,10 +1,8 @@
 import { getJSONStorage } from "@/plugins/utils";
 import axios from "axios";
 
-const redirectURL = (account) =>
-  process.env.VUE_APP_BACKEND_URL + `/api/v1/${account}/requestURL`;
-const oauthDataURL = (account) =>
-  process.env.VUE_APP_BACKEND_URL + `/api/v1/${account}/authcode`;
+const redirectURL = (account) => process.env.VUE_APP_BACKEND_URL + `/api/v1/${account}/requestURL`;
+const oauthDataURL = (account) => process.env.VUE_APP_BACKEND_URL + `/api/v1/${account}/authcode`;
 
 export default {
   async getOauthData(_, { code, state, redirectUrl, account }) {

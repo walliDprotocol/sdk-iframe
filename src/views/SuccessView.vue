@@ -30,15 +30,8 @@
 
     <v-row>
       <v-col cols="12" class="d-flex justify-end pb-4">
-        <FormButton
-          class="mr-5"
-          :text="'Done'"
-          :type="'back'"
-          @click="publishData"
-        >
-        </FormButton>
-        <FormButton :text="'VERIFY ANOTHER ID'" @click="$router.push('/home')">
-        </FormButton>
+        <FormButton class="mr-5" :text="'Done'" :type="'back'" @click="publishData"> </FormButton>
+        <FormButton :text="'VERIFY ANOTHER ID'" @click="$router.push('/home')"> </FormButton>
       </v-col>
     </v-row>
   </v-container>
@@ -63,8 +56,7 @@ export default {
   computed: {
     ...mapState(["selectedAccountId"]),
     getSelectedAccountIdName() {
-      return this.accountIds.find((e) => e.IdName == this.selectedAccountId)
-        ?.IdNameDesc;
+      return this.accountIds.find((e) => e.IdName == this.selectedAccountId)?.IdNameDesc;
     },
   },
   methods: {

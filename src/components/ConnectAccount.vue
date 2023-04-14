@@ -15,10 +15,7 @@
               max-width="40"
             />
           </v-col>
-          <v-col
-            cols="8"
-            class="pl-0 d-flex flex-column align-start justify-center"
-          >
+          <v-col cols="8" class="pl-0 d-flex flex-column align-start justify-center">
             <p class="bold-text-p text-uppercase mb-0">
               {{ selectedAccount.IdNameDesc }}
             </p>
@@ -31,10 +28,7 @@
           </v-col>
           <v-spacer />
 
-          <v-col
-            cols="2"
-            class="d-flex flex-column align-center justify-center"
-          >
+          <v-col cols="2" class="d-flex flex-column align-center justify-center">
             <p
               class="bold-text-p text-uppercase mb-0"
               :style="{
@@ -49,11 +43,7 @@
         </v-col>
       </v-row>
 
-      <v-row
-        class="text-center"
-        v-for="(item, index) in selectedAccount.options"
-        :key="index"
-      >
+      <v-row class="text-center" v-for="(item, index) in selectedAccount.options" :key="index">
         <v-col cols="12" class="d-flex align-start">
           <v-col cols="2" class="d-flex fill-height align-start">
             <p class="bold-text-p text-left mb-0">
@@ -73,10 +63,7 @@
             </p>
           </v-col>
           <v-spacer />
-          <v-col
-            cols="2"
-            class="d-flex fill-height flex-column align-center justify-center py-4"
-          >
+          <v-col cols="2" class="d-flex fill-height flex-column align-center justify-center py-4">
             <v-switch
               class="mt-0 form-switch"
               v-model="item.state"
