@@ -90,12 +90,14 @@ export default {
       this.selectedAccount = this.accountIds.find((e) => e.IdName == this.selectedAccountId);
     },
     async connectAccount() {
-      console.log("Call connectAccount");
+      console.log("Call connectAccount", this.nearAccountId);
       this.loadingConnectAccount = true;
       try {
-        if (this.nearAccountId) {
-          const { state } = await this.$store.dispatch("connectAccount", this.selectedAccount);
-
+        if (this.isRoyaltyFlow || this.nearAccountId) {
+          const { state } = await this.$store.dispatch("connectAccount", {
+            selectedAccount: this.selectedAccount,
+            redirectPath: this.redirectPath,
+          });
           if (state == "success") {
             this.$router.push("/success");
           }
@@ -118,9 +120,12 @@ export default {
     },
   },
   async mounted() {
-    this.accountIds = (await axios.get("userData.json")).data.accountIds;
+    console.log(this.$route);
 
-    // await this.$store.dispatch("near/initNear");
+    this.isRoyaltyFlow = this.$route?.path.includes("royalties");
+    ({ accountIds: this.accountIds, redirectPath: this.redirectPath } = (
+      await axios.get(this.isRoyaltyFlow ? "/userDataRoyalties.json" : "/userData.json")
+    ).data);
 
     // this.step = 2;
 
