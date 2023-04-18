@@ -60,7 +60,7 @@ export default {
     console.log("selectedAccount", this.selectedAccount);
 
     ({ hasUserData } = await this.$store.dispatch("getOauthDataStorage", {
-      selectedAccount: this.selectedAccountId,
+      selectedAccount: "twitter",
     }));
 
     // let hasUserData = await this.$store.dispatch("royalty/getNFTDataStorage", {

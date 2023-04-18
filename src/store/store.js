@@ -116,7 +116,7 @@ const actions = {
   },
 
   // Send localStorage data trough pubnub to iframe opener
-  async publishData() {
+  async publishData(_, data) {
     console.log("publishData Action");
 
     var pubnub = new PubNub({
@@ -129,18 +129,16 @@ const actions = {
     });
 
     let userData = {};
-
-    ACCOUNTS_LIST.forEach((a) => (userData[a] = getJSONStorage("local", a + "_user")));
-
-    console.log("UserData to send to client:", userData);
+    if (!data) {
+      ACCOUNTS_LIST.forEach((a) => (userData[a] = getJSONStorage("local", a + "_user")));
+    } else {
+      userData = { ...data };
+    }
 
     let message = {
-      content: {
-        type: "text",
-        message: userData,
-      },
-      sender: "Thomas Anderson",
+      ...userData,
     };
+    console.log("UserData to send to client:", message);
 
     pubnub.publish(
       {
@@ -233,7 +231,7 @@ const actions = {
 
   async getOauthDataStorage({ commit }, { selectedAccount }) {
     const userData = {};
-    const selectedAccountId = sessionStorage.getItem("selectedAccountId");
+    const selectedAccountId = selectedAccount || sessionStorage.getItem("selectedAccountId");
     commit("selectedAccountId", selectedAccountId);
     console.log("selectedAccountId ", selectedAccountId, selectedAccount);
 
@@ -265,9 +263,7 @@ const actions = {
     // return  userData;
     return {
       userData,
-      hasUserData:
-        userDataQuery[selectedAccountId] in userData &&
-        localStorage.getItem("@wallid:oauth:state") == 1,
+      hasUserData: userDataQuery[selectedAccountId] in userData,
     };
   },
 
