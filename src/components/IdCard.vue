@@ -8,7 +8,7 @@
     <v-row class="text-left id-card-row">
       <v-col cols="auto" class="id-card-col pr-2 pl-3">
         <img
-          :src="item.imgType === 'url' ? item.imgUrl : `./logos/${item.IdName}.webp`"
+          :src="item.imgType === 'url' ? item.imgUrl : `/logos/${item.IdName}.webp`"
           contain
           style="width: 100%; height: auto; max-width: 40px; max-height: 40px"
         />

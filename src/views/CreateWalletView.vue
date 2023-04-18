@@ -73,6 +73,7 @@ export default {
         // contractId: process.env.VUE_APP_NEAR_SOCIAL_CONTRACT_TESTNET,
         contractId: NearAPI.NEAR_SOCIAL_CONTRACT_ADDRESS,
       });
+      console.log(value);
       if (!value.isSignedIn()) {
         console.log(this.modal);
         this.modal.show();
@@ -112,6 +113,7 @@ export default {
   },
   async mounted() {
     // this will store a wallet access keys in browser's local  storage
+    // await this.$store.dispatch("near/initNear");
   },
   components: {
     FormButton,

@@ -8,7 +8,7 @@
               :src="
                 selectedAccount.imgType === 'url'
                   ? selectedAccount.imgUrl
-                  : `./logos/${selectedAccount.IdName}.webp`
+                  : `/logos/${selectedAccount.IdName}.webp`
               "
               contain
               max-height="40"

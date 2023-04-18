@@ -5,7 +5,7 @@ const redirectURL = (account) => process.env.VUE_APP_BACKEND_URL + `/api/v1/${ac
 const oauthDataURL = (account) => process.env.VUE_APP_BACKEND_URL + `/api/v1/${account}/authcode`;
 
 export default {
-  async getOauthData(_, { code, state, redirectUrl, account }) {
+  async getOauthData(_, { code, state, redirectPath, account }) {
     console.log("***  getOauthDataURL data", arguments);
     const userData = {};
     try {
@@ -19,7 +19,7 @@ export default {
       let { data } = await axios.post(oauthDataURL(account), {
         code,
         state,
-        redirectUrl,
+        redirectUrl: window.location.origin + redirectPath,
         codeVerifier,
       });
       console.log("response getOauthDataURL login: ", data);
@@ -36,21 +36,21 @@ export default {
 
     return userData;
   },
-  async getRedirectURL(_, account) {
-    console.log("***** getRedirectURL *****  ");
+  async getRedirectURL(_, { selectedId, redirectPath }) {
+    console.log("***** getRedirectURL *****  ", redirectPath);
 
     try {
-      let { data } = await axios.get(redirectURL(account), {
+      let { data } = await axios.get(redirectURL(selectedId), {
         params: {
-          redirectUrl: window.location.origin,
+          redirectUrl: window.location.origin + redirectPath,
         },
       });
-      console.log(`response getRedirectURL: ${account} => `, data);
+      console.log(`response getRedirectURL: ${selectedId} => `, data);
       if (!(data.redirectURL || data.redirect)) {
         throw "redirectURL not in response";
       }
 
-      if (account == "twitter") {
+      if (selectedId == "twitter") {
         localStorage.setItem("twitter_preAuth", JSON.stringify(data));
       }
 

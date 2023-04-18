@@ -15,7 +15,7 @@
     >
       <template #prepend-inner>
         <v-img
-          :src="`./logos/nearTokens.webp`"
+          :src="`/logos/nearTokens.webp`"
           contain
           max-height="16"
           max-width="16"
@@ -25,7 +25,7 @@
       <template #item="{ item }">
         <div class="d-flex align-center">
           <v-img
-            :src="`./logos/nearTokens.webp`"
+            :src="`/logos/nearTokens.webp`"
             contain
             max-height="16"
             max-width="16"
@@ -36,7 +36,7 @@
           </p>
           <v-img
             v-if="item.id === selectedNetwork.id"
-            :src="`./logos/check.webp`"
+            :src="`/logos/check.webp`"
             contain
             max-height="6"
             max-width="8"

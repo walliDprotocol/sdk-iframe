@@ -8,7 +8,7 @@
               alt="Vuetify Logo"
               class="shrink mr-2"
               contain
-              :src="'./logos/wallid.webp'"
+              src="/logos/wallid.webp"
               transition="scale-transition"
               width="115"
             />
@@ -37,7 +37,7 @@
 <script>
 import { mapState } from "vuex";
 import NetworkDropdown from "./components/NetworkDropdown.vue";
-import { getJSONStorage } from "./plugins/utils";
+// import { getJSONStorage } from "./plugins/utils";
 
 export default {
   name: "App",
@@ -71,48 +71,7 @@ export default {
       // this.$router.push("/");
     },
   },
-  async created() {
-    const { configId, nftPostId, state, code } = await this.$store.dispatch("getURLSearchParams");
-    console.log("configId, nftPostId", configId, nftPostId);
 
-    this.getOauthDataQuery = { state, code };
-  },
-
-  async mounted() {
-    // this will store a wallet access keys in browser's local  storage
-    await this.$store.dispatch("near/initNear");
-    // },
-    // async mounted() {
-    // console.log(await this.walletSelector.wallet());
-    // console.log(this.walletSelector?.isSignedIn());
-    if (this.$route.name == "NearPopup") {
-      return;
-    }
-
-    // const { userData, nearAccountId } = await this.$store.dispatch("getURLSearchParams");
-    const hasUserData = await this.$store.dispatch("getOauthData", this.getOauthDataQuery);
-
-    if (hasUserData) {
-      console.log("Push route success");
-      // Push success screen
-      this.$router.push("/?success=" + this.selectedAccountId);
-      localStorage.setItem("@wallid:oauth:state", 2);
-      this.hasData = getJSONStorage("local", this.selectedAccountId + "_user");
-      console.log("hasData", this.hasData);
-      if (this.hasData) {
-        this.$router.push("/success");
-        this.loading = false;
-      }
-      return;
-    }
-    console.log("Connect");
-    if (this.walletSelector?.isSignedIn()) {
-      this.$router.push("/home");
-    } else {
-      this.$router.push("/");
-    }
-    this.loading = false;
-  },
   components: { NetworkDropdown },
 };
 </script>
