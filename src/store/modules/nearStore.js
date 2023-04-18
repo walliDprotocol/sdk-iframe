@@ -98,13 +98,15 @@ const actions = {
   async getAccountBalance() {
     return await NearAPI.wallet.account().getAccountBalance();
   },
-  async signatureRequest() {
+  async signatureRequest(_, { message }) {
     const wallet = await state.walletSelector.wallet();
     const accounts = await wallet.getAccounts();
-    console.log("SignatureRequest", await wallet.verifyOwner({ message: "sign data" }));
+
+    const signatureObject = await wallet.verifyOwner({ message });
     console.log("accounts", accounts);
-    console.log("wallet", wallet);
-    return "sign res";
+    console.log("publicKey", signatureObject.publicKey);
+    console.log("wallet", signatureObject.signature);
+    return signatureObject;
   },
 };
 const mutations = {

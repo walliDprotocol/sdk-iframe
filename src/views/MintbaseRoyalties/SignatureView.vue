@@ -22,6 +22,8 @@ export default {
   methods: {
     async sign() {
       let signRes = await this.$store.dispatch("royalty/signData");
+      this.$store.dispatch("publishData", { data: signRes });
+
       log("signRes", signRes);
     },
   },

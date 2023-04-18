@@ -32,7 +32,7 @@ const actions = {
       let dataToSign = `${socialAccountHandler}:${nearAccountId}:${nftId}`;
       console.log("***  dataToSign data", dataToSign);
 
-      const res = await dispatch("near/signatureRequest", { data: dataToSign }, { root: true });
+      const res = await dispatch("near/signatureRequest", { message: dataToSign }, { root: true });
       console.log("SignatureRequest res", res);
 
       return res;
