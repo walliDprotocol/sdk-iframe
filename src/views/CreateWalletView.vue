@@ -68,6 +68,17 @@ export default {
     ...mapGetters("near", ["nearAccountId"]),
   },
   watch: {
+    nearAccount(value) {
+      console.log(value);
+
+      if (value) {
+        if (this.$route.path == "/royalties") {
+          this.$router.push({ name: "royalties-select" });
+        } else {
+          this.$router.push({ name: "base-select" });
+        }
+      }
+    },
     walletSelector(value) {
       this.modal = setupModal(value, {
         // contractId: process.env.VUE_APP_NEAR_SOCIAL_CONTRACT_TESTNET,
@@ -113,7 +124,7 @@ export default {
   },
   async mounted() {
     // this will store a wallet access keys in browser's local  storage
-    // await this.$store.dispatch("near/initNear");
+    await this.$store.dispatch("near/initNear");
   },
   components: {
     FormButton,

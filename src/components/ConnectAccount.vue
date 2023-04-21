@@ -2,7 +2,7 @@
   <div>
     <v-container class="connect-account pa-3">
       <v-row class="text-center">
-        <v-col cols="12" class="d-flex">
+        <v-col cols="12" class="d-flex pa-2">
           <v-col cols="auto" class="d-flex align-center">
             <v-img
               :src="
@@ -28,7 +28,11 @@
           </v-col>
           <v-spacer />
 
-          <v-col cols="2" class="d-flex flex-column align-center justify-center">
+          <v-col
+            v-if="selectedAccount.options.length > 1"
+            cols="2"
+            class="d-flex flex-column align-center justify-center"
+          >
             <p
               class="bold-text-p text-uppercase mb-0"
               :style="{
@@ -63,11 +67,13 @@
             </p>
           </v-col>
           <v-spacer />
-          <v-col cols="2" class="d-flex fill-height flex-column align-center justify-center py-4">
+          <v-col cols="2" class="d-flex fill-height flex-column align-end pr-sm-0">
             <v-switch
-              class="mt-0 form-switch"
+              class="mt-0 pt-0 form-switch"
+              height="16"
               v-model="item.state"
               hide-details
+              dense
               :ripple="false"
             ></v-switch>
           </v-col>

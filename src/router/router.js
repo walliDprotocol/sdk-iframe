@@ -1,26 +1,61 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import HomeView from "../views/HomeView.vue";
+import RoyaltiesSelectView from "../views/MintbaseRoyalties/SelectView";
+import SelectView from "../views/SelectView";
 import CreateWalletView from "../views/CreateWalletView.vue";
 import SuccessView from "../views/SuccessView.vue";
 import NearPopup from "../views/nearPopup.vue";
 import MintbaseFlowVue from "@/views/MintbaseRoyaltiesFlow.vue";
+import GeneralVerificationFlow from "@/views/GeneralVerificationFlow.vue";
 import SignatureView from "@/views/MintbaseRoyalties/SignatureView";
+import WelcomeViewVue from "@/views/MintbaseRoyalties/WelcomeView.vue";
 
 Vue.use(VueRouter);
 
 const routes = [
+  {
+    path: "/",
+    name: "GeneralVerificationFlow",
+    component: GeneralVerificationFlow,
+    children: [
+      {
+        path: "",
+        name: "welcome-createWallet",
+        component: WelcomeViewVue,
+      },
+      {
+        path: "create-wallet",
+        name: "base-createWallet",
+        component: CreateWalletView,
+      },
+      {
+        path: "select",
+        name: "base-select",
+        component: SelectView,
+      },
+      // {
+      //   path: "signature",
+      //   name: "base-signature",
+      //   component: SignatureView,
+      // },
+      {
+        path: "/success",
+        name: "success",
+        component: SuccessView,
+      },
+    ],
+  },
   {
     path: "/connect",
     name: "connect",
     component: CreateWalletView,
   },
 
-  {
-    path: "/home",
-    name: "home",
-    component: HomeView,
-  },
+  // {
+  //   path: "/home",
+  //   name: "home",
+  //   component: HomeView,
+  // },
   {
     path: "/success",
     name: "success",
@@ -38,8 +73,13 @@ const routes = [
     children: [
       {
         path: "",
-        name: "royalties-home",
-        component: HomeView,
+        name: "royalties-welcome",
+        component: WelcomeViewVue,
+      },
+      {
+        path: "select",
+        name: "royalties-select",
+        component: RoyaltiesSelectView,
       },
 
       {

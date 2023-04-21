@@ -3,8 +3,7 @@
 // Load font local file
 @font-face {
   font-family: "Karla";
-  src: local("Karla"),
-    url(../fonts/Karla-VariableFont_wght.ttf) format("truetype");
+  src: local("Karla"), url(../fonts/Karla-VariableFont_wght.ttf) format("truetype");
 }
 
 .verification-iframe#app {
@@ -15,19 +14,18 @@
   }
 
   h1.title-h1 {
-    font-size: 17px;
+    font-size: 30px;
     font-family: "Montserrat" !important;
-
-    font-weight: bold;
+    font-weight: normal;
     font-stretch: normal;
     font-style: normal;
-    line-height: 1.59;
+    line-height: 0.9;
     letter-spacing: normal;
     color: var(--midnight);
   }
 
   .normal-text-p {
-    font-size: 13px;
+    font-size: 14px;
     font-weight: normal;
     font-stretch: normal;
     font-style: normal;
@@ -46,6 +44,10 @@
     letter-spacing: normal;
     color: var(--midnight);
     margin-bottom: 0;
+  }
+
+  .error-txt {
+    color: var(--red-error) !important;
   }
 
   /// GENERAL DiSPLAY CSS

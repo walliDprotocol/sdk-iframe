@@ -1,52 +1,47 @@
-
-
 :root {
   --midnight: #01022e;
   --white: #ffffff;
-  --border-color: #ffffff;
+  --border-color: #ebebeb;
   --turquoise-blue: #00afc5;
   --light-sky-blue: #cceff5;
   --light-blue-grey: #ccccd6;
   --grey: #808097;
   --light-grey: #ebebeb;
+  --red-error: #f02049;
 
   // modal vars
 
-    --backdrop-bg: transparent !important;
-    --heading-color: #222222;
-    --text-color: #676767;
-    --sidebar-border-color: #ededed;
-    --selected-wallet-bg: #4f7cd1;
-    --selected-wallet-bg-hover: transparent;
-    --wallet-option-border-color: #a7a7a730;
-    --wallet-option-bg-hover: #6494ee3d;
-    --wallet-option-outline-color: #6494ee;
-    --content-bg: #fafafa;
-    --change-path-bg: #ededed;
-    --home-button-bg: #ededed;
-    --confirm-button-bg: #5f8afa;
-    --confirm-button-bg-hover: #5aa6ff;
-    --error: #db5555;
-    --close-button-bg-color: #ededed;
-    --close-button-fill-icon-color: #9f9f9f;
-    --spinner-color: #676767;
-    --bottom-section: #ececec;
-    --mobile-text: #3e3e3e;
-    --connected-green: #47e586;
-    --gradient-dark-icon: radial-gradient(
-      297.59% 179.46% at 91.67% -25%,
-      #aec2ea 0%,
-      #95d1e4 100%
-    );
-    --get-wallet-option-bg-color: #f8f9fa;
-    --get-wallet-option-bg-color-hover: #6494ee3d;
-    --get-wallet-option-border-color: #c1c1c1;
-    --get-wallet-outline-color: #6494ee;
-    --get-wallet-option-box-shadow: 0px 2px 2px rgba(17, 22, 24, 0.04);
-    --secondary-button-bg-color: #4f7cd129;
-    --secondary-button-border-color: #4f7cd129;
-    --secondary-button-text-color: #4f7cd1;
-    --what-wallet-icon-color: #ffffff;
-    --deprecated-icon-bg-color: #d7e2f7;
-    --deprecated-icon-bg-color-selected: #4f7cd1;
+  --backdrop-bg: transparent !important;
+  --heading-color: #222222;
+  --text-color: #676767;
+  --sidebar-border-color: #ededed;
+  --selected-wallet-bg: #4f7cd1;
+  --selected-wallet-bg-hover: transparent;
+  --wallet-option-border-color: #a7a7a730;
+  --wallet-option-bg-hover: #6494ee3d;
+  --wallet-option-outline-color: #6494ee;
+  --content-bg: #fafafa;
+  --change-path-bg: #ededed;
+  --home-button-bg: #ededed;
+  --confirm-button-bg: #5f8afa;
+  --confirm-button-bg-hover: #5aa6ff;
+  --error: #db5555;
+  --close-button-bg-color: #ededed;
+  --close-button-fill-icon-color: #9f9f9f;
+  --spinner-color: #676767;
+  --bottom-section: #ececec;
+  --mobile-text: #3e3e3e;
+  --connected-green: #47e586;
+  --gradient-dark-icon: radial-gradient(297.59% 179.46% at 91.67% -25%, #aec2ea 0%, #95d1e4 100%);
+  --get-wallet-option-bg-color: #f8f9fa;
+  --get-wallet-option-bg-color-hover: #6494ee3d;
+  --get-wallet-option-border-color: #c1c1c1;
+  --get-wallet-outline-color: #6494ee;
+  --get-wallet-option-box-shadow: 0px 2px 2px rgba(17, 22, 24, 0.04);
+  --secondary-button-bg-color: #4f7cd129;
+  --secondary-button-border-color: #4f7cd129;
+  --secondary-button-text-color: #4f7cd1;
+  --what-wallet-icon-color: #ffffff;
+  --deprecated-icon-bg-color: #d7e2f7;
+  --deprecated-icon-bg-color-selected: #4f7cd1;
 }

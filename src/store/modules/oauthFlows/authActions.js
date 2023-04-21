@@ -3,8 +3,30 @@ import axios from "axios";
 
 const redirectURL = (account) => process.env.VUE_APP_BACKEND_URL + `/api/v1/${account}/requestURL`;
 const oauthDataURL = (account) => process.env.VUE_APP_BACKEND_URL + `/api/v1/${account}/authcode`;
+const userProfileInfo = `https://demo.dca.wallid.io/api/v1/social-profile/twitter`; // post
 
 export default {
+  async getUserProfileInfo(_, { account }) {
+    const body = {
+      username: account,
+    };
+    try {
+      let { data } = await axios.post(userProfileInfo, body);
+      console.log("userProfileInfo res", data);
+
+      const post = data?.data?.fullText;
+      const username = data?.data?.user?.screen_name;
+      const name = data?.data.user?.name;
+
+      const idStr = data?.data.id_str;
+
+      const postURL = `https://twitter.com/${username}/status/${idStr}`;
+
+      return { post, username, name, idStr, postURL };
+    } catch (error) {
+      console.log(error);
+    }
+  },
   async getOauthData(_, { code, state, redirectPath, account }) {
     console.log("***  getOauthDataURL data", arguments);
     const userData = {};
@@ -19,7 +41,7 @@ export default {
       let { data } = await axios.post(oauthDataURL(account), {
         code,
         state,
-        redirectUrl: window.location.origin + redirectPath,
+        redirectUrl: window.location.origin + (redirectPath || ""),
         codeVerifier,
       });
       console.log("response getOauthDataURL login: ", data);
@@ -36,13 +58,14 @@ export default {
 
     return userData;
   },
+
   async getRedirectURL(_, { selectedId, redirectPath }) {
     console.log("***** getRedirectURL *****  ", redirectPath);
 
     try {
       let { data } = await axios.get(redirectURL(selectedId), {
         params: {
-          redirectUrl: window.location.origin + redirectPath,
+          redirectUrl: window.location.origin + (redirectPath || ""),
         },
       });
       console.log(`response getRedirectURL: ${selectedId} => `, data);

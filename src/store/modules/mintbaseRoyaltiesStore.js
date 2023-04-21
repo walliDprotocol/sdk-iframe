@@ -4,7 +4,7 @@ import axios from "axios";
 const NFT_URL = (id) =>
   `${process.env.VUE_APP_BACKEND_URL}/api/v1/external/getNftInfo?nft_id=${id}`;
 
-const state = { nftId: null, identifiedUsers: [] };
+const state = { nftId: null, nftData: {} };
 const getters = {
   walletSelector(state) {
     return state.walletSelector;
@@ -41,7 +41,7 @@ const actions = {
       throw error;
     }
   },
-  async getNFTData(_, { nft }) {
+  async getNFTData({ commit }, { nft }) {
     console.log("***  getNFTData data", nft);
     const userData = {};
     try {
@@ -52,10 +52,17 @@ const actions = {
 
       Object.assign(userData, data);
 
-      if (Object.keys(userData).length == 0) throw "No data to store";
+      //get data form local storage
+      if (Object.keys(userData).length == 0) {
+        let nftPostIdStorage = getJSONStorage("session", `nftPostId`);
+        let dataStorage = getJSONStorage("session", `${nftPostIdStorage}_nft`);
+        Object.assign(userData, dataStorage);
+      }
 
       sessionStorage.setItem(`${nft}_nft`, JSON.stringify(userData));
       sessionStorage.setItem(`currentNFTID`, JSON.stringify({ nftId: nft }));
+      commit("setCurrentNftId", nft);
+      commit("setNftData", userData);
     } catch (error) {
       console.log("error getNFTData login: ", error);
       throw error;
@@ -84,11 +91,11 @@ const actions = {
   },
 };
 const mutations = {
-  setSelector(state, value) {
-    state.walletSelector = value;
+  setCurrentNftId(state, value) {
+    state.currentNftId = value;
   },
-  setNearAccount(state, value) {
-    state.nearAccount = value;
+  setNftData(state, value) {
+    state.nftData = value;
   },
 };
 

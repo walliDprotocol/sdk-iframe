@@ -10,28 +10,6 @@
           "field": "Account name",
           "description": ["(Encrypted)"],
           "state": true
-        },
-        {
-          "field": "Tweets",
-          "description": ["• More than 10"],
-          "state": false
-        },
-        {
-          "field": "Followers",
-          "description": ["• More than 100", "• More than 1000"],
-          "state": false
-        }
-      ]
-    },
-    {
-      "IdName": "google",
-      "IdNameDesc": "Google",
-      "type": "web2",
-      "options": [
-        {
-          "field": "Email account",
-          "description": ["Google"],
-          "state": true
         }
       ]
     }

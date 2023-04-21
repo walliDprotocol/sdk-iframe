@@ -65,7 +65,7 @@ import axios from "axios";
 import { mapGetters, mapState } from "vuex";
 
 export default {
-  name: "HomeView",
+  name: "SelectView",
   data() {
     return {
       accountIds: [],

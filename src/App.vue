@@ -1,29 +1,7 @@
 <template>
   <v-app class="verification-iframe">
-    <v-app-bar class="iframe-app-bar" app elevation="0" color="transparent" height="74">
-      <v-container>
-        <v-row>
-          <v-col class="d-flex justify-start">
-            <v-img
-              alt="Vuetify Logo"
-              class="shrink mr-2"
-              contain
-              src="/logos/wallid.webp"
-              transition="scale-transition"
-              width="115"
-            />
-          </v-col>
-          <v-spacer />
-          <NetworkDropdown></NetworkDropdown>
-          <v-col cols="auto" v-if="nearAccountId">
-            <p class="account-id mb-0" @click="signOut"><span>&bull;</span>{{ nearAccountId }}</p>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-app-bar>
-
     <v-main>
-      <router-view class="router-view px-7" />
+      <router-view class="router-view px-7" style="height: 100%" />
     </v-main>
     <!-- <div class="popup-info" v-if="hasData">
       <p class="normal-text-p">
@@ -36,7 +14,6 @@
 
 <script>
 import { mapState } from "vuex";
-import NetworkDropdown from "./components/NetworkDropdown.vue";
 // import { getJSONStorage } from "./plugins/utils";
 
 export default {
@@ -71,8 +48,6 @@ export default {
       // this.$router.push("/");
     },
   },
-
-  components: { NetworkDropdown },
 };
 </script>
 
@@ -86,19 +61,10 @@ export default {
   text-align: center;
 }
 #app {
-  background-image: url("../public/background/background-gradient.jpg");
+  // background-image: url("../public/background/background-gradient.jpg");
   background-size: cover;
 }
-.iframe-app-bar .v-toolbar__content {
-  border-bottom: solid 2px #f4f4f4;
-  justify-content: center;
 
-  padding: 0;
-
-  .container {
-    padding: 4px 30px;
-  }
-}
 .router-view {
   transition: opacity 0.25s ease-in-out;
 }

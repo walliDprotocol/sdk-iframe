@@ -1,29 +1,26 @@
 <template>
-  <router-view />
+  <div>
+    <!-- <LoaderCircle :loading="loading"></LoaderCircle> -->
+    <router-view />
+  </div>
 </template>
 <script>
 import { getJSONStorage } from "@/plugins/utils";
+import { mapState } from "vuex";
+// import LoaderCircle from "@/components/LoaderCircle.vue";
 
 export default {
   name: "GeneralVerificationFlow",
-
+  data() {
+    return {
+      loading: true,
+    };
+  },
+  computed: {
+    ...mapState("near", ["walletSelector", "nearAccount"]),
+  },
   async created() {
-    const { configId, nft, state, code } = await this.$store.dispatch("getURLSearchParams");
-    console.log("configId, nftPostId", configId, nft);
-
-    if (nft) {
-      let data = await this.$store.dispatch("royalty/getNFTData", { nft });
-      console.log(data);
-      if (data.nftId) {
-        this.isRoyaltyFlow = true;
-      }
-    }
-
-    let data = await this.$store.dispatch("royalty/getNFTDataStorage", { nft: "nftData.json" });
-    console.log("getNFTDataStorage", data);
-    if (data.nftId) {
-      this.isRoyaltyFlow = true;
-    }
+    const { state, code } = await this.$store.dispatch("getURLSearchParams");
 
     this.getOauthDataQuery = { state, code };
   },
@@ -60,13 +57,16 @@ export default {
         return;
       }
     }
-    console.log("Connect");
+    console.log("Connect", this.walletSelector?.isSignedIn);
     if (this.walletSelector?.isSignedIn) {
-      this.$router.push("/home");
+      this.$router.push("/select");
     } else {
       this.$router.push("/");
     }
     this.loading = false;
+  },
+  components: {
+    // LoaderCircle,
   },
 };
 </script>

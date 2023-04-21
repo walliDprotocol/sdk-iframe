@@ -27,8 +27,11 @@ console.log(TWITTER_LOGIN);
 
 Vue.use(Vuex);
 
-const state = { nearAccount: null, selectedAccountId: {}, selectedNetwork: {} };
+const state = { nearAccount: null, selectedAccountId: {}, selectedNetwork: {}, accountIds: [] };
 const mutations = {
+  setAccountIds(state, value) {
+    state.accountIds = value;
+  },
   nearAccount(state, value) {
     state.nearAccount = value;
   },
@@ -116,7 +119,7 @@ const actions = {
   },
 
   // Send localStorage data trough pubnub to iframe opener
-  async publishData(_, data) {
+  async publishData(_, { data }) {
     console.log("publishData Action");
 
     var pubnub = new PubNub({
@@ -191,7 +194,7 @@ const actions = {
 
     try {
       if (!ACCOUNTS_LIST.includes(selectedAccountId)) {
-        throw "Error getURLSearchParams : Not Implemented => " + selectedAccountId;
+        throw "Error getOauthData : Not Implemented => " + selectedAccountId;
       }
 
       // Get the user Oauth url from API using oauth tokens

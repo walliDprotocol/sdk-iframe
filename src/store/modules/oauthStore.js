@@ -1,4 +1,4 @@
-import authConnect from "./oauthFlows/auth";
+import authConnect from "./oauthFlows/authActions";
 
 const state = {};
 const getters = {};
