@@ -11,7 +11,9 @@ export default {
       username: account,
     };
     try {
-      let { data } = await axios.post(userProfileInfo, body);
+      let {
+        data: { data },
+      } = await axios.post(userProfileInfo, body);
       console.log("userProfileInfo res", data);
 
       const post = data?.data?.fullText;

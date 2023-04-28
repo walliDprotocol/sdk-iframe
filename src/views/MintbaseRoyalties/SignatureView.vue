@@ -1,11 +1,36 @@
 <template>
   <v-container fill-height class="align-content-space-between text-center">
-    <v-row justify="center" class="pt-6">
-      <v-col cols="12" sm="8" class="pt-12">
-        <h1 class="title-h1">Connect social account to your wallet</h1>
+    <v-row v-if="verifyResultSuccess" justify="center" class="pt-6">
+      <v-col cols="auto" class="pt-7 pr-0 mr-n3">
+        <div class="img-border">
+          <v-img contain max-width="48" max-height="48" :src="walletIconUrl" />
+        </div>
+      </v-col>
+      <v-col cols="auto" class="pt-7">
+        <v-img contain max-width="46" max-height="46" :src="`/logos/${selectedAccountId}.webp`" />
+      </v-col>
+      <v-col cols="auto" class="pt-7 pl-0">
+        <v-img
+          height="46"
+          max-width="30"
+          :src="require('@/assets/icons/icon-check-filled.webp')"
+        ></v-img>
+      </v-col>
+      <v-col cols="12" sm="12" class="pt-12">
+        <h1 class="title-h1">You're all set!</h1>
+      </v-col>
+      <v-col cols="12" sm="12" class="">
+        <p class="normal-text mb-0 ml-2">
+          Your wallet and social account were both successfully verified and royalties will be sent
+          directly to your wallet.
+        </p>
       </v-col>
     </v-row>
-    <v-row justify="center" class="">
+    <v-row v-else justify="center" class="pt-6">
+      <v-col cols="12" sm="12" class="pt-12">
+        <h1 class="title-h1">Connect social account to your wallet</h1>
+      </v-col>
+      <v-spacer />
       <v-col cols="auto" class="pt-7 pr-0">
         <v-img contain max-width="46" max-height="46" :src="`/logos/${selectedAccountId}.webp`" />
       </v-col>
@@ -17,9 +42,7 @@
           <v-img contain max-width="48" max-height="48" :src="walletIconUrl" />
         </div>
       </v-col>
-    </v-row>
-    <v-row justify="center">
-      <v-col cols="12" sm="9" class="pt-7 d-flex justify-center align-center">
+      <v-col cols="12" sm="12" class="pt-7 d-flex justify-center align-center">
         <v-img
           max-width="20"
           height="20"
@@ -49,7 +72,7 @@
 
     <v-row>
       <v-col cols="12" class="d-flex justify-end pb-5">
-        <FormButton :text="'CONNECT'" @click="doSignPostFlow"> </FormButton>
+        <FormButton :text="'CONNECT'" :loading="loading" @click="doSignPostFlow"> </FormButton>
       </v-col>
     </v-row>
   </v-container>
@@ -63,7 +86,13 @@ import { mapState } from "vuex";
 export default {
   name: "SignatureView",
   data() {
-    return { errorPost: false, errorSignature: false, walletIconUrl: null };
+    return {
+      errorPost: false,
+      errorSignature: false,
+      walletIconUrl: null,
+      loading: false,
+      verifyResultSuccess: false,
+    };
   },
   computed: {
     ...mapState(["selectedAccountId"]),
@@ -74,46 +103,100 @@ export default {
   },
   methods: {
     async doSignPostFlow() {
-      let oauthDataSigned = await this.signOauthData();
-      //next open twitter post pop
-      // await this.openTwitterPost(oauthDataSigned);
+      this.loading = true;
+      let verifyResult;
+      let oauthDataSigned;
+      try {
+        oauthDataSigned = await this.signOauthData();
+        //next open twitter post pop
+        await this.openTwitterPost(oauthDataSigned);
 
-      let userData;
-      ({ userData } = await this.$store.dispatch("getOauthDataStorage", {
-        selectedAccount: this.selectedAccountId,
-      }));
+        let userData;
+        ({ userData } = await this.$store.dispatch("getOauthDataStorage", {
+          selectedAccount: this.selectedAccountId,
+        }));
 
-      // get user last post
-      await this.$store.dispatch("oauth/getUserProfileInfo", {
-        account: userData.username,
-      });
-      const nftId = await getJSONStorage("session", `nftPostId`);
+        // get user last post
+        let numTries = 10;
 
-      const oauthData = oauthDataSigned;
-      const twitterHandler = userData.username;
-      const accountId = this.nearAccountId;
-      const NFT_ID = nftId;
+        while (numTries > 0) {
+          numTries -= 1;
 
-      // verify the post
-      await this.$store.dispatch("royalty/verifySignatureOnPost", {
-        oauthData,
-        twitterHandler,
-        accountId,
-        NFT_ID,
-      });
+          const postData = await this.$store.dispatch("oauth/getUserProfileInfo", {
+            account: userData.username,
+          });
 
-      // send data to iframe app
-      // await this.$store.dispatch("publishData", { signatureObject: oauthDataSigned });
+          log("postData", postData);
+
+          const postDataParsed = this.parsePostData(postData);
+          const nftId = await getJSONStorage("session", `nftPostId`);
+
+          // values to test from user post
+          const twitterHandlerPost = postDataParsed?.username;
+          const nearAccountIdPost = postDataParsed?.nearAccountId;
+
+          const signaturePost = postDataParsed?.signature;
+
+          const oauthData = oauthDataSigned;
+          const NFT_ID = nftId;
+
+          // verify the post
+          verifyResult = await this.$store.dispatch("royalty/verifySignatureOnPost", {
+            oauthData,
+            twitterHandler: twitterHandlerPost,
+            nearAccountId: nearAccountIdPost,
+            signature: signaturePost,
+            NFT_ID,
+          });
+
+          if (verifyResult) {
+            break;
+          }
+
+          // wait 2 seconds between calls
+          await new Promise((resolve) => setTimeout(resolve, 2000));
+        }
+      } catch (error) {
+        console.log(error);
+      }
+      this.loading = false;
+
+      if (verifyResult) {
+        // send data to iframe app
+        this.verifyResultSuccess = true;
+        await this.$store.dispatch("publishData", { signatureObject: oauthDataSigned });
+      }
     },
+    parsePostData({ post }) {
+      console.debug("post", post);
 
+      const encryptedData = post.match(/(Wallet signature:.+)/g)[0]?.split(":");
+      console.debug("encryptedData", encryptedData);
+
+      const signatureBase64 =
+        encryptedData[4].replace(/-/g, "+").replace(/_/g, "/") +
+        "=".repeat((4 - (encryptedData[4].length % 4)) % 4);
+
+      return {
+        username: encryptedData[1],
+        nearAccountId: encryptedData[2],
+        nftId: encryptedData[3],
+        signature: signatureBase64,
+      };
+    },
     async signOauthData() {
       let signRes = await this.$store.dispatch("royalty/signData");
 
       log("signRes", signRes);
       return signRes;
     },
-    openTwitterPost({ accountId }) {
-      const generatedPost = `${accountId}`;
+    openTwitterPost({ message, signature }) {
+      const signatureSafeBase64 = signature
+        .replace(/\+/g, "-")
+        .replace(/\//g, "_")
+        .replace(/=+$/, "");
+      const generatedPost = `I'm verifying my NEAR wallet to start earning royalties from NFTs. Wallet signature:${message}:${signatureSafeBase64}:
+      `;
       window.open(
         "https://twitter.com/intent/tweet?text=" + generatedPost,
         "",

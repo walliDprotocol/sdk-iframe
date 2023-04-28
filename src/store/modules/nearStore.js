@@ -25,9 +25,9 @@ const actions = {
 
     //setup wallet selector
     const selector = NearAPI.getWalletSelector();
-    console.log("setSelector", selector);
-    console.log("setSelector isSignedIn", selector.isSignedIn());
-    commit("setSelector", selector);
+    console.log("setWalletSelector", selector);
+    console.log("setWalletSelector isSignedIn", selector.isSignedIn());
+    commit("setWalletSelector", selector);
 
     selector.store.observable.subscribe((state) => {
       console.log("State changed:", state);
@@ -73,22 +73,26 @@ const actions = {
   },
 
   async getAccounts({ state, dispatch }) {
-    const wallet = await state.walletSelector?.wallet();
-    if (!wallet) {
-      return;
+    try {
+      const wallet = await state.walletSelector?.wallet();
+      if (!wallet) {
+        return;
+      }
+      const accounts = await wallet.getAccounts();
+      const account = accounts[0];
+
+      // TODO: fix when value is missing
+      const { profile } = await dispatch("getProfileName", {
+        accountId: account.accountId,
+      });
+      console.log("Get Social DB response: ", profile);
+
+      console.log("wallet", wallet);
+      console.log("account", account);
+      return { ...account, ...profile };
+    } catch (error) {
+      console.log(error);
     }
-    const accounts = await wallet.getAccounts();
-    const account = accounts[0];
-
-    // TODO: fix when value is missing
-    const { profile } = await dispatch("getProfileName", {
-      accountId: account.accountId,
-    });
-    console.log("Get Social DB response: ", profile);
-
-    console.log("wallet", wallet);
-    console.log("account", account);
-    return { ...account, ...profile };
   },
   async setAccount({ commit }, { account }) {
     if (!account) {
@@ -115,7 +119,7 @@ const actions = {
   },
 };
 const mutations = {
-  setSelector(state, value) {
+  setWalletSelector(state, value) {
     state.walletSelector = value;
   },
   setNearAccount(state, value) {

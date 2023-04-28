@@ -19,7 +19,7 @@ const getters = {
   },
 };
 const actions = {
-  async verifySignatureOnPost(_, { oauthData, twitterHandler, NFT_ID }) {
+  async verifySignatureOnPost(_, { oauthData, twitterHandler, nearAccountId, NFT_ID, signature }) {
     // const selectedAccountId = rootGetters["selectedAccountId"];
     // const nearAccountId = rootGetters["near/nearAccountId"];
     // const { nftId } = await getJSONStorage("session", `currentNFTID`);
@@ -27,27 +27,24 @@ const actions = {
     //   "local",
     //   `${selectedAccountId}_user`
     // );
-    // values to test from user post
-    const twitterHandlerPost = twitterHandler;
-    const accountIdPost = oauthData?.accountId;
 
     // order matters 🙂
     //build the signed data
     let data = {
       accountId: oauthData?.accountId,
-      message: `${twitterHandlerPost}:${accountIdPost}:${NFT_ID}`,
+      message: `${twitterHandler}:${nearAccountId}:${NFT_ID}`,
       blockId: oauthData?.blockId,
       publicKey: oauthData?.publicKey,
       keyType: oauthData?.keyType,
     };
 
-    console.log("data to verify", data);
+    console.log("data to verify", data, signature);
 
     try {
       const encoded = JSON.stringify(data);
       const message = new Uint8Array(sha256.array(decodeUTF8(encoded)));
       let pubKey = decodeBase64(oauthData?.publicKey);
-      let sig = decodeBase64(oauthData?.signature);
+      let sig = decodeBase64(signature);
       // var sig = nacl.sign.detached(msg, keys.secretKey);
       let resultIframe = nacl.sign.detached.verify(message, sig, pubKey);
 
