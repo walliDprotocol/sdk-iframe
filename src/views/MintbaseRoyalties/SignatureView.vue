@@ -1,25 +1,27 @@
 <template>
   <v-container fill-height class="align-content-space-between text-center">
     <v-row v-if="verifyResultSuccess" justify="center" class="pt-6">
-      <v-col cols="auto" class="pt-7 pr-0 mr-n3">
+      <v-col cols="auto" class="pt-7 pr-0" style="z-index: 3">
         <div class="img-border">
-          <v-img contain max-width="48" max-height="48" :src="walletIconUrl" />
+          <div>
+            <v-img contain max-width="48" max-height="48" :src="walletIconUrl" />
+          </div>
         </div>
       </v-col>
-      <v-col cols="auto" class="pt-7">
+      <v-col cols="auto" class="pt-7" style="z-index: 2">
         <v-img contain max-width="46" max-height="46" :src="`/logos/${selectedAccountId}.webp`" />
       </v-col>
-      <v-col cols="auto" class="pt-7 pl-0">
+      <v-col cols="auto" class="pt-7 pl-0" style="z-index: 1">
         <v-img
           height="46"
-          max-width="30"
+          max-width="46"
           :src="require('@/assets/icons/icon-check-filled.webp')"
         ></v-img>
       </v-col>
       <v-col cols="12" sm="12" class="pt-12">
         <h1 class="title-h1">You're all set!</h1>
       </v-col>
-      <v-col cols="12" sm="12" class="">
+      <v-col cols="12" sm="7" class="">
         <p class="normal-text mb-0 ml-2">
           Your wallet and social account were both successfully verified and royalties will be sent
           directly to your wallet.
@@ -39,7 +41,9 @@
       </v-col>
       <v-col cols="auto" class="pt-7 pl-0">
         <div class="img-border">
-          <v-img contain max-width="48" max-height="48" :src="walletIconUrl" />
+          <div>
+            <v-img contain max-width="48" max-height="48" :src="walletIconUrl" />
+          </div>
         </div>
       </v-col>
       <v-col cols="12" sm="12" class="pt-7 d-flex justify-center align-center">
@@ -72,7 +76,12 @@
 
     <v-row>
       <v-col cols="12" class="d-flex justify-end pb-5">
-        <FormButton :text="'CONNECT'" :loading="loading" @click="doSignPostFlow"> </FormButton>
+        <FormButton
+          :text="verifyResultSuccess ? 'DONE' : 'CONNECT'"
+          :loading="loading"
+          @click="doSignPostFlow"
+        >
+        </FormButton>
       </v-col>
     </v-row>
   </v-container>
@@ -103,6 +112,10 @@ export default {
   },
   methods: {
     async doSignPostFlow() {
+      if (this.verifyResultSuccess) {
+        return;
+      }
+
       this.loading = true;
       let verifyResult;
       let oauthDataSigned;
@@ -211,10 +224,17 @@ export default {
 </script>
 <style lang="scss">
 .img-border {
+  > div {
+    box-shadow: 0px 0px 1px 0px var(--light-blue-grey);
+    padding: 8px;
+    border-radius: 50%;
+    background-color: white;
+    max-height: 46px;
+    max-width: 46px;
+  }
   border-radius: 50%;
-  padding: 8px;
-  max-height: 46px;
-  max-width: 46px;
-  box-shadow: 0px 0px 1px 0px var(--light-blue-grey);
+  background-color: white;
+
+  border: solid 4px white;
 }
 </style>
