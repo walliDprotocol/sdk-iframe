@@ -103,6 +103,7 @@ export default {
 
 <style lang="scss">
 .iframe-app-bar .v-toolbar__content {
+  background: white;
   &::after {
     content: "";
     background: #f4f4f4;

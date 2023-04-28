@@ -125,7 +125,21 @@ export default {
   },
   async mounted() {
     // this will store a wallet access keys in browser's local  storage
-    await this.$store.dispatch("near/initNear");
+    // await this.$store.dispatch("near/initNear");
+    if (this.walletSelector) {
+      this.modal = setupModal(this.walletSelector, {
+        // contractId: process.env.VUE_APP_NEAR_SOCIAL_CONTRACT_TESTNET,
+        contractId: NearAPI.NEAR_SOCIAL_CONTRACT_ADDRESS,
+      });
+
+      if (!this.walletSelector.isSignedIn()) {
+        console.log(this.modal);
+        this.modal.show();
+        this.loading = false;
+      } else {
+        this.modal.hide();
+      }
+    }
   },
   components: {
     FormButton,

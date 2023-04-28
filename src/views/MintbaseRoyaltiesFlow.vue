@@ -72,14 +72,10 @@ export default {
     let hasUserData = await this.$store.dispatch("getOauthData", this.getOauthDataQuery);
     // if no oauth get data from local storage
 
-    let userData;
-    ({ hasUserData, userData } = await this.$store.dispatch("getOauthDataStorage", {
+    ({ hasUserData } = await this.$store.dispatch("getOauthDataStorage", {
       selectedAccount: "twitter",
     }));
 
-    await this.$store.dispatch("oauth/getUserProfileInfo", {
-      account: userData.username,
-    });
     // let hasUserData = await this.$store.dispatch("royalty/getNFTDataStorage", {
     //   nft: "nftData.json",
     // });

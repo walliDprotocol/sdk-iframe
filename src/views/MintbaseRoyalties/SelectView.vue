@@ -76,7 +76,7 @@
 import FormButton from "@/components/FormButton";
 import ConnectAccount from "@/components/ConnectAccount";
 
-import { mapState } from "vuex";
+import { mapGetters, mapState } from "vuex";
 
 export default {
   name: "SelectView",
@@ -99,18 +99,24 @@ export default {
   computed: {
     ...mapState(["selectedAccountId", "accountIds"]),
     ...mapState("royalty", ["nftData"]),
+    ...mapGetters("near", ["nearAccountId"]),
+
     isDisabled() {
       return !!this.errorMessage || !this.selectedAccount?.options?.some((value) => value.state);
     },
   },
   methods: {
     async connectAccount() {
-      console.log("Call connectAccount", this.selectedAccountId);
+      console.log("Call connectAccount", this.selectedAccountId, this.nearAccountId);
       this.loadingConnectAccount = true;
       try {
         if (this.successTwitterAccVerification) {
           clearTimeout(this.timer);
-          this.$router.push({ name: "royalties-signature" });
+          if (this.nearAccountId) {
+            this.$router.push({ name: "royalties-signature" });
+          } else {
+            this.$router.push({ name: "royalties-createWallet" });
+          }
           return;
         }
         if (this.selectedAccountId) {
@@ -164,6 +170,11 @@ export default {
       selectedAccount: "twitter",
     }));
 
+    // if no oauth called no need to check more
+    if (localStorage.getItem("@wallid:oauth:state") != 1) {
+      return;
+    }
+
     if (!hasUserData) {
       return (
         (this.errorTwitterAccVerification = true),
@@ -187,7 +198,11 @@ export default {
     if (owner) {
       this.successTwitterAccVerification = true;
       this.timer = setTimeout(() => {
-        this.$router.push({ name: "royalties-createWallet" });
+        if (this.nearAccountId) {
+          this.$router.push({ name: "royalties-signature" });
+        } else {
+          this.$router.push({ name: "royalties-createWallet" });
+        }
       }, 8 * 1000);
     }
   },
