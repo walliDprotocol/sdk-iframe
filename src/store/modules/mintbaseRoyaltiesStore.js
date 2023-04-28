@@ -1,6 +1,11 @@
 import { getJSONStorage } from "@/plugins/utils";
 import axios from "axios";
 
+import nacl from "tweetnacl";
+import { decodeUTF8, decodeBase64 } from "tweetnacl-util";
+
+import { sha256 } from "js-sha256";
+
 const NFT_URL = (id) =>
   `${process.env.VUE_APP_BACKEND_URL}/api/v1/external/getNftInfo?nft_id=${id}`;
 
@@ -14,12 +19,50 @@ const getters = {
   },
 };
 const actions = {
+  async verifySignatureOnPost(_, { oauthData, twitterHandler, NFT_ID }) {
+    // const selectedAccountId = rootGetters["selectedAccountId"];
+    // const nearAccountId = rootGetters["near/nearAccountId"];
+    // const { nftId } = await getJSONStorage("session", `currentNFTID`);
+    // const { username: socialAccountHandler } = await getJSONStorage(
+    //   "local",
+    //   `${selectedAccountId}_user`
+    // );
+    // values to test from user post
+    const twitterHandlerPost = twitterHandler;
+    const accountIdPost = oauthData?.accountId;
+
+    // order matters 🙂
+    //build the signed data
+    let data = {
+      accountId: oauthData?.accountId,
+      message: `${twitterHandlerPost}:${accountIdPost}:${NFT_ID}`,
+      blockId: oauthData?.blockId,
+      publicKey: oauthData?.publicKey,
+      keyType: oauthData?.keyType,
+    };
+
+    console.log("data to verify", data);
+
+    try {
+      const encoded = JSON.stringify(data);
+      const message = new Uint8Array(sha256.array(decodeUTF8(encoded)));
+      let pubKey = decodeBase64(oauthData?.publicKey);
+      let sig = decodeBase64(oauthData?.signature);
+      // var sig = nacl.sign.detached(msg, keys.secretKey);
+      let resultIframe = nacl.sign.detached.verify(message, sig, pubKey);
+
+      console.log(resultIframe);
+      return resultIframe;
+    } catch (error) {
+      console.error(error);
+    }
+  },
   async signData({ dispatch, rootGetters }) {
     try {
       // For twitter we need this code
       const selectedAccountId = rootGetters["selectedAccountId"];
       const nearAccountId = rootGetters["near/nearAccountId"];
-      const { nftId } = await getJSONStorage("session", `currentNFTID`);
+      const nftId = await getJSONStorage("session", `nftPostId`);
       const { username: socialAccountHandler } = await getJSONStorage(
         "local",
         `${selectedAccountId}_user`

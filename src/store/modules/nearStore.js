@@ -11,6 +11,11 @@ const getters = {
   },
 };
 const actions = {
+  async getWalletIconUrl() {
+    const wallet = await state.walletSelector.wallet();
+
+    return wallet?.metadata.iconUrl;
+  },
   async initNear({ commit, dispatch }) {
     let sessionNetwork = getJSONStorage("local", "selectedNetwork");
     const selectedNetwork =
