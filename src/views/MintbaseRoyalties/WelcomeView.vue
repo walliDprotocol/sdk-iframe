@@ -1,35 +1,40 @@
 <template>
   <div>
     <v-container fill-height class="align-content-space-between px-sm-16">
-      <v-row justify="center" class="pt-6 mb-12">
-        <v-col cols="12" sm="8" class="pt-16">
-          <h1 class="text-center">Welcome to WalliD verification</h1>
+      <v-row justify="center" class="">
+        <v-col cols="12" sm="8" class="pt-13">
+          <h1 class="text-center">Welcome to WalliD</h1>
         </v-col>
         <v-col cols="12" sm="10" class="">
-          <h3 class="text-center mb-5">
-            After completing the verification process with WalliD you'll be able to receive your NFT
-            royalties in a wallet account that you will create.
+          <h3 class="text-center mb-13">
+            To get started and receive your royalties, follow these simple steps to verify your
+            social network account and create a NEAR wallet.
           </h3>
-          <h3 class="text-center">In order to complete the process you'll need to:</h3>
+          <h3 class="text-center">After completing the process you'll have:</h3>
         </v-col>
       </v-row>
       <v-row class="justify-center">
-        <v-col cols="4" class="d-flex pb-5">
-          <div class="mr-3">img</div>
-          <div>Connect to your social network account</div>
-        </v-col>
-        <v-col cols="4" class="d-flex pb-5">
-          <div class="mr-3">img</div>
-          <div>Create a wallet account to receive your royalties</div>
-        </v-col>
-        <v-col cols="4" class="d-flex pb-5">
-          <div class="mr-3">img</div>
-          <div>Post on your social network</div>
+        <v-col
+          v-for="bulletPoint in bulletPoints"
+          :key="bulletPoint"
+          cols="12"
+          class="d-flex pb-1 justify-center"
+        >
+          <div class="d-flex bullet-point-wrapper">
+            <v-img
+              class="mr-3"
+              contain
+              max-width="24"
+              max-height="24"
+              :src="require('@/assets/icons/icon-check-filled.webp')"
+            />
+            <div>{{ bulletPoint }}</div>
+          </div>
         </v-col>
       </v-row>
     </v-container>
     <v-container fill-height class="align-content-space-between">
-      <v-row>
+      <v-row class="mt-10">
         <v-col cols="12" class="d-flex justify-end pb-5">
           <FormButton :text="'Get started'" @click="startFlow"> </FormButton>
         </v-col>
@@ -46,6 +51,11 @@ export default {
   data() {
     return {
       getOauthDataQuery: {},
+      bulletPoints: [
+        "Verified your social network account qualified to recieve royalties",
+        "Your own NEAR wallet",
+        "Royalty funds being automatically transferred to your wallet",
+      ],
     };
   },
   methods: {
@@ -94,3 +104,18 @@ export default {
   },
 };
 </script>
+<style lang="scss">
+.bullet-point-wrapper {
+  padding: 10px;
+
+  background: linear-gradient(
+    90deg,
+    rgba(100, 255, 222, 0.24) 4%,
+    rgba(115, 221, 231, 0.33) 43%,
+    rgba(122, 206, 253, 0.02) 86%
+  );
+
+  border-bottom-left-radius: 40px;
+  border-top-left-radius: 40px;
+}
+</style>

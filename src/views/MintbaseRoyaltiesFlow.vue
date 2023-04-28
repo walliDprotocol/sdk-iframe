@@ -4,12 +4,14 @@
     <LoaderCircle :loading="loading"></LoaderCircle>
 
     <router-view v-if="!loading" />
+    <AppFooter />
   </div>
 </template>
 
 <script>
 // import Vue from "vue";
 import LoaderCircle from "@/components/LoaderCircle";
+import AppFooter from "@/layout/AppFooter.vue";
 import AppHeader from "@/layout/AppHeader.vue";
 import axios from "axios";
 
@@ -99,6 +101,7 @@ export default {
   components: {
     LoaderCircle,
     AppHeader,
+    AppFooter,
   },
 };
 </script>
