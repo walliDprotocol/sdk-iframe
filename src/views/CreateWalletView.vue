@@ -70,10 +70,11 @@ export default {
   watch: {
     nearAccount(value) {
       console.log(value);
+      console.log(this.$route.path);
 
-      if (value) {
-        if (this.$route.path == "/royalties") {
-          this.$router.push({ name: "royalties-select" });
+      if (value?.accountId) {
+        if (this.$route.path.includes("/royalties")) {
+          this.$router.push({ name: "royalties-signature" });
         } else {
           this.$router.push({ name: "base-select" });
         }
