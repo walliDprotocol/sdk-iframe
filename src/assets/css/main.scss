@@ -6,11 +6,16 @@
   src: local("Karla"), url(../fonts/Karla-VariableFont_wght.ttf) format("truetype");
 }
 
+@font-face {
+  font-family: "Roobert";
+  src: url("https://wallid-assets.s3.eu-west-3.amazonaws.com/Roobert-Regular.woff") format("woff");
+}
+
 .verification-iframe#app {
   ///// FONTS /////
 
   * {
-    font-family: Karla;
+    font-family: Roobert, Karla;
   }
 
   h1.title-h1 {

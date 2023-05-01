@@ -17,6 +17,7 @@ export default {
 
 <style lang="scss">
 .form-button.v-btn {
+  font-family: Karla !important;
   border-radius: 20px;
   border: solid 1px transparent;
   // border-style: solid;
