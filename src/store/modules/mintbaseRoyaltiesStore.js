@@ -9,15 +9,13 @@ import { sha256 } from "js-sha256";
 const NFT_URL = (id) =>
   `${process.env.VUE_APP_BACKEND_URL}/api/v1/external/getNftInfo?nft_id=${id}`;
 
-const state = { nftId: null, nftData: {} };
-const getters = {
-  walletSelector(state) {
-    return state.walletSelector;
-  },
-  nearAccountId(state) {
-    return state.nearAccount?.accountId;
-  },
+const state = {
+  nftId: null,
+  nftData: {},
+  verifySuccess: false,
 };
+
+const getters = {};
 const actions = {
   async verifySignatureOnPost(_, { oauthData, twitterHandler, nearAccountId, NFT_ID, signature }) {
     // const selectedAccountId = rootGetters["selectedAccountId"];
@@ -136,6 +134,9 @@ const mutations = {
   },
   setNftData(state, value) {
     state.nftData = value;
+  },
+  verifySuccess(state, value) {
+    state.verifySuccess = value;
   },
 };
 

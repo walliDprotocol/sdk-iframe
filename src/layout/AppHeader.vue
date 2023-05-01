@@ -26,7 +26,7 @@
           v-if="$route.name != 'royalties-welcome'"
           class="d-flex flex-column justify-center text-center"
         >
-          <h5>{{ appHeaderTitle }}</h5>
+          <h5 class="stepper-title mb-1">{{ appHeaderTitle }}</h5>
           <p class="stepper-display mb-0">Step {{ currentStep }}/3</p>
         </v-col>
 
@@ -64,6 +64,7 @@ export default {
     ...mapState(["selectedAccountId"]),
     ...mapGetters("near", ["nearAccountId"]),
     ...mapState("near", ["walletSelector", "nearAccount"]),
+    ...mapState("royalty", ["verifySuccess"]),
 
     appHeaderTitle() {
       const titlesList = [
@@ -71,7 +72,7 @@ export default {
         "Create wallet",
         "Connect social account to your wallet",
       ];
-      return titlesList[this.currentStep - 1];
+      return this.verifySuccess ? "Success!" : titlesList[this.currentStep - 1];
     },
     cssVars() {
       return {
@@ -104,6 +105,23 @@ export default {
 <style lang="scss">
 .iframe-app-bar .v-toolbar__content {
   background: white;
+  .stepper-title {
+    color: var(--midnight);
+  }
+  .stepper-display {
+    color: var(--grey);
+  }
+
+  .stepper-title,
+  .stepper-display {
+    font-family: Roobert;
+    font-size: 13px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+  }
   &::after {
     content: "";
     background: #f4f4f4;

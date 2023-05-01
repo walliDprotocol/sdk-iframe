@@ -2,20 +2,21 @@
   <v-container fill-height class="align-content-space-between text-center">
     <v-row v-if="verifyResultSuccess" justify="center" class="pt-6">
       <v-col cols="auto" class="pt-7 pr-0" style="z-index: 3">
-        <div class="img-border">
+        <div class="img-border mt-n1 mr-n1">
           <div>
             <v-img contain max-width="48" max-height="48" :src="walletIconUrl" />
           </div>
         </div>
       </v-col>
-      <v-col cols="auto" class="pt-7" style="z-index: 2">
+      <v-col cols="auto" class="pt-7 mx-n4" style="z-index: 2">
         <v-img contain max-width="46" max-height="46" :src="`/logos/${selectedAccountId}.webp`" />
       </v-col>
       <v-col cols="auto" class="pt-7 pl-0" style="z-index: 1">
         <v-img
           height="46"
           max-width="46"
-          :src="require('@/assets/icons/icon-check-filled.webp')"
+          contain
+          :src="require('@/assets/icons/icon-check.webp')"
         ></v-img>
       </v-col>
       <v-col cols="12" sm="12" class="pt-12">
@@ -163,6 +164,7 @@ export default {
           });
 
           if (verifyResult) {
+            this.$store.commit("royalty/verifySuccess", true);
             break;
           }
 
