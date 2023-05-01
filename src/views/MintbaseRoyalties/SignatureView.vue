@@ -23,7 +23,7 @@
         <h1 class="title-h1">You're all set!</h1>
       </v-col>
       <v-col cols="12" sm="7" class="">
-        <p class="normal-text mb-0 ml-2">
+        <p class="normal-text-p mb-0 ml-2">
           Your wallet and social account were both successfully verified and royalties will be sent
           directly to your wallet.
         </p>
@@ -54,9 +54,9 @@
           contain
           :src="require('@/assets/icons/icon-1.webp')"
         ></v-img>
-        <p class="normal-text mb-0 ml-2">Approve the signature request in your wallet</p>
+        <p class="normal-text-p mb-0 ml-2">Approve the signature request in your wallet</p>
       </v-col>
-      <p v-if="errorSignature" class="error-txt normal-text">
+      <p v-if="errorSignature" class="error-txt normal-text-p">
         Wallet signature failed. Please try again.
       </p>
       <v-col cols="12" sm="9" class="pt-1 d-flex justify-center align-center">
@@ -66,11 +66,11 @@
           contain
           :src="require('@/assets/icons/icon-2.webp')"
         ></v-img>
-        <p class="normal-text mb-0 ml-2">
+        <p class="normal-text-p mb-0 ml-2">
           Approve the post on your social network that contains your wallet signature
         </p>
       </v-col>
-      <p v-if="errorPost" class="error-txt normal-text">
+      <p v-if="errorPost" class="error-txt normal-text-p">
         No post found in your public feed. Please try again.
       </p>
     </v-row>

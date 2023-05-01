@@ -16,7 +16,7 @@
             />
           </v-col>
           <v-col cols="8" class="pl-0 d-flex flex-column align-start justify-center">
-            <p class="bold-text-p text-uppercase mb-0">
+            <p class="bold-text-p mb-0" :style="'font-size:15px'">
               {{ selectedAccount.IdNameDesc }}
             </p>
             <p class="mb-0">

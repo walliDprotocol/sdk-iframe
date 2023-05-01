@@ -21,7 +21,7 @@
           <h1 class="title-h1 text-center">Verification failed</h1>
         </v-col>
         <v-col cols="12" sm="8">
-          <p class="normal-text text-center">
+          <p class="normal-text-p text-center">
             {{ errorMessage }}
           </p>
         </v-col>
@@ -46,7 +46,7 @@
           <h1 class="title-h1 text-center">Success! Your account was verified.</h1>
         </v-col>
         <v-col cols="12">
-          <p class="normal-text text-center">
+          <p class="normal-text-p text-center">
             You can now create a wallet and claim your royalties
           </p>
         </v-col>

@@ -3,14 +3,14 @@
     <v-container fill-height class="align-content-space-between px-sm-16">
       <v-row justify="center" class="">
         <v-col cols="12" sm="8" class="pt-13">
-          <h1 class="text-center">Welcome to WalliD</h1>
+          <h1 class="title-h1 text-center">Welcome to WalliD</h1>
         </v-col>
         <v-col cols="12" sm="10" class="">
-          <h3 class="text-center mb-13">
+          <h3 class="sub-title-h3 text-center mb-12">
             To get started and receive your royalties, follow these simple steps to verify your
             social network account and create a NEAR wallet.
           </h3>
-          <h3 class="text-center">After completing the process you'll have:</h3>
+          <h3 class="sub-title-h3 text-center">After completing the process you'll have:</h3>
         </v-col>
       </v-row>
       <v-row class="justify-center">
@@ -28,7 +28,9 @@
               max-height="24"
               :src="require('@/assets/icons/icon-check-filled.webp')"
             />
-            <div>{{ bulletPoint }}</div>
+            <div>
+              <h5 class="sub-title-h5 text-center">{{ bulletPoint }}</h5>
+            </div>
           </div>
         </v-col>
       </v-row>
