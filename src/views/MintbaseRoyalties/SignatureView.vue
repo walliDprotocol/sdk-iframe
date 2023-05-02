@@ -182,7 +182,7 @@ export default {
       if (verifyResult) {
         // send data to iframe app
         this.verifyResultSuccess = true;
-        await this.$store.dispatch("publishData", { signatureObject: oauthDataSigned });
+        await this.$store.dispatch("publishData", { data: oauthDataSigned });
       }
     },
     parsePostData({ post }) {
