@@ -64,8 +64,19 @@
       </v-row>
       <v-row class="pb-2">
         <v-col class="d-flex justify-end">
-          <FormButton class="mr-4" :text="'Back'" :type="'back'" @click="backStep"> </FormButton>
-          <FormButton :text="'Connect'" @click="connectAccount"> </FormButton>
+          <FormButton
+            v-if="!successTwitterAccVerification"
+            class="mr-4"
+            :text="'Back'"
+            :type="'back'"
+            @click="backStep"
+          >
+          </FormButton>
+          <FormButton
+            :text="successTwitterAccVerification ? 'Next' : 'Connect'"
+            @click="connectAccount"
+          >
+          </FormButton>
         </v-col>
       </v-row>
     </v-container>
@@ -171,7 +182,7 @@ export default {
     }));
 
     // if no oauth called no need to check more
-    if (localStorage.getItem("@wallid:oauth:state") != 1) {
+    if (localStorage.getItem("@wallid:oauth:state") == 1) {
       return;
     }
 

@@ -50,6 +50,7 @@ const actions = {
       return resultIframe;
     } catch (error) {
       console.error(error);
+      throw error;
     }
   },
   async signData({ dispatch, rootGetters }) {
@@ -57,7 +58,7 @@ const actions = {
       // For twitter we need this code
       const selectedAccountId = rootGetters["selectedAccountId"];
       const nearAccountId = rootGetters["near/nearAccountId"];
-      const nftId = await getJSONStorage("session", `nftPostId`);
+      const nftId = sessionStorage.getItem("nftPostId");
       const { username: socialAccountHandler } = await getJSONStorage(
         "local",
         `${selectedAccountId}_user`

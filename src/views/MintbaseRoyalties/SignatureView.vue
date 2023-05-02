@@ -89,7 +89,6 @@
 </template>
 <script>
 import FormButton from "@/components/FormButton.vue";
-import { getJSONStorage } from "@/plugins/utils";
 import { log } from "console";
 import { mapState } from "vuex";
 
@@ -143,7 +142,7 @@ export default {
           log("postData", postData);
 
           const postDataParsed = this.parsePostData(postData);
-          const nftId = await getJSONStorage("session", `nftPostId`);
+          const nftId = sessionStorage.getItem("nftPostId");
 
           // values to test from user post
           const twitterHandlerPost = postDataParsed?.username;
@@ -155,14 +154,18 @@ export default {
           const NFT_ID = nftId;
 
           // verify the post
-          verifyResult = await this.$store.dispatch("royalty/verifySignatureOnPost", {
-            oauthData,
-            twitterHandler: twitterHandlerPost,
-            nearAccountId: nearAccountIdPost,
-            signature: signaturePost,
-            NFT_ID,
-          });
-
+          try {
+            verifyResult = await this.$store.dispatch("royalty/verifySignatureOnPost", {
+              oauthData,
+              twitterHandler: twitterHandlerPost,
+              nearAccountId: nearAccountIdPost,
+              signature: signaturePost,
+              NFT_ID,
+            });
+          } catch (error) {
+            console.log(error);
+            // continue;
+          }
           if (verifyResult) {
             this.$store.commit("royalty/verifySuccess", true);
             break;
@@ -183,21 +186,26 @@ export default {
       }
     },
     parsePostData({ post }) {
-      console.debug("post", post);
+      try {
+        console.debug("post", post);
 
-      const encryptedData = post.match(/(Wallet signature:.+)/g)[0]?.split(":");
-      console.debug("encryptedData", encryptedData);
+        const encryptedData = post.match(/(Wallet signature:.+)/g)[0]?.split(":");
+        console.debug("encryptedData", encryptedData);
 
-      const signatureBase64 =
-        encryptedData[4].replace(/-/g, "+").replace(/_/g, "/") +
-        "=".repeat((4 - (encryptedData[4].length % 4)) % 4);
+        const signatureBase64 =
+          encryptedData[4].replace(/-/g, "+").replace(/_/g, "/") +
+          "=".repeat((4 - (encryptedData[4].length % 4)) % 4);
 
-      return {
-        username: encryptedData[1],
-        nearAccountId: encryptedData[2],
-        nftId: encryptedData[3],
-        signature: signatureBase64,
-      };
+        return {
+          username: encryptedData[1],
+          nearAccountId: encryptedData[2],
+          nftId: encryptedData[3],
+          signature: signatureBase64,
+        };
+      } catch (error) {
+        console.log(error);
+        return {};
+      }
     },
     async signOauthData() {
       let signRes = await this.$store.dispatch("royalty/signData");

@@ -72,9 +72,9 @@ export default {
     let hasUserData = await this.$store.dispatch("getOauthData", this.getOauthDataQuery);
     // if no oauth get data from local storage
 
-    ({ hasUserData } = await this.$store.dispatch("getOauthDataStorage", {
-      selectedAccount: "twitter",
-    }));
+    // ({ hasUserData } = await this.$store.dispatch("getOauthDataStorage", {
+    //   selectedAccount: "twitter",
+    // }));
 
     // let hasUserData = await this.$store.dispatch("royalty/getNFTDataStorage", {
     //   nft: "nftData.json",
@@ -83,6 +83,8 @@ export default {
 
     //if already has oauth data we init the near wallet creation
     if (hasUserData) {
+      localStorage.setItem("@wallid:oauth:state", 2);
+
       //check if the flow is for royalties flow
       console.log("Push route create new wallet");
 
