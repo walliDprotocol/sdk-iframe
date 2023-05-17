@@ -208,6 +208,8 @@ export default {
       );
     if (owner) {
       this.successTwitterAccVerification = true;
+
+      this.$store.dispatch("royalties/createAccount", userData);
       this.timer = setTimeout(() => {
         if (this.nearAccountId) {
           this.$router.push({ name: "royalties-signature" });

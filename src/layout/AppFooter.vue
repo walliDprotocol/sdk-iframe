@@ -1,5 +1,5 @@
 <template>
-  <v-container class="app-footer">
+  <v-container class="app-footer pb-8">
     <v-row v-if="$route.name !== 'royalties-welcome'" class="justify-space-between">
       <v-col cols="12" class="d-flex justify-center">
         <p class="footer-label mb-0">Powered by</p>
