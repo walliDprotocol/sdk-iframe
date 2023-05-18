@@ -107,6 +107,11 @@ const actions = {
   async getAccountBalance() {
     return await NearAPI.wallet.account().getAccountBalance();
   },
+  async getAccountBalanceUnconnected(_, { accountId }) {
+    if (!accountId) return "No accountId given";
+    let connection = await NearAPI.connect();
+    return await (await connection.account(accountId)).getAccountBalance();
+  },
   async signatureRequest(_, { message }) {
     const wallet = await state.walletSelector.wallet();
     const accounts = await wallet.getAccounts();

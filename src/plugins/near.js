@@ -51,8 +51,14 @@ export class NEAR {
     };
   }
 
+  connect() {
+    return nearAPI.connect(this.config);
+  }
   getWalletSelector() {
     return this.selector;
+  }
+  getAccountBalance(accountId) {
+    return nearAPI.account(accountId);
   }
 
   // Make a read-only call to retrieve information from the network

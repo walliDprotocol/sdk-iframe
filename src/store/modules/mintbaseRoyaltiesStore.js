@@ -31,7 +31,7 @@ async function handleAPIRequest({ method, endpoint, uid, platformId, data }) {
     method,
     url,
     data,
-  }).catch(console.log);
+  }).catch((error) => error);
 }
 
 const getters = {};
@@ -51,6 +51,7 @@ const actions = {
 
     const res = await handleAPIRequest({ ...CREATE_ACCOUNT_POST, uid, platformId, data });
     console.log("res", res);
+    return res?.data || res?.message;
   },
 
   async verifySignatureOnPost(_, { oauthData, twitterHandler, nearAccountId, NFT_ID, signature }) {

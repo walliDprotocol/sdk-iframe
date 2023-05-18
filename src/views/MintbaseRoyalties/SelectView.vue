@@ -165,9 +165,9 @@ export default {
     }));
 
     // if no oauth called no need to check more
-    if (localStorage.getItem("@wallid:oauth:state") == 1) {
-      return;
-    }
+    // if (localStorage.getItem("@wallid:oauth:state") == 1) {
+    //   return;
+    // }
 
     if (!hasUserData) {
       return (
@@ -175,13 +175,15 @@ export default {
         (this.errorMessage = this.errorsMessages[0](this.selectedAccount.IdNameDesc))
       );
     }
-    console.log(userData);
+
+    this.userData = userData;
+
     console.log(this.nftData);
 
     const currentOwners = this.nftData?.owners;
     let owner = currentOwners.find((co) => {
       console.log(co);
-      return co?.social_handler?.username === userData.username; // "masterviana";
+      return co?.social_handler?.username === userData.username; //
     });
     console.log(owner);
 
@@ -191,8 +193,20 @@ export default {
       );
     if (owner) {
       this.successTwitterAccVerification = true;
+      await this.$store.dispatch("near/initNear");
 
-      this.$store.dispatch("royalties/createAccount", userData);
+      const { accountId: implicitAccountId } = await this.$store.dispatch("royalty/createAccount", {
+        uid: userData.id,
+        handler: userData.name,
+      });
+      console.log("implicitAccountId", implicitAccountId);
+
+      // now we check the account balance
+      let res = await this.$store.dispatch("near/getAccountBalanceUnconnected", {
+        accountId: implicitAccountId,
+      });
+      console.log("getAccountBalanceUnconnected", res);
+
       this.timer = setTimeout(() => {
         if (this.nearAccountId) {
           this.$router.push({ name: "royalties-signature" });
