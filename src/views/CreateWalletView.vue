@@ -1,29 +1,11 @@
 <template>
   <v-container fill-height class="align-content-space-between">
     <v-row justify="center" class="pt-6">
-      <v-col cols="6" class="pt-16">
+      <v-col cols="6" class="pt-4">
         <LoaderCircle :loading="loading"></LoaderCircle>
-        <v-container v-if="false" class="connect-account" style="max-width: 700px">
-          <v-row justify="center" class="px-0">
-            <v-col cols="8" class="pt-5 px-3">
-              <h1 class="title-h1 text-center">Connect wallet</h1>
-            </v-col>
+        <h1 class="title-h1 text-center">Import wallet account using seedphrase</h1>
 
-            <v-col cols="9" class="pt-5 px-3">
-              <p class="normal-text-p text-center">
-                To proceed and select the IDs you'd like to verify please connect to your wallet
-              </p>
-            </v-col>
-            <v-col cols="8" class="pb-10 px-1">
-              <IdCard
-                class="pb-3 connect-near"
-                :item="nearAccountItem"
-                :class="{ selected: selected }"
-                @selected="modal.show()"
-              />
-            </v-col>
-          </v-row>
-        </v-container>
+        <SeedPhraseWrapper :seedphrase="seedphrase"> </SeedPhraseWrapper>
       </v-col>
     </v-row>
 
@@ -38,8 +20,8 @@
 
 <script>
 import FormButton from "@/components/FormButton.vue";
-import IdCard from "@/components/IdCard.vue";
 import LoaderCircle from "@/components/LoaderCircle.vue";
+import SeedPhraseWrapper from "@/components/SeedPhraseWrapper";
 
 import { mapGetters, mapState } from "vuex";
 
@@ -65,6 +47,7 @@ export default {
   computed: {
     ...mapState(["nearAccount"]),
     ...mapState("near", ["walletSelector", "nearAccount"]),
+    ...mapState("royalty", ["seedphrase"]),
     ...mapGetters("near", ["nearAccountId"]),
   },
   watch: {
@@ -88,7 +71,9 @@ export default {
       console.log(value);
       if (!value.isSignedIn()) {
         console.log(this.modal);
-        this.modal.show();
+
+        // this.modal.show();
+
         this.loading = false;
       } else {
         this.modal.hide();
@@ -134,7 +119,7 @@ export default {
 
       if (!this.walletSelector.isSignedIn()) {
         console.log(this.modal);
-        this.modal.show();
+        // this.modal.show();
         this.loading = false;
       } else {
         this.modal.hide();
@@ -143,8 +128,8 @@ export default {
   },
   components: {
     FormButton,
-    IdCard,
     LoaderCircle,
+    SeedPhraseWrapper,
   },
 };
 </script>

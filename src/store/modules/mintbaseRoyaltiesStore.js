@@ -23,6 +23,7 @@ const state = {
   nftId: null,
   nftData: {},
   verifySuccess: false,
+  seedphrase: "kiss renew lift easy media squirrel orbit birth index aim bacon cheese",
 };
 async function handleAPIRequest({ method, endpoint, uid, platformId, data }) {
   let url = MINTBASE_URL + getUrl(uid, platformId, endpoint);
