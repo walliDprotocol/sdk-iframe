@@ -2,29 +2,11 @@
   <v-container fill-height class="pt-7 align-content-start">
     <v-container fill-height class="pa-0 align-content-space-between">
       <v-row v-if="errorTwitterAccVerification" class="pt-8 d-flex justify-center">
-        <v-col cols="12" class="pt-16 d-flex justify-center">
-          <v-img
-            style="position: absolute; left: calc(50% - 66px)"
-            contain
-            max-width="48"
-            max-height="48"
-            :src="`/logos/${selectedAccount.IdName}.webp`"
-          />
-          <v-img
-            contain
-            max-width="41"
-            max-height="46"
-            :src="require('@/assets/icons/icon-error.webp')"
-          />
-        </v-col>
-        <v-col cols="12" class="pt-5">
-          <h1 class="title-h1 text-center">Verification failed</h1>
-        </v-col>
-        <v-col cols="12" sm="8">
-          <p class="normal-text-p text-center">
-            {{ errorMessage }}
-          </p>
-        </v-col>
+        <ErrorState
+          :error-message="errorMessage"
+          :selectedAccount="selectedAccount"
+          :userData="userData"
+        ></ErrorState>
       </v-row>
       <v-row v-else-if="successTwitterAccVerification">
         <v-col cols="12" class="pt-16 d-flex justify-center">
@@ -86,6 +68,7 @@
 <script>
 import FormButton from "@/components/FormButton";
 import ConnectAccount from "@/components/ConnectAccount";
+import ErrorState from "@/components/ErrorState";
 
 import { mapGetters, mapState } from "vuex";
 
@@ -222,6 +205,7 @@ export default {
   components: {
     FormButton,
     ConnectAccount,
+    ErrorState,
   },
 };
 </script>
