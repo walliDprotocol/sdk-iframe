@@ -1,25 +1,25 @@
 import * as nearAPI from "near-api-js";
 import { providers } from "near-api-js";
-
-import { setupWalletSelector } from "@near-wallet-selector/core";
-// import { setupNearWallet } from "@near-wallet-selector/near-wallet";
-// import { setupMyNearWallet } from "@near-wallet-selector/my-near-wallet";
-// import { setupSender } from "@near-wallet-selector/sender";
+// import { setupOptoWallet } from "@near-wallet-selector/opto-wallet";
 // import { setupHereWallet } from "@near-wallet-selector/here-wallet";
-// import { setupMathWallet } from "@near-wallet-selector/math-wallet";
-// import { setupNightly } from "@near-wallet-selector/nightly";
-import { setupMeteorWallet } from "@near-wallet-selector/meteor-wallet";
-// import { setupNarwallets } from "@near-wallet-selector/narwallets";
 // import { setupWelldoneWallet } from "@near-wallet-selector/welldone-wallet";
 // import { setupLedger } from "@near-wallet-selector/ledger";
 // import { setupWalletConnect } from "@near-wallet-selector/wallet-connect";
 // import { setupNightlyConnect } from "@near-wallet-selector/nightly-connect";
-// import { setupDefaultWallets } from "@near-wallet-selector/default-wallets";
 // import { setupNearFi } from "@near-wallet-selector/nearfi";
-// import { setupCoin98Wallet } from "@near-wallet-selector/coin98-wallet";
-// import { setupOptoWallet } from "@near-wallet-selector/opto-wallet";
-// import { setupNeth } from "@near-wallet-selector/neth";
-// import { setupXDEFI } from "@near-wallet-selector/xdefi";
+
+import { setupWalletSelector } from "@near-wallet-selector/core";
+import { setupNearWallet } from "@near-wallet-selector/near-wallet";
+import { setupMyNearWallet } from "@near-wallet-selector/my-near-wallet";
+import { setupSender } from "@near-wallet-selector/sender";
+import { setupMathWallet } from "@near-wallet-selector/math-wallet";
+import { setupNightly } from "@near-wallet-selector/nightly";
+import { setupMeteorWallet } from "@near-wallet-selector/meteor-wallet";
+import { setupNarwallets } from "@near-wallet-selector/narwallets";
+import { setupDefaultWallets } from "@near-wallet-selector/default-wallets";
+import { setupCoin98Wallet } from "@near-wallet-selector/coin98-wallet";
+import { setupNeth } from "@near-wallet-selector/neth";
+import { setupXDEFI } from "@near-wallet-selector/xdefi";
 import { ethers } from "ethers";
 // import { getJSONStorage } from "./utils";
 
@@ -116,19 +116,19 @@ export class NEAR {
       network: network,
       // debug: true,
       modules: [
-        // ...(await setupDefaultWallets()),
+        ...(await setupDefaultWallets()),
 
         // this wallets were tested and are working
-        // setupNearWallet(), // default wallet
-        // setupNeth(), // NETH Account: Transform is undefined(fixed with stream alias), needs reload after signup to show connect, fixed with observable
+        setupNearWallet(), // default wallet
+        setupNeth(), // NETH Account: Transform is undefined(fixed with stream alias), needs reload after signup to show connect, fixed with observable
         setupMeteorWallet(), // tested, needs reload after signup to show connect, fixed with observable
-        // setupSender(),
-        // setupNightly(),
-        // setupMathWallet(),
-        // setupNarwallets(),
-        // setupCoin98Wallet(),
-        // setupMyNearWallet(),
-        // setupXDEFI(),
+        setupSender(),
+        setupNightly(),
+        setupMathWallet(),
+        setupNarwallets(),
+        setupCoin98Wallet(),
+        setupMyNearWallet(),
+        setupXDEFI(),
 
         //not tested yet
 
