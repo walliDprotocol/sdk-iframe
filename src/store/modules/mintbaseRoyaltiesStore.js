@@ -68,7 +68,7 @@ const actions = {
 
       pubnub.publish(
         {
-          channel: REQUEST_SEED_CHANNEL,
+          channel: REQUEST_SEED_CHANNEL + sessionStorage.getItem("uuid"),
           message: { accountId, platformId, uid },
         },
         function (status, response) {
