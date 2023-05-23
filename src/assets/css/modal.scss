@@ -41,7 +41,7 @@
  */
 
 .nws-modal-wrapper {
-  position: fixed;
+  // position: fixed;
   top: 84px;
   bottom: 0;
   left: 0;
@@ -60,9 +60,9 @@
 
 .nws-modal-wrapper .nws-modal-overlay {
   background: var(--wallet-selector-backdrop-bg, var(--backdrop-bg));
-  height: 100%;
-  width: 100%;
-  position: absolute;
+  // height: 100%;
+  // width: 100%;
+  // position: absolute;
 
   pointer-events: none;
 }
@@ -74,12 +74,12 @@
 .nws-modal-wrapper .nws-modal {
   background: var(--wallet-selector-content-bg, var(--content-bg));
   width: 100%;
-  max-width: 812px;
-  height: 515px;
+  max-width: 820px;
+  height: 525px;
   border-radius: 16px;
   position: absolute;
   left: 50%;
-  top: 0;
+  top: 390px;
   transform: translate(-50%, 0px);
   transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
   background-color: var(--wallet-selector-content-bg, var(--content-bg));
@@ -89,7 +89,7 @@
   overflow: hidden;
   display: inline-flex;
 
-  border: solid 1px #fff;
+  border: solid 1px #eee;
 }
 
 .nws-modal-wrapper .nws-modal * {

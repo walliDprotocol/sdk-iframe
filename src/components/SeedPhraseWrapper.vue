@@ -7,12 +7,12 @@
       <v-col cols="4" class="">
         <p class="bold-text-p f15 mb-4">Copy this seedphrase to the clipboard</p>
         <p class="small-text-p">
-          After completing this two steps at the moment of Import your wallet account, you will be
-          prompted to enter the seed phrase generated here.
+          Download a NEAR wallet, select the "import wallet" option and and paste this seedphrase in
+          your wallet extension.
         </p>
       </v-col>
 
-      <v-col cols="auto" class="pl-10">
+      <v-col cols="7" class="pl-10">
         <v-container class="seed-phrase-wrapper" style="max-width: 446px">
           <v-row>
             <v-col style="position: relative">
@@ -106,6 +106,8 @@ export default {
     line-height: normal;
     letter-spacing: normal;
     color: var(--midnight);
+
+    word-spacing: 20px;
   }
   .btn-copy {
     min-width: unset !important;

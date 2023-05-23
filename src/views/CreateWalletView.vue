@@ -1,11 +1,37 @@
 <template>
-  <v-container fill-height class="align-content-space-between">
-    <v-row justify="center" class="pt-6">
-      <v-col cols="6" class="pt-4">
-        <LoaderCircle :loading="loading"></LoaderCircle>
+  <v-container fill-height class="align-content-space-between" style="height: 910px">
+    <v-row v-if="successState" justify="center" class="pa-10">
+      <v-col cols="8" class="pt-5">
+        <v-img
+          :src="require(`../assets/icons/success.webp`)"
+          contain
+          class="mx-auto"
+          max-height="40"
+          max-width="40"
+        />
+      </v-col>
+
+      <v-col cols="8" class="pt-5">
+        <h1 class="title-h1 text-center">You're all set!</h1>
+      </v-col>
+
+      <v-col cols="8" class="pt-5">
+        <h1 class="title-h1 text-center">
+          You now have access to the wallet receiving your royalties.
+        </h1>
+      </v-col>
+    </v-row>
+    <v-row v-else justify="center" class="pt-6">
+      <LoaderCircle :loading="loading"></LoaderCircle>
+      <v-col v-if="!loading" cols="12" class="pt-4">
         <h1 class="title-h1 text-center">Import wallet account using seedphrase</h1>
 
         <SeedPhraseWrapper :seedphrase="seedphrase"> </SeedPhraseWrapper>
+      </v-col>
+      <v-col cols="12" class="pt-4">
+        <div id="nws-modal-stub">
+          <!-- <component v-if="!loading" :is="headerComponent"></component> -->
+        </div>
       </v-col>
     </v-row>
 
@@ -36,12 +62,16 @@ export default {
       loading: true,
       modal: null,
       selected: false,
+      successState: false,
       nearAccountItem: {
         IdName: "nearTokens",
         IdNameDesc: "Near Wallet",
         IdDescription: "Connect to your NEAR wallet",
         type: "web3",
       },
+      // headerComponent: {
+      //   template: "#near-wallet-selector-modal", // refer to template element by selector
+      // },
     };
   },
   computed: {
@@ -67,12 +97,13 @@ export default {
       this.modal = setupModal(value, {
         // contractId: process.env.VUE_APP_NEAR_SOCIAL_CONTRACT_TESTNET,
         contractId: NearAPI.NEAR_SOCIAL_CONTRACT_ADDRESS,
+        description: "where ythis goes",
       });
       console.log(value);
       if (!value.isSignedIn()) {
         console.log(this.modal);
 
-        // this.modal.show();
+        this.modal.show();
 
         this.loading = false;
       } else {
@@ -119,11 +150,24 @@ export default {
 
       if (!this.walletSelector.isSignedIn()) {
         console.log(this.modal);
-        // this.modal.show();
-        this.loading = false;
+        await this.modal.show();
+        await this.$nextTick();
+
+        this.$forceUpdate();
+        // var nodesToMove = document.querySelectorAll(".nws-modal-wrapper");
+        // console.log(nodesToMove);
+
+        // var destinationContainerNode = document.querySelector("#nws-modal-stub");
+        // console.log(destinationContainerNode);
+        // Array.from(nodesToMove).forEach(function (node) {
+        //   destinationContainerNode.appendChild(node);
+        // });
       } else {
         this.modal.hide();
+        this.successState = true;
+        this.$store.commit("royalty/verifySuccess", true);
       }
+      this.loading = false;
     }
   },
   components: {

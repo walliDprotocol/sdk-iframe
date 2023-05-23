@@ -15,12 +15,12 @@
             </v-col>
 
             <v-col cols="8" class="pt-5">
+              <h1 class="title-h1 text-center">You're all set!</h1>
+            </v-col>
+
+            <v-col cols="8" class="pt-5">
               <h1 class="title-h1 text-center">
-                Your
-                <span style="text-transform: lowercase; font-family: inherit">
-                  {{ getSelectedAccountIdName }}
-                </span>
-                account was successfully verified!
+                You now have access to the wallet receiving your royalties.
               </h1>
             </v-col>
           </v-row>
@@ -31,7 +31,7 @@
     <v-row>
       <v-col cols="12" class="d-flex justify-end pb-4">
         <FormButton class="mr-5" :text="'Done'" :type="'back'" @click="publishData"> </FormButton>
-        <FormButton :text="'VERIFY ANOTHER ID'" @click="$router.push('/select')"> </FormButton>
+        <!-- <FormButton :text="'VERIFY ANOTHER ID'" @click="$router.push('/select')"> </FormButton> -->
       </v-col>
     </v-row>
   </v-container>
