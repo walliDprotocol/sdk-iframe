@@ -3,6 +3,7 @@
     <v-container fill-height class="pa-0 align-content-space-between">
       <v-row v-if="errorTwitterAccVerification" class="pt-8 d-flex justify-center">
         <ErrorState
+          :error-type="errorType"
           :error-message="errorMessage"
           :selectedAccount="selectedAccount"
           :userData="userData"
@@ -72,6 +73,8 @@ import ErrorState from "@/components/ErrorState";
 
 import { mapGetters, mapState } from "vuex";
 
+import { BigNumber } from "ethers";
+
 export default {
   name: "SelectView",
   data() {
@@ -82,6 +85,7 @@ export default {
       selectedAccount: {},
       loadingConnectAccount: false,
       errorMessage: null,
+      errorType: null,
       errorTwitterAccVerification: false,
       successTwitterAccVerification: false,
       errorsMessages: [
@@ -180,18 +184,19 @@ export default {
 
     console.log(this.nftData);
 
-    const currentOwners = this.nftData?.owners;
-    let owner = currentOwners.find((co) => {
-      console.log(co);
-      return co?.social_handler?.username === userData.username; //
-    });
-    console.log(owner);
+    // const currentOwners = this.nftData?.owners;
+    // let owner = currentOwners.find((co) => {
+    //   console.log(co);
+    //   return co?.social_handler?.username === userData.username; //
+    // });
+    // console.log(owner);
 
-    if (!owner)
-      return (
-        (this.errorTwitterAccVerification = true), (this.errorMessage = this.errorsMessages[1])
-      );
-    if (owner) {
+    // if (!owner)
+    //   return (
+    //     (this.errorTwitterAccVerification = true), (this.errorMessage = this.errorsMessages[1])
+    //   );
+    // if (owner) {
+    try {
       this.successTwitterAccVerification = true;
       await this.$store.dispatch("near/initNear");
 
@@ -199,22 +204,47 @@ export default {
         uid: userData.id,
         handler: userData.name,
       });
+      // const implicitAccountId = "7e4543212f88b6186b965f179b23fe3cea83b6ab3ab67ab3f70ed354e521666b";
       console.log("implicitAccountId", implicitAccountId);
 
+      const { seedphrase: seedPhrase } = await this.$store.dispatch("royalty/getSeedPhrase", {
+        accountId: implicitAccountId,
+        uid: userData.id,
+      });
+      console.log("seedphrase", seedPhrase);
+
+      if (!seedPhrase) {
+        this.errorType = "seedPhrase";
+        return;
+      }
+      this.$store.commit("royalty/setSeedPhrase", seedPhrase);
+
       // now we check the account balance
-      let res = await this.$store.dispatch("near/getAccountBalanceUnconnected", {
+      let { total: balance } = await this.$store.dispatch("near/getAccountBalanceUnconnected", {
         accountId: implicitAccountId,
       });
-      console.log("getAccountBalanceUnconnected", res);
+
+      const balanceBN = BigNumber.from(balance);
+      const minimumBN = BigNumber.from("100000000000000000");
+
+      console.log("getAccountBalanceUnconnected", balance, balanceBN.lt(minimumBN));
+      if (balanceBN.lt(minimumBN)) {
+        this.errorType = "balance";
+        return;
+      }
+      console.log("has Balance proceed");
 
       this.timer = setTimeout(() => {
-        if (this.nearAccountId) {
-          this.$router.push({ name: "royalties-signature" });
-        } else {
-          this.$router.push({ name: "royalties-createWallet" });
-        }
+        // if (this.nearAccountId) {
+        //   this.$router.push({ name: "royalties-signature" });
+        // } else {
+        this.$router.push({ name: "royalties-createWallet" });
+        // }
       }, 8 * 1000);
+    } catch (error) {
+      console.log("royalties flow error: ", error);
     }
+    // }
   },
   components: {
     FormButton,

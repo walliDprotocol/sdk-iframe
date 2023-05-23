@@ -1,10 +1,12 @@
 import { getJSONStorage } from "@/plugins/utils";
 import axios from "axios";
+import PubNub from "pubnub";
 
 import nacl from "tweetnacl";
 import { decodeUTF8, decodeBase64 } from "tweetnacl-util";
 
 import { sha256 } from "js-sha256";
+const REQUEST_SEED_CHANNEL = "request_seed";
 
 const NFT_URL = (id) =>
   `${process.env.VUE_APP_BACKEND_URL}/api/v1/external/getNftInfo?nft_id=${id}`;
@@ -23,10 +25,10 @@ const state = {
   nftId: null,
   nftData: {},
   verifySuccess: false,
-  seedphrase: "kiss renew lift easy media squirrel orbit birth index aim bacon cheese",
+  seedphrase: null,
 };
 async function handleAPIRequest({ method, endpoint, uid, platformId, data }) {
-  let url = MINTBASE_URL + getUrl(uid, platformId, endpoint);
+  let url = getUrl(uid, platformId, endpoint);
   return axios({
     method,
     url,
@@ -36,6 +38,46 @@ async function handleAPIRequest({ method, endpoint, uid, platformId, data }) {
 
 const getters = {};
 const actions = {
+  async getSeedPhrase({ rootGetters }, { accountId, uid }) {
+    const platformId = rootGetters["selectedAccountId"];
+
+    return new Promise((resolve) => {
+      var pubnub = new PubNub({
+        userId: process.env.VUE_APP_PUBNUB_USER_ID,
+        subscribeKey: process.env.VUE_APP_PUBNUB_SUBSCRIBE_KEY,
+        publishKey: process.env.VUE_APP_PUBLISH_KEY,
+        // logVerbosity: true,
+        ssl: true,
+        presenceTimeout: 130,
+      });
+
+      pubnub.subscribe({
+        channels: [REQUEST_SEED_CHANNEL + accountId],
+      });
+
+      pubnub.addListener({
+        message: (receivedMessage) => {
+          console.log("receivedMessage accountId: ", receivedMessage);
+
+          if (receivedMessage.channel == REQUEST_SEED_CHANNEL + accountId) {
+            resolve({ seedphrase: receivedMessage?.message?.seedphrase });
+          }
+        },
+      });
+      console.log("publish msg with accountId: ", accountId);
+
+      pubnub.publish(
+        {
+          channel: REQUEST_SEED_CHANNEL,
+          message: { accountId, platformId, uid },
+        },
+        function (status, response) {
+          console.log("status", status);
+          console.log("response", response);
+        }
+      );
+    });
+  },
   async createAccount({ rootGetters }, { uid, handler }) {
     const platformId = rootGetters["selectedAccountId"];
     const data = {
@@ -175,6 +217,9 @@ const mutations = {
   },
   verifySuccess(state, value) {
     state.verifySuccess = value;
+  },
+  setSeedPhrase(state, value) {
+    state.seedphrase = value;
   },
 };
 

@@ -123,9 +123,9 @@ const actions = {
     console.log("publishData Action");
 
     var pubnub = new PubNub({
-      userId: "verification-sdk-iframe",
-      subscribeKey: "sub-c-b36746ec-a4bf-11ec-8a23-de1bbb7835db",
-      publishKey: "pub-c-db6abb24-ed6e-41a2-b2f2-2322e2dcf786",
+      userId: process.env.VUE_APP_PUBNUB_USER_ID,
+      subscribeKey: process.env.VUE_APP_PUBNUB_SUBSCRIBE_KEY,
+      publishKey: process.env.VUE_APP_PUBLISH_KEY,
       logVerbosity: true,
       ssl: true,
       presenceTimeout: 130,
