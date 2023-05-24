@@ -30,7 +30,7 @@
           <p class="stepper-display mb-0">Step {{ currentStep }}/2</p>
         </v-col>
 
-        <v-col cols="4" class="d-flex align-center">
+        <v-col cols="4" class="d-flex align-center justify-end">
           <NetworkDropdown></NetworkDropdown>
           <p v-if="nearAccountId" class="account-id mb-0">
             <span>&bull;</span>{{ nearAccountId | truncate(16) }}
