@@ -192,29 +192,28 @@ export default {
   },
   async mounted() {
     this.loadingConnectAccount = true;
-
-    let userData, hasUserData;
-    ({ userData, hasUserData } = await this.$store.dispatch("getOauthDataStorage", {
-      selectedAccount: "twitter",
-    }));
-
-    // if no oauth called no need to check more
-    // if (localStorage.getItem("@wallid:oauth:state") == 1) {
-    //   return;
-    // }
-
-    if (!hasUserData) {
-      return (
-        (this.errorTwitterAccVerification = true),
-        (this.errorMessage = this.errorsMessages[0](this.selectedAccount.IdNameDesc))
-      );
-    }
-
-    this.userData = userData;
-
-    console.log(this.nftData);
-
     try {
+      let userData, hasUserData;
+      ({ userData, hasUserData } = await this.$store.dispatch("getOauthDataStorage", {
+        selectedAccount: "twitter",
+      }));
+
+      // if no oauth called no need to check more
+      if (localStorage.getItem("@wallid:oauth:state") == 1) {
+        return;
+      }
+
+      if (!hasUserData) {
+        return (
+          (this.errorTwitterAccVerification = true),
+          (this.errorMessage = this.errorsMessages[0](this.selectedAccount.IdNameDesc))
+        );
+      }
+
+      this.userData = userData;
+
+      console.log(this.nftData);
+
       this.successTwitterAccVerification = true;
       await this.$store.dispatch("near/initNear");
 
