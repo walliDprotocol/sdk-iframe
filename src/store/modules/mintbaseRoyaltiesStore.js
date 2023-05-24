@@ -6,7 +6,7 @@ import nacl from "tweetnacl";
 import { decodeUTF8, decodeBase64 } from "tweetnacl-util";
 
 import { sha256 } from "js-sha256";
-const REQUEST_SEED_CHANNEL = "request_seed";
+const REQUEST_SEED_CHANNEL = "request_seed_";
 
 const NFT_URL = (id) =>
   `${process.env.VUE_APP_BACKEND_URL}/api/v1/external/getNftInfo?nft_id=${id}`;
@@ -52,12 +52,15 @@ const actions = {
       });
 
       pubnub.subscribe({
-        channels: [REQUEST_SEED_CHANNEL + accountId],
+        channels: [REQUEST_SEED_CHANNEL + accountId + sessionStorage.getItem("uuid")],
       });
 
       pubnub.addListener({
         message: (receivedMessage) => {
-          if (receivedMessage.channel == REQUEST_SEED_CHANNEL + accountId) {
+          if (
+            receivedMessage.channel ==
+            REQUEST_SEED_CHANNEL + accountId + sessionStorage.getItem("uuid")
+          ) {
             resolve({ seedphrase: receivedMessage?.message?.seedphrase });
           }
         },
