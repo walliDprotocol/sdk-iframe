@@ -3,6 +3,13 @@
     <v-row v-if="errorType == 'balance'" justify="center">
       <v-col cols="12" class="pt-16 d-flex justify-center">
         <v-img
+          style="position: absolute; left: calc(50% - 66px)"
+          contain
+          max-width="48"
+          max-height="48"
+          :src="`/logos/${selectedAccount.IdName}.webp`"
+        />
+        <v-img
           contain
           max-width="41"
           max-height="46"
@@ -23,6 +30,13 @@
     <v-row v-else-if="errorType == 'seedPhrase'" justify="center">
       <v-col cols="12" class="pt-16 d-flex justify-center">
         <v-img
+          style="position: absolute; left: calc(50% - 66px)"
+          contain
+          max-width="48"
+          max-height="48"
+          :src="`/logos/${selectedAccount.IdName}.webp`"
+        />
+        <v-img
           contain
           max-width="41"
           max-height="46"
@@ -37,6 +51,13 @@
     </v-row>
     <v-row v-else-if="errorType == 'generalError'" justify="center">
       <v-col cols="12" class="pt-16 d-flex justify-center">
+        <v-img
+          style="position: absolute; left: calc(50% - 66px)"
+          contain
+          max-width="48"
+          max-height="48"
+          :src="`/logos/${selectedAccount.IdName}.webp`"
+        />
         <v-img
           contain
           max-width="41"
