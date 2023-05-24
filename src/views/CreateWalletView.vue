@@ -57,6 +57,9 @@ import NearAPI from "@/plugins/near";
 
 export default {
   name: "ConnectView",
+  beforeDestroy() {
+    this.modal.hide();
+  },
   data() {
     return {
       loading: true,
