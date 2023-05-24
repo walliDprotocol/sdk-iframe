@@ -52,12 +52,15 @@
             class="mr-4"
             :text="'Back'"
             :type="'back'"
+            :loading="loadingConnectAccount"
             @click="backStep"
           >
           </FormButton>
           <FormButton
             :text="successTwitterAccVerification ? 'Next' : 'Connect'"
             @click="connectAccount"
+            :disabled="errorTwitterAccVerification || errorType != null"
+            :loading="loadingConnectAccount"
           >
           </FormButton>
         </v-col>
@@ -110,11 +113,11 @@ export default {
       try {
         if (this.successTwitterAccVerification) {
           clearTimeout(this.timer);
-          if (this.nearAccountId) {
-            this.$router.push({ name: "royalties-signature" });
-          } else {
-            this.$router.push({ name: "royalties-createWallet" });
-          }
+          // if (this.nearAccountId) {
+          //   this.$router.push({ name: "royalties-signature" });
+          // } else {
+          this.$router.push({ name: "royalties-createWallet" });
+          // }
           return;
         }
         if (this.selectedAccountId) {
@@ -138,6 +141,7 @@ export default {
         this.$router.push({ name: "royalties-welcome" });
       }
       this.errorTwitterAccVerification = false;
+      this.successTwitterAccVerification = false;
 
       // uncomment this line to remove selected value on back
       // this.$store.commit("selectedAccountId");
@@ -163,6 +167,8 @@ export default {
     // await this.$forceUpdate();
   },
   async mounted() {
+    this.loadingConnectAccount = true;
+
     let userData, hasUserData;
     ({ userData, hasUserData } = await this.$store.dispatch("getOauthDataStorage", {
       selectedAccount: "twitter",
@@ -211,10 +217,10 @@ export default {
         accountId: implicitAccountId,
         uid: userData.id,
       });
-      console.log("seedphrase", seedPhrase);
 
       if (!seedPhrase) {
         this.errorType = "seedPhrase";
+        this.errorTwitterAccVerification = true;
         return;
       }
       this.$store.commit("royalty/setSeedPhrase", seedPhrase);
@@ -230,6 +236,7 @@ export default {
       console.log("getAccountBalanceUnconnected", balance, balanceBN.lt(minimumBN));
       if (balanceBN.lt(minimumBN)) {
         this.errorType = "balance";
+        this.errorTwitterAccVerification = true;
         return;
       }
       console.log("has Balance proceed");
@@ -243,6 +250,11 @@ export default {
       }, 8 * 1000);
     } catch (error) {
       console.log("royalties flow error: ", error);
+      this.errorType = "generalError";
+      this.errorMessage = error?.message;
+      this.errorTwitterAccVerification = true;
+    } finally {
+      this.loadingConnectAccount = false;
     }
     // }
   },

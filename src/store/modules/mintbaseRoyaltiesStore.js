@@ -57,8 +57,6 @@ const actions = {
 
       pubnub.addListener({
         message: (receivedMessage) => {
-          console.log("receivedMessage accountId: ", receivedMessage);
-
           if (receivedMessage.channel == REQUEST_SEED_CHANNEL + accountId) {
             resolve({ seedphrase: receivedMessage?.message?.seedphrase });
           }
