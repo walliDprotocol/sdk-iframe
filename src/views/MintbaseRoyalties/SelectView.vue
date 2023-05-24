@@ -107,17 +107,54 @@ export default {
     },
   },
   methods: {
+    async getSeedPhrase(accountId, uid) {
+      const { seedphrase: seedPhrase } = await this.$store.dispatch("royalty/getSeedPhrase", {
+        accountId,
+        uid,
+      });
+
+      if (!seedPhrase) {
+        this.errorType = "seedPhrase";
+        this.errorTwitterAccVerification = true;
+        return;
+      }
+      this.$store.commit("royalty/setSeedPhrase", seedPhrase);
+      return seedPhrase;
+    },
+
+    async getBalance(accountId) {
+      try {
+        let { total: balance } = await this.$store.dispatch("near/getAccountBalanceUnconnected", {
+          accountId,
+        });
+
+        const balanceBN = BigNumber.from(balance);
+        const minimumBN = BigNumber.from("100000000000000000");
+
+        console.log("getAccountBalanceUnconnected", balance, balanceBN.lt(minimumBN));
+        if (balanceBN.lt(minimumBN)) {
+          this.errorType = "balance";
+          this.errorTwitterAccVerification = true;
+          return false;
+        }
+        return true;
+      } catch (error) {
+        console.log("getBalance", error?.message || error);
+        this.errorType = "balance";
+        this.errorTwitterAccVerification = true;
+        this.errorMessage = error?.message;
+
+        return false;
+      }
+    },
     async connectAccount() {
       console.log("Call connectAccount", this.selectedAccountId, this.nearAccountId);
       this.loadingConnectAccount = true;
       try {
         if (this.successTwitterAccVerification) {
           clearTimeout(this.timer);
-          // if (this.nearAccountId) {
-          //   this.$router.push({ name: "royalties-signature" });
-          // } else {
+
           this.$router.push({ name: "royalties-createWallet" });
-          // }
           return;
         }
         if (this.selectedAccountId) {
@@ -152,19 +189,6 @@ export default {
     console.log(this.$route);
     this.errorMessage = null;
     this.selectedAccount = this.accountIds.find((e) => e.IdName == this.selectedAccountId);
-    // this.step = 2;
-
-    // let objIndex = this.accountIds.findIndex(
-    //   (e) => e.IdName == this.selectedAccountId
-    // );
-
-    // Vue.set(this.accountIds, objIndex, {
-    //   ...this.accountIds[objIndex],
-    //   userData,
-    // });
-
-    // this.accountIds[objIndex].userData = userData;
-    // await this.$forceUpdate();
   },
   async mounted() {
     this.loadingConnectAccount = true;
@@ -190,18 +214,6 @@ export default {
 
     console.log(this.nftData);
 
-    // const currentOwners = this.nftData?.owners;
-    // let owner = currentOwners.find((co) => {
-    //   console.log(co);
-    //   return co?.social_handler?.username === userData.username; //
-    // });
-    // console.log(owner);
-
-    // if (!owner)
-    //   return (
-    //     (this.errorTwitterAccVerification = true), (this.errorMessage = this.errorsMessages[1])
-    //   );
-    // if (owner) {
     try {
       this.successTwitterAccVerification = true;
       await this.$store.dispatch("near/initNear");
@@ -213,40 +225,20 @@ export default {
       // const implicitAccountId = "7e4543212f88b6186b965f179b23fe3cea83b6ab3ab67ab3f70ed354e521666b";
       console.log("implicitAccountId", implicitAccountId);
 
-      const { seedphrase: seedPhrase } = await this.$store.dispatch("royalty/getSeedPhrase", {
-        accountId: implicitAccountId,
-        uid: userData.id,
-      });
-
+      // get the seed phrase through pubnub
+      const seedPhrase = await this.getSeedPhrase(implicitAccountId, userData.id);
       if (!seedPhrase) {
-        this.errorType = "seedPhrase";
-        this.errorTwitterAccVerification = true;
         return;
       }
-      this.$store.commit("royalty/setSeedPhrase", seedPhrase);
-
       // now we check the account balance
-      let { total: balance } = await this.$store.dispatch("near/getAccountBalanceUnconnected", {
-        accountId: implicitAccountId,
-      });
-
-      const balanceBN = BigNumber.from(balance);
-      const minimumBN = BigNumber.from("100000000000000000");
-
-      console.log("getAccountBalanceUnconnected", balance, balanceBN.lt(minimumBN));
-      if (balanceBN.lt(minimumBN)) {
-        this.errorType = "balance";
-        this.errorTwitterAccVerification = true;
+      const hasBalance = await this.getBalance(implicitAccountId);
+      if (!hasBalance) {
         return;
       }
       console.log("has Balance proceed");
 
       this.timer = setTimeout(() => {
-        // if (this.nearAccountId) {
-        //   this.$router.push({ name: "royalties-signature" });
-        // } else {
         this.$router.push({ name: "royalties-createWallet" });
-        // }
       }, 8 * 1000);
     } catch (error) {
       console.log("royalties flow error: ", error);
