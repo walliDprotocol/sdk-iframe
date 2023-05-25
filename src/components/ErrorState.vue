@@ -16,7 +16,7 @@
           :src="require('@/assets/icons/icon-error.webp')"
         />
       </v-col>
-      <v-col cols="12" class="pt-5">
+      <v-col cols="8" sm="8" class="pt-5">
         <h1 class="title-h1 text-center">
           Ups, it seems like this account doesn't have any royalties to claim yet.
         </h1>
@@ -28,7 +28,7 @@
       </v-col>
     </v-row>
     <v-row v-else-if="errorType == 'seedPhrase'" justify="center">
-      <v-col cols="12" class="pt-16 d-flex justify-center">
+      <v-col cols="12" sm="7" class="pt-16 d-flex justify-center">
         <v-img
           style="position: absolute; left: calc(50% - 66px)"
           contain
@@ -43,7 +43,7 @@
           :src="require('@/assets/icons/icon-error.webp')"
         />
       </v-col>
-      <v-col cols="12" class="pt-5">
+      <v-col cols="8" sm="7" class="pt-5">
         <h1 class="title-h1 text-center">
           Ups, there was a problem getting your wallet seed phrase
         </h1>
@@ -68,7 +68,7 @@
       <v-col cols="12" class="pt-5">
         <h1 class="title-h1 text-center">Ups, there was a problem</h1>
       </v-col>
-      <v-col cols="12" sm="8">
+      <v-col cols="8" sm="8">
         <p class="normal-text-p text-center">
           {{ errorMessage }}
         </p>

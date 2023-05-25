@@ -14,7 +14,7 @@
           :userData="userData"
         ></ErrorState>
       </v-row>
-      <v-row v-else-if="successTwitterAccVerification">
+      <v-row v-else-if="successTwitterAccVerification" justify="center">
         <v-col cols="12" class="pt-16 d-flex justify-center">
           <v-img
             style="position: absolute; left: calc(50% - 66px)"
@@ -30,7 +30,7 @@
             :src="require('@/assets/icons/icon-check.webp')"
           />
         </v-col>
-        <v-col cols="12" class="pt-5">
+        <v-col cols="9" class="pt-5">
           <h1 class="title-h1 text-center">
             Success! Your account was verified and you have some royalties to claim!
           </h1>
@@ -187,8 +187,8 @@ export default {
       try {
         if (this.successTwitterAccVerification) {
           clearTimeout(this.timer);
-
           this.$router.push({ name: "royalties-createWallet" });
+          this.loadingConnectAccount = false;
           return;
         }
         if (this.selectedAccountId) {
@@ -202,8 +202,6 @@ export default {
         }
       } catch (error) {
         console.log("connectAccount", error);
-      } finally {
-        this.loadingConnectAccount = false;
       }
     },
 

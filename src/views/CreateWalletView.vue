@@ -1,5 +1,9 @@
 <template>
-  <v-container fill-height class="align-content-space-between" style="height: 910px">
+  <v-container
+    fill-height
+    class="align-content-space-between"
+    :style="{ height: !successState ? '910px' : 'unset' }"
+  >
     <v-row v-if="successState" justify="center" class="pa-10">
       <v-col cols="8" class="pt-5">
         <v-img

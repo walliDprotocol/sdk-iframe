@@ -134,7 +134,7 @@ export default {
     content: "";
     background: linear-gradient(90deg, #64ffde 0%, #73dde7 50%, #7acefd 100%);
     height: 2px;
-    width: calc(var(--currentStep) * 25vw);
+    width: calc(var(--currentStep) * 50vw);
     position: absolute;
     bottom: 0;
     z-index: 1;
