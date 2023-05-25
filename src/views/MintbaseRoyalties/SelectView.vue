@@ -1,6 +1,11 @@
 <template>
-  <v-container fill-height class="pt-7 align-content-start">
-    <v-container fill-height class="pa-0 align-content-space-between">
+  <v-container fill-height class="pt-0 align-content-start">
+    <LoaderCircle :loading="loadingConnectAccount"></LoaderCircle>
+    <v-container
+      v-if="!loadingConnectAccount"
+      fill-height
+      class="pa-0 pt-7align-content-space-between"
+    >
       <v-row v-if="errorTwitterAccVerification" class="pt-8 d-flex justify-center">
         <ErrorState
           :error-type="errorType"
@@ -82,6 +87,7 @@ import ErrorState from "@/components/ErrorState";
 import { mapGetters, mapState } from "vuex";
 
 import { BigNumber } from "ethers";
+import LoaderCircle from "@/components/LoaderCircle.vue";
 
 export default {
   name: "SelectView",
@@ -119,11 +125,6 @@ export default {
         uid,
       });
 
-      if (!seedPhrase) {
-        this.errorType = "seedPhrase";
-        this.errorTwitterAccVerification = true;
-        return;
-      }
       this.$store.commit("royalty/setSeedPhrase", seedPhrase);
       return seedPhrase;
     },
@@ -139,20 +140,47 @@ export default {
 
         console.log("getAccountBalanceUnconnected", balance, balanceBN.lt(minimumBN));
         if (balanceBN.lt(minimumBN)) {
-          this.errorType = "balance";
-          this.errorTwitterAccVerification = true;
           return false;
         }
         return true;
       } catch (error) {
         console.log("getBalance", error?.message || error);
-        this.errorType = "balance";
-        this.errorTwitterAccVerification = true;
         this.errorMessage = error?.message;
-
         return false;
       }
     },
+
+    async getWalletAccess() {
+      await this.$store.dispatch("near/initNear");
+
+      const { accountId: implicitAccountId } = await this.$store.dispatch("royalty/createAccount", {
+        uid: this.userData.id,
+        handler: this.userData.name,
+      });
+      // const implicitAccountId = "7e4543212f88b6186b965f179b23fe3cea83b6ab3ab67ab3f70ed354e521666b";
+      console.log("implicitAccountId", implicitAccountId);
+
+      // get the seed phrase through pubnub
+      const seedPhrase = await this.getSeedPhrase(implicitAccountId, this.userData.id);
+      if (!seedPhrase) {
+        this.errorType = "seedPhrase";
+        this.errorTwitterAccVerification = true;
+        return;
+      }
+      // now we check the account balance
+      const hasBalance = await this.getBalance(implicitAccountId);
+      if (!hasBalance) {
+        this.errorType = "balance";
+        this.errorTwitterAccVerification = true;
+        return;
+      }
+      this.successTwitterAccVerification = true;
+
+      console.log("has Balance proceed", hasBalance);
+
+      // this.$router.push({ name: "royalties-createWallet" });
+    },
+
     async connectAccount() {
       console.log("Call connectAccount", this.selectedAccountId, this.nearAccountId);
       this.loadingConnectAccount = true;
@@ -169,7 +197,7 @@ export default {
             redirectPath: this.redirectPath,
           });
           if (state == "success") {
-            this.$router.push("/success");
+            console.log("connectAccount state", state);
           }
         }
       } catch (error) {
@@ -222,31 +250,9 @@ export default {
 
       console.log(this.nftData);
 
-      this.successTwitterAccVerification = true;
-      await this.$store.dispatch("near/initNear");
-
-      const { accountId: implicitAccountId } = await this.$store.dispatch("royalty/createAccount", {
-        uid: userData.id,
-        handler: userData.name,
-      });
-      // const implicitAccountId = "7e4543212f88b6186b965f179b23fe3cea83b6ab3ab67ab3f70ed354e521666b";
-      console.log("implicitAccountId", implicitAccountId);
-
-      // get the seed phrase through pubnub
-      const seedPhrase = await this.getSeedPhrase(implicitAccountId, userData.id);
-      if (!seedPhrase) {
-        return;
-      }
-      // now we check the account balance
-      const hasBalance = await this.getBalance(implicitAccountId);
-      if (!hasBalance) {
-        return;
-      }
-      console.log("has Balance proceed");
-
-      this.timer = setTimeout(() => {
-        this.$router.push({ name: "royalties-createWallet" });
-      }, 8 * 1000);
+      // this.timer = setTimeout(() => {
+      await this.getWalletAccess();
+      // }, 8 * 1000);
     } catch (error) {
       console.log("royalties flow error: ", error);
       this.errorType = "generalError";
@@ -261,6 +267,7 @@ export default {
     FormButton,
     ConnectAccount,
     ErrorState,
+    LoaderCircle,
   },
 };
 </script>
