@@ -9,7 +9,7 @@
         {
           "field": "Account name",
           "description": ["(Encrypted)"],
-          "state": true
+          "state": false
         }
       ]
     }

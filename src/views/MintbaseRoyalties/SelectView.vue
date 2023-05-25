@@ -26,22 +26,23 @@
           />
         </v-col>
         <v-col cols="12" class="pt-5">
-          <h1 class="title-h1 text-center">Success! Your account was verified.</h1>
+          <h1 class="title-h1 text-center">
+            Success! Your account was verified and you have some royalties to claim!
+          </h1>
         </v-col>
         <v-col cols="12">
-          <p class="normal-text-p text-center">
-            You can now create a wallet and claim your royalties
-          </p>
+          <p class="normal-text-p text-center">Proceed to get your wallet and access your funds.</p>
         </v-col>
       </v-row>
       <v-row v-else>
         <v-col cols="12">
-          <h1 class="title-h1 text-center">Connect to your social network account</h1>
+          <h1 class="title-h1 text-center">Verify your social network account</h1>
         </v-col>
         <v-col cols="12" class="pt-5">
           <ConnectAccount
             :selectedAccount="selectedAccount"
             @errorMessage="errorMessage = $event"
+            @allSelected="($event) => (allSelected = $event)"
           />
         </v-col>
       </v-row>
@@ -52,14 +53,18 @@
             class="mr-4"
             :text="'Back'"
             :type="'back'"
-            :loading="loadingConnectAccount"
+            :disabled="loadingConnectAccount"
             @click="backStep"
           >
           </FormButton>
           <FormButton
-            :text="successTwitterAccVerification ? 'Next' : 'Connect'"
+            :text="successTwitterAccVerification ? 'Next' : 'Verify'"
             @click="connectAccount"
-            :disabled="errorTwitterAccVerification || errorType != null"
+            :disabled="
+              errorTwitterAccVerification ||
+              errorType != null ||
+              (!allSelected && !successTwitterAccVerification)
+            "
             :loading="loadingConnectAccount"
           >
           </FormButton>
@@ -95,6 +100,7 @@ export default {
         (idName) => `It was not possible to verify ${idName} your account, please try again.`,
         "The account you connected to doesn't match the one identified in the NFT creator's post. Please confirm your account and try again.",
       ],
+      allSelected: false,
     };
   },
   computed: {
@@ -177,8 +183,10 @@ export default {
       if (!this.errorTwitterAccVerification) {
         this.$router.push({ name: "royalties-welcome" });
       }
+      this.errorType = null;
       this.errorTwitterAccVerification = false;
       this.successTwitterAccVerification = false;
+      this.errorMessage = null;
 
       // uncomment this line to remove selected value on back
       // this.$store.commit("selectedAccountId");

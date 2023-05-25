@@ -97,6 +97,12 @@ export default {
   beforeDestroy() {
     this.selectedAccount?.options.map((e) => (e.state = false));
   },
+
+  watch: {
+    allSelected(val) {
+      this.$emit("allSelected", val);
+    },
+  },
   async mounted() {
     try {
       if (

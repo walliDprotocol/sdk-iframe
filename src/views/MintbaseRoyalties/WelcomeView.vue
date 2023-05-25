@@ -6,8 +6,8 @@
       </v-col>
       <v-col cols="12" sm="10" class="">
         <h3 class="sub-title-h3 text-center mb-12">
-          To get started and receive your royalties, follow these simple steps to verify your social
-          network account and create a NEAR wallet.
+          To get started and claim your royalties follow these steps to verify your social network
+          account and import a NEAR wallet.
         </h3>
         <h3 class="sub-title-h3 text-center">After completing the process you'll have:</h3>
       </v-col>
@@ -51,8 +51,8 @@ export default {
     return {
       getOauthDataQuery: {},
       bulletPoints: [
-        "Verified your social network account qualified to recieve royalties",
-        "Your own NEAR wallet",
+        "Verified your social network account qualified to receive royalties",
+        "Imported your NEAR wallet",
         "Royalty funds being automatically transferred to your wallet",
       ],
     };
