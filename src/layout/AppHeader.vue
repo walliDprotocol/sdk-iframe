@@ -68,8 +68,8 @@ export default {
 
     appHeaderTitle() {
       const titlesList = [
-        "Connect to social network",
-        "Create wallet",
+        "Verify social network",
+        "Import wallet account",
         "Connect social account to your wallet",
       ];
       return this.verifySuccess ? "Success!" : titlesList[this.currentStep - 1];

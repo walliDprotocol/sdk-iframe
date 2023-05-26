@@ -37,16 +37,29 @@
           </v-row>
           <v-row justify="end">
             <v-col cols="auto" class="mt-1 pr-0">
-              <v-btn class="btn-copy" text @click="copyClipboard">
-                <img
-                  :height="10"
-                  :width="10"
-                  src="@/assets/icons/icon-copy.svg"
-                  style="filter: brightness(0)"
-                  class="mr-1"
-                />
-                {{ "Copy" }}
-              </v-btn>
+              <v-tooltip bottom content-class="wallet-tooltip" :open-on-hover="false">
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn class="btn-copy" text @click="copyClipboard" v-bind="attrs" v-on="on">
+                    <img
+                      :height="10"
+                      :width="10"
+                      src="@/assets/icons/icon-copy.svg"
+                      style="filter: brightness(0)"
+                      class="mr-1"
+                    />
+                    {{ "Copy" }}
+                  </v-btn>
+                </template>
+                <div class="arrow-seed-tooltip"></div>
+                <div class="seed-phrase-tooltip">
+                  <p>
+                    {{ "Copied to clipboard!" }}
+                  </p>
+                  <!-- <p v-else>
+                    {{ "Copy to clipboard" }}
+                  </p> -->
+                </div>
+              </v-tooltip>
             </v-col>
           </v-row>
         </v-container>
@@ -61,11 +74,17 @@ export default {
   data() {
     return {
       seedLocked: true,
+      show: false,
     };
   },
   methods: {
     copyClipboard() {
-      navigator.clipboard.writeText(this.seedphrase);
+      try {
+        navigator.clipboard.writeText(this.seedphrase);
+        this.show = true;
+      } catch (err) {
+        console.error(err);
+      }
     },
   },
   props: {
@@ -77,6 +96,57 @@ export default {
   components: {},
 };
 </script>
+
+<style lang="scss">
+.wallet-tooltip {
+  &.v-tooltip__content {
+    width: 170px;
+    height: 43px;
+    background-color: transparent;
+    opacity: 1 !important;
+  }
+  &.v-tooltip__content .seed-phrase-tooltip {
+    background-color: #d9fbed;
+    padding: 4px;
+    margin: auto;
+    width: fit-content;
+    border-radius: 8px;
+  }
+  p {
+    margin: 0 !important;
+    font-family: Roobert;
+    font-size: 10px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #01022e;
+  }
+  .arrow-seed-tooltip {
+    background-color: #d9fbed;
+    transform: rotate(45deg);
+    width: 12px;
+    height: 12px;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    margin-left: -7px;
+    z-index: -1;
+  }
+  .arrow-seed-tooltip--bottom {
+    background-color: #d9fbed;
+    transform: rotate(45deg);
+    width: 15px;
+    height: 15px;
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    margin-left: -7px;
+    z-index: -1;
+  }
+}
+</style>
 <style scoped lang="scss">
 .number {
   font-size: 14px;
