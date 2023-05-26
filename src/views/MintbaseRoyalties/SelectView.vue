@@ -169,11 +169,11 @@ export default {
       }
       // now we check the account balance
       const hasBalance = await this.getBalance(implicitAccountId);
-      // if (!hasBalance) {
-      //   this.errorType = "balance";
-      //   this.errorTwitterAccVerification = true;
-      //   return;
-      // }
+      if (!hasBalance) {
+        this.errorType = "balance";
+        this.errorTwitterAccVerification = true;
+        return;
+      }
       this.successTwitterAccVerification = true;
 
       console.log("has Balance proceed", hasBalance);
