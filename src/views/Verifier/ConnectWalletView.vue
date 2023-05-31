@@ -33,18 +33,18 @@
     </v-row>
     <v-row v-else-if="!loading" justify="center" class="pt-6">
       <v-col v-if="!loading" cols="12" class="pt-4">
-        <h1 class="title-h1 text-center">{{ $t(`connectWallet.title`) }}</h1>
+        <h1 class="title-h1 text-center mb-1">{{ $t(`connectWallet.title`) }} {{ tokenName }}</h1>
       </v-col>
-      <v-col v-for="asset in web3TokensList" :key="asset.IdName" cols="12" class="pt-4">
+      <v-col v-for="asset in web3TokensList" :key="asset.IdName" cols="12" class="pt-3">
         <ConnectAccount
           :selectedAccount="asset"
           @errorMessage="errorMessage = $event"
           @allSelected="($event) => (allSelected = $event)"
+          :checkBalance="false"
         />
       </v-col>
-
-      <v-col v-if="!loading && hasWeb3BrowserExtension" cols="12" class="pt-4">
-        <WalletSelector class="" v-model="selectedWallet"></WalletSelector>
+      <v-col v-if="!loading && hasWeb3BrowserExtension" cols="12" class="pt-2">
+        <WalletSelector class="" v-model="selectedWallet" :chainId="chainId"></WalletSelector>
       </v-col>
     </v-row>
 
@@ -73,7 +73,9 @@ import { mapState } from "vuex";
 
 export default {
   name: "ConnectWalletView",
-  beforeDestroy() {},
+  beforeDestroy() {
+    localStorage.setItem("@wallid:oauth:state", 1);
+  },
   data() {
     return {
       allSelected: false,
@@ -106,6 +108,12 @@ export default {
   },
   computed: {
     ...mapState(["nearAccount", "assetsToVerify", "web3TokensList"]),
+    chainId() {
+      return this.web3TokensList?.[0]?.chainId;
+    },
+    tokenName() {
+      return this.web3TokensList?.[0]?.IdNameDesc;
+    },
   },
   watch: {
     selectedWallet(value) {

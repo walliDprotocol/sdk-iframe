@@ -63,14 +63,28 @@ export default {
 
     ({ providers } = (await this.$store.dispatch("getConfig", { configId })).data);
 
-    const [accountIdsFilter, web3TokensList] = splitIntoTwoLists(providers, "type", [OAUTH, WEB3]);
+    let [accountIdsFilter, web3TokensList] = splitIntoTwoLists(providers, "type", [OAUTH, WEB3]);
 
     // filter out providers list
 
     console.log("accountIdsFilter", accountIdsFilter);
     console.log("web3TokensList", web3TokensList);
+    web3TokensList.forEach((a) =>
+      a.options.forEach((option) => {
+        option.display = true;
+      })
+    );
 
     this.$store.commit("setWeb3Tokens", web3TokensList);
+
+    // hide other options
+    accountIdsFilter.forEach((a) =>
+      a.options.forEach((option) => {
+        option.display = option.code == 1;
+      })
+    );
+
+    this.accountIds = accountIdsFilter;
 
     if (hasUserData) {
       //check if the flow is for royalties flow
@@ -79,14 +93,14 @@ export default {
       console.log("Push route success");
       // Push success screen
       // // this.$router.push("/?success=" + this.selectedAccountId);
-      // localStorage.setItem("@wallid:oauth:state", 2);
+      localStorage.setItem("@wallid:oauth:state", 2);
       this.hasData = getJSONStorage("local", this.selectedAccountId + "_user");
-      // console.log("hasData", this.hasData);
-      // if (this.hasData) {
-      //   this.$router.push({ name: "base-createWallet" });
-      //   this.loading = false;
-      // }
-      // return;
+      console.log("hasData", this.hasData);
+      if (this.hasData) {
+        this.$router.push({ name: "base-select" });
+        this.loading = false;
+      }
+      return;
     }
     // this.$router.push({ name: "base-select" });
     // } else {

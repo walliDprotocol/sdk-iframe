@@ -48,6 +48,7 @@
             :selectedAccount="selectedAccount"
             @errorMessage="errorMessage = $event"
             @allSelected="($event) => (allSelected = $event)"
+            :checkBalance="false"
           />
         </v-col>
       </v-row>
@@ -158,7 +159,6 @@ export default {
   },
 
   async created() {
-    console.log(this.$route);
     console.log("/?flow=" + this.flow);
 
     this.errorMessage = null;
