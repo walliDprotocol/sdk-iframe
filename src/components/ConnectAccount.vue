@@ -29,7 +29,7 @@
           <v-spacer />
 
           <v-col
-            v-if="selectedAccount.options.length > 1"
+            v-if="optionsFiltered.length > 1"
             cols="2"
             class="d-flex flex-column align-center justify-center"
           >
@@ -47,7 +47,7 @@
         </v-col>
       </v-row>
 
-      <v-row class="text-center" v-for="(item, index) in selectedAccount.options" :key="index">
+      <v-row class="text-center" v-for="(item, index) in optionsFiltered" :key="index">
         <v-col cols="12" class="d-flex align-start">
           <v-col cols="auto" class="d-flex fill-height align-start">
             <p class="bold-text-p text-left mb-0">
@@ -93,7 +93,13 @@
 <script>
 export default {
   name: "HelloWorld",
-  props: ["selectedAccount"],
+  props: {
+    selectedAccount: Object,
+    checkBalance: {
+      type: Boolean,
+      default: true,
+    },
+  },
   beforeDestroy() {
     this.selectedAccount?.options.map((e) => (e.state = false));
   },
@@ -106,8 +112,9 @@ export default {
   async mounted() {
     try {
       if (
-        this.selectedAccount.contractType == "native" ||
-        this.selectedAccount.contractType == "ERC20"
+        (this.selectedAccount.contractType == "native" ||
+          this.selectedAccount.contractType == "ERC20") &&
+        this.checkBalance
       ) {
         const availableBalance = await this.$store.dispatch(
           "getAccountBalance",
@@ -125,10 +132,17 @@ export default {
       this.$emit("errorMessage", error.message);
       this.errorMessage = error.message;
     }
+
+    this.$emit("allSelected", this.allSelected);
   },
   computed: {
+    optionsFiltered() {
+      return this.selectedAccount?.options.filter((e) => !("display" in e) || e.display);
+    },
     allSelected() {
-      return this.selectedAccount?.options.every((e) => e.state);
+      return this.selectedAccount?.options.every((e) => {
+        return !e.display || (e.display && e.state);
+      });
     },
     userData() {
       return this.selectedAccount?.userData || {};
