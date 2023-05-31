@@ -53,8 +53,8 @@ export default {
     return {
       isVerified: false,
       idDescription: {
-        web2: ({ IdNameDesc }) => `Connect your ${IdNameDesc} account`,
-        web3: ({ IdDescription }) => `${IdDescription}`,
+        OAUTH: ({ IdNameDesc }) => `Connect your ${IdNameDesc} account`,
+        WEB3: ({ IdDescription }) => `${IdDescription}`,
       },
     };
   },

@@ -60,7 +60,7 @@ import { setupModal } from "@near-wallet-selector/modal-ui";
 import NearAPI from "@/plugins/near";
 
 export default {
-  name: "ConnectView",
+  name: "CreateWalletView",
   beforeDestroy() {
     this.modal.hide();
   },

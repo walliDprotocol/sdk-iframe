@@ -6,10 +6,13 @@ import PubNub from "pubnub";
 import * as modules from "./modules";
 import { getJSONStorage } from "@/plugins/utils";
 import near from "@/plugins/near";
+import axios from "axios";
 
 // import router from "@/router";
 
 const TWITTER_LOGIN = process.env.VUE_APP_BACKEND_URL + "/api/v1/redirect/login/twitter";
+const CONFIG_URL = (configId) =>
+  `${process.env.VUE_APP_BACKEND_URL}/api/v1/config/byId?configId=${configId}`;
 
 const ACCOUNTS_LIST = [
   "discord",
@@ -27,8 +30,21 @@ console.log(TWITTER_LOGIN);
 
 Vue.use(Vuex);
 
-const state = { nearAccount: null, selectedAccountId: {}, selectedNetwork: {}, accountIds: [] };
+const state = {
+  nearAccount: null,
+  selectedAccountId: {},
+  selectedNetwork: {},
+  accountIds: [],
+  web3TokensList: [],
+  flow: null,
+};
 const mutations = {
+  setWeb3Tokens(state, value) {
+    state.web3TokensList = value;
+  },
+  setFlow(state, value) {
+    state.flow = value;
+  },
   setAccountIds(state, value) {
     state.accountIds = value;
   },
@@ -46,6 +62,9 @@ const mutations = {
 };
 
 const getters = {
+  flow(state) {
+    return state.flow;
+  },
   selectedNetwork(state) {
     return state.selectedNetwork;
   },
@@ -54,6 +73,13 @@ const getters = {
   },
 };
 const actions = {
+  async getConfig(_, { configId }) {
+    console.log("configId", configId);
+    // CONFIG_URL
+    // return await axios.get("/userDataRoyalties.json");
+    return await axios.get(CONFIG_URL(configId));
+  },
+
   async changeNetwork({ state, commit, getters }, selectedNetwork) {
     const accountId = getters["near/nearAccountId"];
 
@@ -163,9 +189,14 @@ const actions = {
 
       console.log("url parameters : ", urlParams);
 
-      const allowedParameters = ["account_id", "uuid", "state", "code", "nft"];
+      const allowedParameters = ["account_id", "uuid", "state", "code", "nft", "flow", "configId"];
       const localStorageParamsMap = { account_id: "nearAccount" };
-      const sessionStorageParamsMap = { uuid: "uuid", nft: "nftPostId" };
+      const sessionStorageParamsMap = {
+        uuid: "uuid",
+        nft: "nftPostId",
+        flow: "flow",
+        configId: "configId",
+      };
 
       for (let param of urlParams.keys()) {
         if (allowedParameters.includes(param)) {

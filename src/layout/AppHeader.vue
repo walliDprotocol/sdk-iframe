@@ -11,7 +11,7 @@
       <v-row class="justify-space-between">
         <v-col cols="4" class="d-flex justify-start">
           <v-img
-            v-if="$route.name == 'royalties-welcome'"
+            v-if="$route.name.includes('welcome')"
             alt="Vuetify Logo"
             class="shrink mr-2"
             contain
@@ -23,7 +23,7 @@
 
         <v-col
           cols="4"
-          v-if="$route.name != 'royalties-welcome'"
+          v-if="!$route.name.includes('welcome')"
           class="d-flex flex-column justify-center text-center"
         >
           <h5 class="stepper-title mb-1">{{ appHeaderTitle }}</h5>
@@ -65,8 +65,14 @@ export default {
     ...mapGetters("near", ["nearAccountId"]),
     ...mapState("near", ["walletSelector", "nearAccount"]),
     ...mapState("royalty", ["verifySuccess"]),
+    ...mapGetters(["flow"]),
 
     appHeaderTitle() {
+      if (this.flow == "celo") {
+        console.log("meta title", this.$route?.meta);
+        return this.$route?.meta?.title;
+      }
+
       const titlesList = [
         "Verify social network",
         "Import wallet account",
@@ -89,7 +95,8 @@ export default {
   },
   mounted() {
     let currentRoutes = this.recursiveChildrenSearch(this.$router.options.routes, "MintbaseFlow");
-    this.currentStep = currentRoutes.findIndex(({ name }) => name === this.$route.name);
+    this.currentStep =
+      this.$route?.meta?.step || currentRoutes.findIndex(({ name }) => name === this.$route.name);
   },
   components: {
     NetworkDropdown,

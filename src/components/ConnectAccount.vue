@@ -49,7 +49,7 @@
 
       <v-row class="text-center" v-for="(item, index) in selectedAccount.options" :key="index">
         <v-col cols="12" class="d-flex align-start">
-          <v-col cols="2" class="d-flex fill-height align-start">
+          <v-col cols="auto" class="d-flex fill-height align-start">
             <p class="bold-text-p text-left mb-0">
               {{ item.field }}
             </p>

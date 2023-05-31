@@ -1,72 +1,102 @@
 <template>
   <div>
-    <!-- <LoaderCircle :loading="loading"></LoaderCircle> -->
-    <router-view />
+    <AppHeader />
+
+    <LoaderCircle :loading="loading"></LoaderCircle>
+    <router-view v-if="!loading" />
+    <AppFooter />
   </div>
 </template>
 <script>
-import { getJSONStorage } from "@/plugins/utils";
+import LoaderCircle from "@/components/LoaderCircle.vue";
+import AppFooter from "@/layout/AppFooter.vue";
+import AppHeader from "@/layout/AppHeader.vue";
+import { getJSONStorage, getStorageFields, splitIntoTwoLists } from "@/plugins/utils";
 import { mapState } from "vuex";
-// import LoaderCircle from "@/components/LoaderCircle.vue";
+
+import { OAUTH, WEB3 } from "@/constants";
 
 export default {
   name: "GeneralVerificationFlow",
   data() {
     return {
       loading: true,
+      getOauthDataQuery: {},
     };
   },
   computed: {
     ...mapState("near", ["walletSelector", "nearAccount"]),
+    accountIds: {
+      get() {
+        return this.$store.state.accountIds;
+      },
+      set(val) {
+        this.$store.commit("setAccountIds", val);
+      },
+    },
   },
-  async created() {
-    const { state, code } = await this.$store.dispatch("getURLSearchParams");
-
-    this.getOauthDataQuery = { state, code };
-  },
+  async created() {},
 
   async mounted() {
-    // this will store a wallet access keys in browser's local  storage
-    await this.$store.dispatch("near/initNear");
+    let { state, code, flow, configId } = await this.$store.dispatch("getURLSearchParams");
+    // try to get this values from local storage
+    configId ??= (await getStorageFields(["configId", "flow"])).configId;
+    flow ??= (await getStorageFields(["configId", "flow"])).flow;
 
-    // console.log(await this.walletSelector.wallet());
-    // console.log(this.walletSelector?.isSignedIn());
-    if (this.$route.name == "NearPopup") {
-      return;
-    }
+    console.log("flow", flow, state, code);
+
+    // Temp Values
+    this.$store.commit("setFlow", flow);
+    this.$store.commit("selectedAccountId", "twitter");
+
+    this.getOauthDataQuery = {
+      state,
+      code,
+      redirectPath: "/?flow=" + flow,
+    };
+    console.log("getOauthDataQuery", this.getOauthDataQuery);
 
     // const { userData, nearAccountId } = await this.$store.dispatch("getURLSearchParams");
     const hasUserData = await this.$store.dispatch("getOauthData", this.getOauthDataQuery);
 
+    let providers = [];
+
+    ({ providers } = (await this.$store.dispatch("getConfig", { configId })).data);
+
+    const [accountIdsFilter, web3TokensList] = splitIntoTwoLists(providers, "type", [OAUTH, WEB3]);
+
+    // filter out providers list
+
+    console.log("accountIdsFilter", accountIdsFilter);
+    console.log("web3TokensList", web3TokensList);
+
+    this.$store.commit("setWeb3Tokens", web3TokensList);
+
     if (hasUserData) {
       //check if the flow is for royalties flow
-      if (this.isRoyaltyFlow) {
-        // push to create wallet now
-        this.$router.push("/connect");
-      } else {
-        console.log("Push route success");
-        // Push success screen
-        this.$router.push("/?success=" + this.selectedAccountId);
-        localStorage.setItem("@wallid:oauth:state", 2);
-        this.hasData = getJSONStorage("local", this.selectedAccountId + "_user");
-        console.log("hasData", this.hasData);
-        if (this.hasData) {
-          this.$router.push("/success");
-          this.loading = false;
-        }
-        return;
-      }
+      // TODO: Check this logic
+
+      console.log("Push route success");
+      // Push success screen
+      // // this.$router.push("/?success=" + this.selectedAccountId);
+      // localStorage.setItem("@wallid:oauth:state", 2);
+      this.hasData = getJSONStorage("local", this.selectedAccountId + "_user");
+      // console.log("hasData", this.hasData);
+      // if (this.hasData) {
+      //   this.$router.push({ name: "base-createWallet" });
+      //   this.loading = false;
+      // }
+      // return;
     }
-    console.log("Connect", this.walletSelector?.isSignedIn);
-    if (this.walletSelector?.isSignedIn) {
-      this.$router.push("/select");
-    } else {
-      this.$router.push("/");
-    }
+    // this.$router.push({ name: "base-select" });
+    // } else {
+    //   this.$router.push("/");
     this.loading = false;
   },
   components: {
-    // LoaderCircle,
+    AppFooter,
+    AppHeader,
+    LoaderCircle,
   },
 };
 </script>

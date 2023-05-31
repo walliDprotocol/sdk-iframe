@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.4.4",
+    "@metamask/detect-provider": "^2.0.0",
     "@near-wallet-selector/coin98-wallet": "^7.6.1",
     "@near-wallet-selector/core": "^7.6.1",
     "@near-wallet-selector/default-wallets": "^7.6.1",

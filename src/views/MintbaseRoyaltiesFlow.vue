@@ -60,9 +60,7 @@ export default {
     let data = await this.$store.dispatch("royalty/getNFTData", { nft });
     console.log(data);
 
-    ({ accountIds: this.accountIds, redirectPath: this.redirectPath } = (
-      await axios.get("/userDataRoyalties.json")
-    ).data);
+    ({ accountIds: this.accountIds } = (await axios.get("/userDataRoyalties.json")).data);
 
     this.$store.commit("selectedAccountId", "twitter");
 
