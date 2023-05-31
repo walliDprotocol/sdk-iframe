@@ -57,7 +57,8 @@ export default {
   watch: {
     $route(to) {
       let currentRoutes = this.recursiveChildrenSearch(this.$router.options.routes, "MintbaseFlow");
-      this.currentStep = currentRoutes.findIndex(({ name }) => name === to.name);
+      this.currentStep =
+        this.$route?.meta?.step || currentRoutes.findIndex(({ name }) => name === to.name);
     },
   },
   computed: {

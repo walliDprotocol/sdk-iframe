@@ -58,18 +58,18 @@ export default {
       color: "#f79520",
     },
   },
+  verifyAccount: {
+    title: "Connect to your Twitter account and select the levels you want to verify",
+  },
 
-  connect: {
-    title: "Connect to your wallet and verify WalliDAO tokens",
-    label: "Select an address:",
-    placeholder: "Select an address",
-    text: "To sign this document you need to authorise the access to your wallet address and sign it in the pop-up presented to you by WalliD wallet.",
-    dropdown: {
-      walletAddress: "wallet address",
-      metamaskNotStored: "Add an address from another wallet",
-    },
-    storeButton: "Store Metamask in MyWalliD",
-    storeButtonENS: "Store ENS in MyWalliD",
+  connectWallet: {
+    title: "Connect to your wallet and verify",
+
+    connectButton: "Connect and verify",
+  },
+  walletSelector: {
+    label: "Choose a wallet to connect",
+    text: "After select a wallet, confirm the connection in the extension window",
   },
   authentication: {
     title: "Authentication validation",
@@ -79,16 +79,9 @@ export default {
 
     codeLabel: ["Authentication code:", "Enter the code"],
   },
-  successful: {
-    title: "Your document has been successfully signed!",
-    text1: [
-      " The envelope ID",
-      "with the documents: ",
-      "has been successfully signed with your wallet address.",
-    ],
-    text2:
-      "Once all signatures are complete you will receive the original file in your email address and a NFT with the proof-of-signature will be minted to your wallet.",
-    link: ["Verify it in ", " on-chain", "or in our", "OpenSea collection"],
+  successfulVerify: {
+    title: "Success! Your account was verified!",
+    text1: "Proceed to connect to your CELO wallet and verify WalliDAO token ownership.",
   },
   errors: {
     noCMD: "Your mobile number doesn't have an active CMD associated",
@@ -120,6 +113,7 @@ export default {
   button: {
     getStarted: "Get started",
     back: "Back",
+    next: "Next",
     signIn: "Sign in with {wallet}",
     connect: "Connect to {wallet}",
     sign: "Sign document",
