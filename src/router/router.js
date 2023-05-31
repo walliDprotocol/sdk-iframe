@@ -1,15 +1,22 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import RoyaltiesSelectView from "../views/MintbaseRoyalties/SelectView";
-import SelectView from "../views/Verifier/SelectView";
 import SuccessView from "../views/SuccessView.vue";
 import NearPopup from "../views/nearPopup.vue";
+// royalties flow
 import MintbaseFlowVue from "@/views/MintbaseRoyaltiesFlow.vue";
-import GeneralVerificationFlow from "@/views/GeneralVerificationFlow.vue";
-import SignatureView from "@/views/MintbaseRoyalties/SignatureView";
 import WelcomeViewRoyaltiesVue from "@/views/MintbaseRoyalties/WelcomeView.vue";
-import CreateWalletView from "@/views/Verifier/CreateWalletView.vue";
+import RoyaltiesSelectView from "../views/MintbaseRoyalties/SelectView";
+import CreateWalletView from "@/views/MintbaseRoyalties/CreateWalletView.vue";
+
+import SignatureView from "@/views/MintbaseRoyalties/SignatureView"; // deprecated
+
+// general verifier flow
+import GeneralVerificationFlow from "@/views/GeneralVerificationFlow.vue";
 import WelcomeViewVue from "@/views/Verifier/WelcomeView.vue";
+import ConnectWalletView from "@/views/Verifier/ConnectWalletView.vue";
+import ConnectAccountView from "../views/Verifier/ConnectAccountView";
+
+// i18n messages
 import messages from "@/locales/languages/verifier";
 import i18n from "@/plugins/i18n";
 
@@ -35,9 +42,9 @@ const routes = [
         },
       },
       {
-        path: "select",
+        path: "connect-account",
         name: "base-select",
-        component: SelectView,
+        component: ConnectAccountView,
         meta: {
           i18n: messages,
           title: "Verify social network",
@@ -45,9 +52,9 @@ const routes = [
         },
       },
       {
-        path: "create-wallet",
+        path: "connect-wallet",
         name: "base-createWallet",
-        component: CreateWalletView,
+        component: ConnectWalletView,
         meta: {
           i18n: messages,
           title: "Verify tokens ownership",
@@ -104,6 +111,7 @@ const routes = [
         name: "royalties-createWallet",
         component: CreateWalletView,
       },
+      // deprecated
       {
         path: "signature",
         name: "royalties-signature",

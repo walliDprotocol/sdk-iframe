@@ -7,7 +7,7 @@
     <v-row v-if="successState" justify="center" class="pa-10">
       <v-col cols="8" class="pt-5">
         <v-img
-          :src="require(`../assets/icons/success.webp`)"
+          :src="require(`@/assets/icons/success.webp`)"
           contain
           class="mx-auto"
           max-height="40"
