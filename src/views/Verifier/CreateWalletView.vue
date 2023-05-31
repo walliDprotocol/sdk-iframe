@@ -33,7 +33,7 @@
     </v-row>
     <v-row v-else-if="!loading" justify="center" class="pt-6">
       <v-col v-if="!loading" cols="12" class="pt-4">
-        <h1 class="title-h1 text-center">{{ $t(`connect.title`) }}</h1>
+        <h1 class="title-h1 text-center">{{ $t(`connectWallet.title`) }}</h1>
       </v-col>
       <v-col v-for="asset in web3TokensList" :key="asset.IdName" cols="12" class="pt-4">
         <ConnectAccount
@@ -50,8 +50,9 @@
 
     <v-row>
       <v-col cols="12" class="d-flex justify-end pb-5">
+        <FormButton class="mr-4" :text="'Back'" :type="'back'" @click="backStep"> </FormButton>
         <FormButton
-          :text="'Connect Wallet'"
+          :text="$t(`connectWallet.connectButton`)"
           @click="connectAccount"
           :disabled="!(allSelected && selectedWallet)"
         >
@@ -71,7 +72,7 @@ import WalletSelector from "@/components/WalletSelector";
 import { mapState } from "vuex";
 
 export default {
-  name: "CreateWalletView",
+  name: "ConnectWalletView",
   beforeDestroy() {},
   data() {
     return {
@@ -138,6 +139,12 @@ export default {
       //   }
       // }, 1000);
       // await this.$store.dispatch("near/connectNear");
+    },
+    backStep() {
+      this.$router.go(-1);
+
+      // uncomment this line to remove selected value on back
+      // this.$store.commit("selectedAccountId");
     },
   },
   async mounted() {

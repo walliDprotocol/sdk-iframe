@@ -1,10 +1,10 @@
 <template>
-  <v-container fill-height class="pt-0 align-content-start">
+  <v-container fill-height class="pt-0 align-content-space-between">
     <LoaderCircle :loading="loadingConnectAccount"></LoaderCircle>
     <v-container
       v-if="!loadingConnectAccount"
       fill-height
-      class="pa-0 pt-7align-content-space-between"
+      class="pa-0 pt-7 align-content-space-between"
     >
       <v-row v-if="errorTwitterAccVerification" class="pt-8 d-flex justify-center">
         <ErrorState
@@ -32,11 +32,11 @@
         </v-col>
         <v-col cols="9" class="pt-5">
           <h1 class="title-h1 text-center">
-            Success! Your account was verified and you have some royalties to claim!
+            {{ $t(`successfulVerify.title`) }}
           </h1>
         </v-col>
-        <v-col cols="12">
-          <p class="normal-text-p text-center">Proceed to get your wallet and access your funds.</p>
+        <v-col cols="12" sm="6">
+          <p class="normal-text-p text-center">{{ $t(`successfulVerify.text1`) }}</p>
         </v-col>
       </v-row>
       <v-row v-else>
@@ -89,7 +89,7 @@ import { mapGetters, mapState } from "vuex";
 import LoaderCircle from "@/components/LoaderCircle.vue";
 
 export default {
-  name: "SelectView",
+  name: "ConnectAccountView",
   data() {
     return {
       step: 1,
@@ -109,7 +109,6 @@ export default {
   },
   computed: {
     ...mapState(["selectedAccountId", "accountIds"]),
-    ...mapGetters("near", ["nearAccountId"]),
     ...mapGetters(["flow"]),
     redirectPath() {
       console.log("/?flow=" + this.flow);
@@ -121,12 +120,12 @@ export default {
   },
   methods: {
     async connectAccount() {
-      console.log("Call connectAccount", this.selectedAccountId, this.nearAccountId);
+      console.log("Call connectAccount", this.selectedAccountId);
       this.loadingConnectAccount = true;
       try {
         if (this.successTwitterAccVerification) {
           clearTimeout(this.timer);
-          this.$router.push({ name: "royalties-createWallet" });
+          this.$router.push({ name: "base-createWallet" });
           this.loadingConnectAccount = false;
           return;
         }
@@ -146,7 +145,7 @@ export default {
 
     backStep() {
       if (!this.errorTwitterAccVerification) {
-        this.$router.push({ name: "royalties-welcome" });
+        this.$router.push({ name: "base-welcome" });
       }
       this.errorType = null;
       this.errorTwitterAccVerification = false;
@@ -175,9 +174,9 @@ export default {
 
       // if no oauth called no need to check more
       // with this we always do the oauth request
-      // if (localStorage.getItem("@wallid:oauth:state") == 1) {
-      //   return;
-      // }
+      if (localStorage.getItem("@wallid:oauth:state") == 1) {
+        return;
+      }
 
       if (!hasUserData) {
         return (
@@ -188,14 +187,15 @@ export default {
 
       this.userData = userData;
       if (hasUserData) {
-        this.$router.push({ name: "base-createWallet" });
+        // this.$router.push({ name: "base-createWallet" });
+        this.successTwitterAccVerification = true;
         this.loading = false;
       }
       // this.timer = setTimeout(() => {
       // await this.getWalletAccess();
       // }, 8 * 1000);
     } catch (error) {
-      console.log("royalties flow error: ", error);
+      console.log("base flow error: ", error);
       this.errorType = "generalError";
       this.errorMessage = error?.message;
       this.errorTwitterAccVerification = true;

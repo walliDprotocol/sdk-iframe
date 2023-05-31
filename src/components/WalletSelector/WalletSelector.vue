@@ -1,8 +1,8 @@
 <template>
   <v-container class="connect-account">
     <v-row>
-      <v-col cols="12" class="mt-4">
-        <h4 style="font-weight: 600">Choose a wallet to use:</h4>
+      <v-col cols="4" class="pa-5">
+        <h4 style="font-weight: 600">{{ $t(`walletSelector.label`) }}</h4>
         <v-radio-group v-model="value" row class="mt-0 pt-0 wallet-radio">
           <v-radio
             v-for="{ name } in wallets"
@@ -22,6 +22,9 @@
             </template>
           </v-radio>
         </v-radio-group>
+      </v-col>
+      <v-col cols="8" class="pa-16">
+        <h4 class="text-center" style="font-weight: 600">{{ $t(`walletSelector.text`) }}</h4>
       </v-col>
     </v-row>
   </v-container>
@@ -55,3 +58,12 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+.connect-account {
+  .row {
+    .col:first-child {
+      border-right: solid 1px #eee;
+    }
+  }
+}
+</style>
