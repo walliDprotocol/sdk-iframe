@@ -1,12 +1,12 @@
 <template>
   <v-container fill-height class="d-flex" style="align-content: space-between">
     <v-row justify="center">
-      <v-col cols="8" class="pt-10">
+      <v-col cols="12" sm="8" class="pt-10">
         <v-container class="connect-account" style="max-width: 700px">
           <v-row justify="center" class="pa-10">
             <v-col cols="8" class="pt-5">
               <v-img
-                :src="require(`../assets/icons/success.webp`)"
+                :src="require(`@/assets/icons/success.webp`)"
                 contain
                 class="mx-auto"
                 max-height="40"
@@ -18,7 +18,7 @@
               <h1 class="title-h1 text-center">
                 Your
                 <span style="text-transform: lowercase; font-family: inherit">
-                  {{ getSelectedAccountIdName }}
+                  {{ selectedAccountId }}
                 </span>
                 account was successfully verified!
               </h1>
@@ -41,7 +41,6 @@
 import FormButton from "@/components/FormButton.vue";
 
 import { mapState } from "vuex";
-import axios from "axios";
 
 export default {
   name: "ConnectView",
@@ -55,9 +54,6 @@ export default {
   },
   computed: {
     ...mapState(["selectedAccountId"]),
-    getSelectedAccountIdName() {
-      return this.accountIds.find((e) => e.IdName == this.selectedAccountId)?.IdNameDesc;
-    },
   },
   methods: {
     async connectAccount() {
@@ -72,9 +68,7 @@ export default {
     },
   },
   async mounted() {
-    this.accountIds = (await axios.get("userData.json")).data.accountIds;
-
-    await this.publishData();
+    console.log(this.selectedAccountId);
   },
   components: {
     FormButton,

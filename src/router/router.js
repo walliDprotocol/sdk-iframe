@@ -1,6 +1,5 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import SuccessView from "../views/SuccessView.vue";
 import NearPopup from "../views/nearPopup.vue";
 // royalties flow
 import MintbaseFlowVue from "@/views/MintbaseRoyaltiesFlow.vue";
@@ -15,6 +14,7 @@ import GeneralVerificationFlow from "@/views/GeneralVerificationFlow.vue";
 import WelcomeViewVue from "@/views/Verifier/WelcomeView.vue";
 import ConnectWalletView from "@/views/Verifier/ConnectWalletView.vue";
 import ConnectAccountView from "../views/Verifier/ConnectAccountView";
+import SuccessView from "../views/Verifier/SuccessView.vue";
 
 // i18n messages
 import messages from "@/locales/languages/verifier";
@@ -61,6 +61,17 @@ const routes = [
           step: 2,
         },
       },
+      {
+        path: "success-view",
+        name: "base-success-view",
+        component: SuccessView,
+
+        meta: {
+          i18n: messages,
+          title: "Success",
+          step: 3,
+        },
+      },
 
       // {
       //   path: "signature",
@@ -80,11 +91,7 @@ const routes = [
   //   name: "home",
   //   component: HomeView,
   // },
-  {
-    path: "/success",
-    name: "success",
-    component: SuccessView,
-  },
+
   {
     path: "/near",
     name: "NearPopup",
