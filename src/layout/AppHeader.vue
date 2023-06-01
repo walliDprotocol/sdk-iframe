@@ -27,7 +27,7 @@
           class="d-flex flex-column justify-center text-center"
         >
           <h5 class="stepper-title mb-1">{{ appHeaderTitle }}</h5>
-          <p class="stepper-display mb-0">Step {{ currentStep }}/2</p>
+          <p class="stepper-display mb-0">Step {{ currentStep }}/{{ totalSteps }}</p>
         </v-col>
 
         <v-col cols="4" class="d-flex align-center justify-end">
@@ -59,6 +59,7 @@ export default {
       let currentRoutes = this.recursiveChildrenSearch(this.$router.options.routes, "MintbaseFlow");
       this.currentStep =
         this.$route?.meta?.step || currentRoutes.findIndex(({ name }) => name === to.name);
+      this.currentStep = this.currentStep >= this.totalSteps ? this.totalSteps : this.currentStep;
     },
   },
   computed: {
@@ -105,6 +106,7 @@ export default {
   data() {
     return {
       currentStep: 0,
+      totalSteps: 2,
     };
   },
 };
