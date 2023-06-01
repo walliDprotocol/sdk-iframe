@@ -60,8 +60,9 @@ export default {
     const hasUserData = await this.$store.dispatch("getOauthData", this.getOauthDataQuery);
 
     let providers = [];
+    let chainId = [];
 
-    ({ providers } = (await this.$store.dispatch("getConfig", { configId })).data);
+    ({ providers, chainId } = (await this.$store.dispatch("getConfig", { configId })).data);
 
     let [accountIdsFilter, web3TokensList] = splitIntoTwoLists(providers, "type", [OAUTH, WEB3]);
 
@@ -76,6 +77,7 @@ export default {
     );
 
     this.$store.commit("setWeb3Tokens", web3TokensList);
+    this.$store.commit("setChainId", chainId);
 
     // hide other options
     accountIdsFilter.forEach((a) =>

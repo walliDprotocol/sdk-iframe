@@ -1,3 +1,5 @@
+import { BigNumber } from "ethers";
+
 /**
  *
  * @param {string} type local or session
@@ -74,4 +76,11 @@ export function splitIntoTwoLists(mainList, field, filters) {
   }
 
   return splitLists;
+}
+
+export function compareBalance(num1, num2) {
+  const bn1 = BigNumber.from(num1);
+  const bn2 = BigNumber.from(num2);
+
+  return bn1.gte(bn2);
 }

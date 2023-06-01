@@ -37,8 +37,12 @@ const state = {
   accountIds: [],
   web3TokensList: [],
   flow: null,
+  chainId: null,
 };
 const mutations = {
+  setChainId(state, value) {
+    state.chainId = value;
+  },
   setWeb3Tokens(state, value) {
     state.web3TokensList = value;
   },

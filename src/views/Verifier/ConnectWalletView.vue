@@ -7,7 +7,7 @@
       <ErrorState
         :error-type="errorType"
         :error-message="errorMessage"
-        :selected-account="selectedAccount"
+        :selected-account="tokenData"
       ></ErrorState>
     </v-row>
     <v-row v-else-if="successState" justify="center" class="pa-10">
@@ -37,14 +37,18 @@
       </v-col>
       <v-col v-for="asset in web3TokensList" :key="asset.IdName" cols="12" class="pt-3">
         <ConnectAccount
-          :selectedAccount="asset"
+          :selectedAccount="tokenData"
           @errorMessage="errorMessage = $event"
           @allSelected="($event) => (allSelected = $event)"
           :checkBalance="false"
         />
       </v-col>
       <v-col v-if="!loading && hasWeb3BrowserExtension" cols="12" class="pt-2">
-        <WalletSelector class="" v-model="selectedWallet" :chainId="chainId"></WalletSelector>
+        <WalletSelector
+          class=""
+          v-model="selectedWallet"
+          :loading="loadingConnection"
+        ></WalletSelector>
       </v-col>
     </v-row>
 
@@ -53,7 +57,7 @@
         <FormButton class="mr-4" :text="'Back'" :type="'back'" @click="backStep"> </FormButton>
         <FormButton
           :text="$t(`connectWallet.connectButton`)"
-          @click="connectAccount"
+          @click="doVerifyTokenBalanceFlow"
           :disabled="!(allSelected && selectedWallet)"
         >
         </FormButton>
@@ -68,8 +72,11 @@ import ErrorState from "@/components/ErrorState.vue";
 import FormButton from "@/components/FormButton.vue";
 import LoaderCircle from "@/components/LoaderCircle.vue";
 import WalletSelector from "@/components/WalletSelector";
+import { networks } from "@/constants/networks";
 
 import { mapState } from "vuex";
+
+// import { compareBalance } from "@/plugins/utils";
 
 export default {
   name: "ConnectWalletView",
@@ -80,39 +87,23 @@ export default {
     return {
       allSelected: false,
       loading: false,
+      loadingConnection: false,
       selected: false,
       successState: false,
       errorMessage: null,
       errorType: null,
       hasWeb3BrowserExtension: false,
       selectedWallet: null,
-      nearAccountItem: {
-        IdName: "nearTokens",
-        IdNameDesc: "Near Wallet",
-        IdDescription: "Connect to your NEAR wallet",
-        type: "web3",
-      },
-      selectedAccount: {
-        IdName: "WalliDAO",
-        IdNameDesc: "WalliDAO tokens",
-        type: "web3",
-        options: [
-          {
-            field: "WalliDAO tokens ownership",
-            description: ["At least 1,000 tokens"],
-            state: false,
-          },
-        ],
-      },
     };
   },
   computed: {
-    ...mapState(["nearAccount", "assetsToVerify", "web3TokensList"]),
-    chainId() {
-      return this.web3TokensList?.[0]?.chainId;
-    },
+    ...mapState(["web3TokensList", "chainId"]),
+
     tokenName() {
-      return this.web3TokensList?.[0]?.IdNameDesc;
+      return this.tokenData?.IdNameDesc;
+    },
+    tokenData() {
+      return this.web3TokensList?.[0];
     },
   },
   watch: {
@@ -121,32 +112,86 @@ export default {
     },
   },
   methods: {
+    async doVerifyTokenBalanceFlow() {
+      console.log("Call doVerifyTokenBalanceFlow");
+      this.loadingConnection = true;
+      try {
+        const walletAddress = await this.connectAccount();
+
+        console.log("walletAddress", walletAddress, this.tokenData);
+
+        for (let index = 0; index < this.tokenData?.options.length; index++) {
+          const option = this.tokenData?.options[index];
+          option.result = await this.verifyOptionData(option);
+        }
+
+        // let res = await this.verifyOptionData(this.tokenData?.options?.[0]);
+
+        console.log("verifyOptionData", this.tokenData?.options);
+
+        let selectedOptionsResults = this.tokenData?.options.every(
+          (option) => option.state && option.result
+        );
+
+        if (selectedOptionsResults) {
+          this.$router.push({ name: "base-success-view" });
+        }
+        return walletAddress;
+      } catch (error) {
+        console.log("error", error);
+      } finally {
+        this.loadingConnection = false;
+      }
+    },
+
+    async verifyOptionData({ type, value }) {
+      console.log("verifyOptionData", type);
+
+      switch (type) {
+        case "balance": {
+          let balance = await this.checkTokenBalance();
+          // return compareBalance(balance, value, "bt");
+          return balance >= value;
+        }
+
+        default:
+          return "Nothing";
+      }
+    },
+
+    async checkTokenBalance() {
+      let tokenBalance = await this.$store.dispatch("web3wallet/tokenBalance", {
+        walletAddress: this.walletAddress,
+        contractAddress: this.tokenData?.contractAddress,
+        contractType: this.tokenData?.contractType,
+      });
+      console.log("tokenBalance", tokenBalance);
+      return tokenBalance;
+    },
     async connectAccount() {
       console.log("Call connectAccount");
-      let walletAddress = await this.$store.dispatch("web3wallet/connectProvider");
-      console.log("walletAddress", walletAddress);
 
-      // const popup = window.open(
-      //   "/near",
-      //   "popup",
-      //   "width=600,height=600,toolbar=no,menubar=no"
-      // );
-      // const checkPopup = setInterval(async () => {
-      //   // if (popup.window.location.href.includes("success=1")) {
-      //   //   popup.close();
-      //   // }
-      //   if (!popup || !popup.closed) return;
-      //   clearInterval(checkPopup);
-      //   const { nearAccountId } = await this.$store.dispatch(
-      //     "getURLSearchParams"
-      //   );
+      // connect to wallet
+      try {
+        let walletAddress = await this.$store.dispatch("web3wallet/connectProvider");
 
-      //   console.log("popup close check near account", nearAccountId);
-      //   if (nearAccountId) {
-      //     this.$router.push("/home");
-      //   }
-      // }, 1000);
-      // await this.$store.dispatch("near/connectNear");
+        const networkParams = networks.find((n) => n.chainId === this.chainId);
+
+        let res = await window.ethereum.request({
+          method: "wallet_addEthereumChain",
+          params: [networkParams],
+        });
+
+        await window.ethereum.request({
+          method: "wallet_switchEthereumChain",
+          params: [{ chainId: networkParams.chainId }],
+        });
+        this.walletAddress = walletAddress;
+        console.log(res);
+        return walletAddress;
+      } catch (error) {
+        console.log("error", error);
+      }
     },
     backStep() {
       this.$router.go(-1);

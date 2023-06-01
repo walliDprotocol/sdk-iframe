@@ -1,4 +1,7 @@
 import detectEthereumProvider from "@metamask/detect-provider";
+import { ethers } from "ethers";
+
+import { erc20ABI } from "@/constants/contracts";
 
 const state = () => ({
   account: null,
@@ -53,6 +56,21 @@ const actions = {
     }
 
     return false;
+  },
+  async tokenBalance(_, { walletAddress, contractAddress, contractType }) {
+    console.log("contractAddress", contractAddress, contractType);
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+
+    const tokenContract = new ethers.Contract(contractAddress, erc20ABI, provider);
+
+    // Call the balanceOf() function on the token contract to get the balance
+    const balance = await tokenContract.balanceOf(walletAddress);
+
+    // Convert the balance to the token's decimals
+    const decimals = await tokenContract.decimals();
+    const balanceFormatted = ethers.utils.formatUnits(balance, decimals);
+
+    return balanceFormatted;
   },
 
   async connectProvider({ dispatch }) {

@@ -22,16 +22,32 @@
           </v-radio>
         </v-radio-group>
       </v-col>
-      <v-col cols="10" sm="7" class="pa-16">
-        <h4 class="text-center" style="font-weight: 600">{{ $t(`walletSelector.text`) }}</h4>
+      <v-col cols="10" sm="7" class="">
+        <v-container fill-height class="">
+          <v-row class="border-none">
+            <v-col cols="12" class="" style="height: 69px">
+              <LoadingCircle
+                class="border-none"
+                style="height: unset"
+                :loading="loading"
+              ></LoadingCircle>
+            </v-col>
+            <v-col cols="12" class="">
+              <h4 class="text-center" style="font-weight: 600">{{ $t(`walletSelector.text`) }}</h4>
+            </v-col>
+          </v-row>
+        </v-container>
       </v-col>
     </v-row>
   </v-container>
 </template>
 <script>
+import LoadingCircle from "@/components/LoaderCircle";
+
 export default {
-  props: ["selectedWallet"],
+  props: ["selectedWallet", "loading"],
   //   emits: ["update:selectedWallet"],
+  components: { LoadingCircle },
   data() {
     return {
       wallets: [
