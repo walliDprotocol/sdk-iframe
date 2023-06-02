@@ -5,13 +5,19 @@ import { erc20ABI } from "@/constants/contracts";
 
 const state = () => ({
   account: null,
+  selectedWallet: null,
 });
 
-const getters = {};
+const getters = {
+  selectedWallet: (state) => state.selectedWallet,
+};
 
 const mutations = {
   setAccount(state, value) {
     state.account = value;
+  },
+  setSelectedWallet(state, value) {
+    state.selectedWallet = value;
   },
 };
 

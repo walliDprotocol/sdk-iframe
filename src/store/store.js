@@ -147,7 +147,27 @@ const actions = {
     };
     localStorage.setItem(`${selectedAccount.IdName}_user`, JSON.stringify(userData));
   },
-
+  emitClose() {
+    var pubnub = new PubNub({
+      userId: process.env.VUE_APP_PUBNUB_USER_ID,
+      subscribeKey: process.env.VUE_APP_PUBNUB_SUBSCRIBE_KEY,
+      publishKey: process.env.VUE_APP_PUBLISH_KEY,
+      logVerbosity: true,
+      ssl: true,
+      presenceTimeout: 130,
+    });
+    const message = { event: "close-iframe" };
+    pubnub.publish(
+      {
+        channel: "verification-iframe-" + sessionStorage.getItem("uuid"),
+        message,
+      },
+      function (status, response) {
+        console.log(status);
+        console.log(response);
+      }
+    );
+  },
   // Send localStorage data trough pubnub to iframe opener
   async publishData(_, { data }) {
     console.log("publishData Action");

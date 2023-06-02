@@ -31,7 +31,7 @@
         </v-col>
 
         <v-col cols="4" class="d-flex align-center justify-end">
-          <NetworkDropdown></NetworkDropdown>
+          <NetworkDropdown v-if="false"></NetworkDropdown>
           <p v-if="nearAccountId" class="account-id mb-0">
             <span>&bull;</span>{{ nearAccountId | truncate(16) }}
           </p>
@@ -99,6 +99,7 @@ export default {
     let currentRoutes = this.recursiveChildrenSearch(this.$router.options.routes, "MintbaseFlow");
     this.currentStep =
       this.$route?.meta?.step || currentRoutes.findIndex(({ name }) => name === this.$route.name);
+    this.currentStep = this.currentStep >= this.totalSteps ? this.totalSteps : this.currentStep;
   },
   components: {
     NetworkDropdown,

@@ -93,7 +93,6 @@ export default {
       errorMessage: null,
       errorType: null,
       hasWeb3BrowserExtension: false,
-      selectedWallet: null,
     };
   },
   computed: {
@@ -104,6 +103,15 @@ export default {
     },
     tokenData() {
       return this.web3TokensList?.[0];
+    },
+    selectedWallet: {
+      get() {
+        return this.$store.getters["web3wallet/selectedWallet"];
+      },
+      set(value) {
+        console.log(value);
+        this.$store.commit("web3wallet/setSelectedWallet", value);
+      },
     },
   },
   watch: {
