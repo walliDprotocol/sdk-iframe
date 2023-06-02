@@ -31,7 +31,7 @@
         </v-col>
 
         <v-col cols="4" class="d-flex align-center justify-end">
-          <NetworkDropdown v-if="false"></NetworkDropdown>
+          <NetworkDropdown v-if="walletSelector"></NetworkDropdown>
           <p v-if="nearAccountId" class="account-id mb-0">
             <span>&bull;</span>{{ nearAccountId | truncate(16) }}
           </p>

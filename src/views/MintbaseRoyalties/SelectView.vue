@@ -4,7 +4,7 @@
     <v-container
       v-if="!loadingConnectAccount"
       fill-height
-      class="pa-0 pt-7align-content-space-between"
+      class="pa-0 pt-7 align-content-space-between"
     >
       <v-row v-if="errorTwitterAccVerification" class="pt-8 d-flex justify-center">
         <ErrorState
