@@ -1,0 +1,17 @@
+{
+  "redirectPath": "/royalties",
+  "accountIds": [
+    {
+      "IdName": "twitter",
+      "IdNameDesc": "Twitter",
+      "type": "web2",
+      "options": [
+        {
+          "field": "Account name",
+          "description": ["(Encrypted)"],
+          "state": false
+        }
+      ]
+    }
+  ]
+}
