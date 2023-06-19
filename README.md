@@ -4,7 +4,7 @@
 
 This repo contains the frontend code of the modal that receives authentication or verification configs and supports the flows by connecting users to the selected providers and completing a verification within your own system.
 
-![image](https://github.com/walliDprotocol/verification-modal/assets/39834004/079ace06-141f-437f-beab-d33b1159ed68)
+![Independent verifications 1](https://github.com/walliDprotocol/verification-modal/assets/29485846/72bca474-c13e-45ea-aa6c-20ccaab36be3)
 
 ## How to use it
 
