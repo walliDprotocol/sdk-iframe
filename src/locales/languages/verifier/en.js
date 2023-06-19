@@ -66,6 +66,7 @@ export default {
     title: "Connect to your wallet and verify",
 
     connectButton: "Connect and verify",
+    tryAgain: "Try Again",
   },
   walletSelector: {
     label: "Choose a wallet to connect",

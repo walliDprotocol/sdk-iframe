@@ -54,10 +54,25 @@
 
     <v-row>
       <v-col cols="12" class="d-flex justify-end pb-5">
-        <FormButton class="mr-4" :text="'Back'" :type="'back'" @click="backStep"> </FormButton>
         <FormButton
+          v-if="!errorMessage"
+          class="mr-4"
+          :text="'Back'"
+          :type="'back'"
+          @click="backStep"
+        >
+        </FormButton>
+        <FormButton
+          v-if="!errorMessage"
           :text="$t(`connectWallet.connectButton`)"
           @click="doVerifyTokenBalanceFlow"
+          :disabled="!(allSelected && selectedWallet)"
+        >
+        </FormButton>
+        <FormButton
+          v-else
+          :text="$t(`connectWallet.tryAgain`)"
+          @click="backStep"
           :disabled="!(allSelected && selectedWallet)"
         >
         </FormButton>
@@ -141,12 +156,17 @@ export default {
           (option) => option.state && option.result
         );
 
+        console.log("selectedOptionsResults", selectedOptionsResults);
+
         if (selectedOptionsResults) {
           this.$router.push({ name: "base-success-view" });
+        } else {
+          this.errorMessage = "It seems like you don't have enough tokens.";
         }
         return walletAddress;
       } catch (error) {
         console.log("error", error);
+        this.errorMessage = `It was not possible to verify ${this.tokenData.IdNameDesc} ownership.`;
       } finally {
         this.loadingConnection = false;
       }
@@ -181,7 +201,11 @@ export default {
 
       // connect to wallet
       try {
-        let walletAddress = await this.$store.dispatch("web3wallet/connectProvider");
+        let walletAddress;
+        if (this.requestWalletChange) {
+          await this.$store.dispatch("web3wallet/requestAccounts");
+        }
+        walletAddress = await this.$store.dispatch("web3wallet/connectProvider");
 
         const networkParams = networks.find((n) => n.chainId === this.chainId);
 
@@ -202,6 +226,11 @@ export default {
       }
     },
     backStep() {
+      if (this.errorMessage) {
+        this.errorMessage = null;
+        this.requestWalletChange = true;
+        return;
+      }
       this.$router.go(-1);
 
       // uncomment this line to remove selected value on back

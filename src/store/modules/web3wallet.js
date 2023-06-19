@@ -79,6 +79,23 @@ const actions = {
     return balanceFormatted;
   },
 
+  async requestAccounts() {
+    console.log("requestAccounts");
+    const provider = await detectEthereumProvider();
+    if (!provider) {
+      throw new Error("NO_WEB3");
+    }
+    if (provider !== window.ethereum) {
+      throw new Error("checkError: Do you have multiple wallets installed?");
+    }
+    const accounts = await provider.request({
+      method: "wallet_requestPermissions",
+      params: [{ eth_accounts: {} }],
+    });
+
+    return accounts;
+  },
+
   async connectProvider({ dispatch }) {
     console.log("checkProvider");
     const provider = await detectEthereumProvider();
