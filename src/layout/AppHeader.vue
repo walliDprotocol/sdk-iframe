@@ -59,6 +59,7 @@ export default {
       let currentRoutes = this.recursiveChildrenSearch(this.$router.options.routes, "MintbaseFlow");
       this.currentStep =
         this.$route?.meta?.step || currentRoutes.findIndex(({ name }) => name === to.name);
+      this.successModifier = this.currentStep > this.totalSteps ? 0 : 1;
       this.currentStep = this.currentStep >= this.totalSteps ? this.totalSteps : this.currentStep;
     },
   },
@@ -82,9 +83,17 @@ export default {
       ];
       return this.verifySuccess ? "Success!" : titlesList[this.currentStep - 1];
     },
+    totalSteps() {
+      if (this.flow == "celo") {
+        return 2;
+      }
+      return 3;
+    },
     cssVars() {
       return {
         "--currentStep": this.currentStep,
+        "--totalSteps": this.totalSteps,
+        "--successModifier": this.successModifier,
       };
     },
   },
@@ -99,6 +108,7 @@ export default {
     let currentRoutes = this.recursiveChildrenSearch(this.$router.options.routes, "MintbaseFlow");
     this.currentStep =
       this.$route?.meta?.step || currentRoutes.findIndex(({ name }) => name === this.$route.name);
+    this.successModifier = this.currentStep > this.totalSteps ? 0 : 1;
     this.currentStep = this.currentStep >= this.totalSteps ? this.totalSteps : this.currentStep;
   },
   components: {
@@ -107,7 +117,7 @@ export default {
   data() {
     return {
       currentStep: 0,
-      totalSteps: 2,
+      successModifier: 1,
     };
   },
 };
@@ -145,7 +155,7 @@ export default {
     content: "";
     background: linear-gradient(90deg, #64ffde 0%, #73dde7 50%, #7acefd 100%);
     height: 2px;
-    width: calc(var(--currentStep) * 50vw);
+    width: calc((var(--currentStep) - var(--successModifier)) * calc(100vw / var(--totalSteps)));
     position: absolute;
     bottom: 0;
     z-index: 1;
