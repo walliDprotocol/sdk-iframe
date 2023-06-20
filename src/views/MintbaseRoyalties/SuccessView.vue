@@ -2,11 +2,11 @@
   <v-container fill-height class="d-flex" style="align-content: space-between">
     <v-row justify="center">
       <v-col cols="8" class="pt-10">
-        <v-container class="connect-account" style="max-width: 700px">
+        <v-container style="max-width: 700px">
           <v-row justify="center" class="pa-10">
             <v-col cols="8" class="pt-5">
               <v-img
-                :src="require(`../assets/icons/success.webp`)"
+                :src="require(`@/assets/icons/success.webp`)"
                 contain
                 class="mx-auto"
                 max-height="40"
@@ -19,9 +19,9 @@
             </v-col>
 
             <v-col cols="8" class="pt-5">
-              <h1 class="title-h1 text-center">
+              <h3 class="sub-title-h3 text-center">
                 You now have access to the wallet receiving your royalties.
-              </h1>
+              </h3>
             </v-col>
           </v-row>
         </v-container>
@@ -31,7 +31,9 @@
     <v-row>
       <v-col cols="12" class="d-flex justify-end pb-4">
         <FormButton class="mr-5" :text="'Done'" :type="'back'" @click="publishData"> </FormButton>
-        <!-- <FormButton :text="'VERIFY ANOTHER ID'" @click="$router.push('/select')"> </FormButton> -->
+        <!-- 
+          <FormButton :text="'VERIFY ANOTHER ID'" @click="$router.push('/select')"> </FormButton> 
+        -->
       </v-col>
     </v-row>
   </v-container>
@@ -41,7 +43,6 @@
 import FormButton from "@/components/FormButton.vue";
 
 import { mapState } from "vuex";
-import axios from "axios";
 
 export default {
   name: "ConnectView",
@@ -72,8 +73,7 @@ export default {
     },
   },
   async mounted() {
-    this.accountIds = (await axios.get("userData.json")).data.accountIds;
-
+    this.$store.commit("royalty/verifySuccess", true);
     await this.publishData();
   },
   components: {

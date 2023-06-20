@@ -6,6 +6,7 @@ import MintbaseFlowVue from "@/views/MintbaseRoyaltiesFlow.vue";
 import WelcomeViewRoyaltiesVue from "@/views/MintbaseRoyalties/WelcomeView.vue";
 import RoyaltiesSelectView from "../views/MintbaseRoyalties/SelectView";
 import CreateWalletView from "@/views/MintbaseRoyalties/CreateWalletView.vue";
+import RoyaltiesSuccessView from "../views/MintbaseRoyalties/SuccessView.vue";
 
 import SignatureView from "@/views/MintbaseRoyalties/SignatureView"; // deprecated
 
@@ -34,7 +35,7 @@ const routes = [
     children: [
       {
         path: "",
-        name: "welcome-createWallet",
+        name: "base-welcome",
         component: WelcomeViewVue,
         meta: {
           i18n: messages,
@@ -117,6 +118,15 @@ const routes = [
         path: "createWallet",
         name: "royalties-createWallet",
         component: CreateWalletView,
+      },
+      {
+        path: "success",
+        name: "royalties-success",
+        component: RoyaltiesSuccessView,
+        meta: {
+          title: "Success",
+          step: 4,
+        },
       },
       // deprecated
       {

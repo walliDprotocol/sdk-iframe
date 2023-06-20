@@ -176,7 +176,7 @@ export default {
       }
       this.successTwitterAccVerification = true;
 
-      console.log("has Balance proceed", hasBalance);
+      this.$store.commit("stepSuccess", true);
 
       // this.$router.push({ name: "royalties-createWallet" });
     },

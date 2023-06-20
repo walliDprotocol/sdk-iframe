@@ -37,9 +37,15 @@
           </v-row>
           <v-row justify="end">
             <v-col cols="auto" class="mt-1 pr-0">
-              <v-tooltip bottom content-class="wallet-tooltip" :open-on-hover="false">
+              <v-tooltip
+                bottom
+                content-class="wallet-tooltip"
+                :value="show"
+                :open-on-focus="false"
+                :open-on-hover="false"
+              >
                 <template v-slot:activator="{ on, attrs }">
-                  <v-btn class="btn-copy" text @click="copyClipboard" v-bind="attrs" v-on="on">
+                  <v-btn class="btn-copy" text v-bind="attrs" v-on="on" @click="copyClipboard">
                     <img
                       :height="10"
                       :width="10"
@@ -75,6 +81,7 @@ export default {
     return {
       seedLocked: true,
       show: false,
+      tooltipTimeOut: null,
     };
   },
   methods: {
@@ -82,6 +89,13 @@ export default {
       try {
         navigator.clipboard.writeText(this.seedphrase);
         this.show = true;
+
+        if (!this.tooltipTimeOut) {
+          this.tooltipTimeOut = setTimeout(() => {
+            this.show = false;
+            this.tooltipTimeOut = null;
+          }, 2000);
+        }
       } catch (err) {
         console.error(err);
       }

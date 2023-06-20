@@ -38,8 +38,12 @@ const state = {
   web3TokensList: [],
   flow: null,
   chainId: null,
+  stepSuccess: null,
 };
 const mutations = {
+  stepSuccess(state, value) {
+    state.stepSuccess = value;
+  },
   setChainId(state, value) {
     state.chainId = value;
   },

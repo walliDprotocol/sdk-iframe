@@ -20,9 +20,9 @@
       </v-col>
 
       <v-col cols="8" class="pt-5">
-        <h1 class="title-h1 text-center">
+        <h3 class="sub-title-h3 text-center">
           You now have access to the wallet receiving your royalties.
-        </h1>
+        </h3>
       </v-col>
     </v-row>
     <v-row v-else justify="center" class="pt-6">
@@ -171,7 +171,9 @@ export default {
         // });
       } else {
         this.modal.hide();
-        this.successState = true;
+        // this.successState = true;
+        this.$router.push({ name: "royalties-success" });
+
         this.$store.commit("royalty/verifySuccess", true);
       }
       this.loading = false;
