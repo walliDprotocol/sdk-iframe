@@ -1,7 +1,7 @@
 <template>
   <v-app class="verification-iframe">
     <v-main>
-      <router-view class="router-view px-7" style="height: 100%" />
+      <router-view v-if="!loading" class="router-view px-7" style="height: 100%" />
     </v-main>
     <!-- <div class="popup-info" v-if="hasData">
       <p class="normal-text-p">
@@ -14,6 +14,7 @@
 
 <script>
 import { mapState } from "vuex";
+import { getStorageFields } from "./plugins/utils";
 // import { getJSONStorage } from "./plugins/utils";
 
 export default {
@@ -24,9 +25,17 @@ export default {
     isSignedIn() {
       return this.walletSelector?.isSignedIn();
     },
-    nearAccountId() {
-      return this.nearAccount?.name || this.nearAccount?.accountId;
-    },
+  },
+  async created() {
+    let { state, code, flow } = await this.$store.dispatch("getURLSearchParams");
+    // try to get this values from local storage
+    flow ??= (await getStorageFields(["configId", "flow"])).flow;
+
+    console.log("flow", flow, state, code);
+    if (flow == "celo") {
+      this.$router.push("Celo");
+    }
+    this.loading = false;
   },
   data() {
     return {
@@ -35,13 +44,7 @@ export default {
       getOauthDataQuery: {},
     };
   },
-  watch: {
-    // nearAccountId(value) {
-    //   if (value) {
-    //     this.$router.push("/home");
-    //   }
-    // },
-  },
+  watch: {},
   methods: {
     async signOut() {
       // await this.$store.dispatch("near/signOut");

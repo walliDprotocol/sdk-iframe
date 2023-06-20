@@ -10,77 +10,16 @@ import RoyaltiesSuccessView from "../views/MintbaseRoyalties/SuccessView.vue";
 
 import SignatureView from "@/views/MintbaseRoyalties/SignatureView"; // deprecated
 
-// general verifier flow
-import GeneralVerificationFlow from "@/views/GeneralVerificationFlow.vue";
-import WelcomeViewVue from "@/views/Verifier/WelcomeView.vue";
-import ConnectWalletView from "@/views/Verifier/ConnectWalletView.vue";
-import ConnectAccountView from "../views/Verifier/ConnectAccountView";
-import SuccessView from "../views/Verifier/SuccessView.vue";
-
 // i18n messages
-import messages from "@/locales/languages/verifier";
 import i18n from "@/plugins/i18n";
 
+// flows
+import flowsRoutes from "./flows";
+console.log("flowsRoutes", flowsRoutes);
 Vue.use(VueRouter);
 
 const routes = [
-  {
-    path: "/",
-    name: "GeneralVerificationFlow",
-    component: GeneralVerificationFlow,
-    meta: {
-      i18n: messages,
-      totalSteps: 2,
-    },
-    children: [
-      {
-        path: "",
-        name: "base-welcome",
-        component: WelcomeViewVue,
-        meta: {
-          i18n: messages,
-          title: "Welcome",
-        },
-      },
-      {
-        path: "connect-account",
-        name: "base-select",
-        component: ConnectAccountView,
-        meta: {
-          i18n: messages,
-          title: "Verify social network",
-          step: 1,
-        },
-      },
-      {
-        path: "connect-wallet",
-        name: "base-createWallet",
-        component: ConnectWalletView,
-        meta: {
-          i18n: messages,
-          title: "Verify tokens ownership",
-          step: 2,
-        },
-      },
-      {
-        path: "success-view",
-        name: "base-success-view",
-        component: SuccessView,
-
-        meta: {
-          i18n: messages,
-          title: "Success",
-          step: 3,
-        },
-      },
-
-      // {
-      //   path: "signature",
-      //   name: "base-signature",
-      //   component: SignatureView,
-      // },
-    ],
-  },
+  ...flowsRoutes,
   {
     path: "/connect",
     name: "connect",
@@ -152,6 +91,10 @@ const router = new VueRouter({
   routes,
 });
 
+function hasQueryParams(route) {
+  return !!Object.keys(route.query).length;
+}
+
 router.beforeEach((to, from, next) => {
   // //   if (store.getters.step === 0) {
   // //     store.commit('decStep');
@@ -169,7 +112,13 @@ router.beforeEach((to, from, next) => {
   if (!!to.meta.i18n) {
     Object.keys(to.meta.i18n).forEach((lang) => i18n.mergeLocaleMessage(lang, to.meta.i18n[lang]));
   }
-  next();
+
+  if (!hasQueryParams(to) && hasQueryParams(from)) {
+    const toWithQuery = Object.assign({}, to, { query: from.query });
+    next(toWithQuery);
+  } else {
+    next();
+  }
 });
 
 export default router;
