@@ -1,6 +1,7 @@
 import messages from "@/locales/languages/verifier";
 
 import celo from "./celo";
+import royalties from "./royalties";
 
 // general verifier flow
 import GeneralVerificationFlow from "@/views/GeneralVerificationFlow";
@@ -60,4 +61,4 @@ const baseFlow = {
   ],
 };
 
-export default [].concat.apply([], [celo, baseFlow]);
+export default [].concat.apply([], [baseFlow, royalties, celo]);

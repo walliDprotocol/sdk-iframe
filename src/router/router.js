@@ -1,14 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import NearPopup from "../views/nearPopup.vue";
-// royalties flow
-import MintbaseFlowVue from "@/views/MintbaseRoyaltiesFlow.vue";
-import WelcomeViewRoyaltiesVue from "@/views/MintbaseRoyalties/WelcomeView.vue";
-import RoyaltiesSelectView from "../views/MintbaseRoyalties/SelectView";
-import CreateWalletView from "@/views/MintbaseRoyalties/CreateWalletView.vue";
-import RoyaltiesSuccessView from "../views/MintbaseRoyalties/SuccessView.vue";
-
-import SignatureView from "@/views/MintbaseRoyalties/SignatureView"; // deprecated
 
 // i18n messages
 import i18n from "@/plugins/i18n";
@@ -20,11 +12,6 @@ Vue.use(VueRouter);
 
 const routes = [
   ...flowsRoutes,
-  {
-    path: "/connect",
-    name: "connect",
-    component: CreateWalletView,
-  },
 
   // {
   //   path: "/home",
@@ -36,53 +23,6 @@ const routes = [
     path: "/near",
     name: "NearPopup",
     component: NearPopup,
-  },
-  {
-    path: "/royalties",
-    name: "MintbaseFlow",
-    component: MintbaseFlowVue,
-    children: [
-      {
-        path: "",
-        name: "royalties-welcome",
-        component: WelcomeViewRoyaltiesVue,
-      },
-      {
-        path: "select",
-        name: "royalties-select",
-        component: RoyaltiesSelectView,
-      },
-
-      {
-        path: "createWallet",
-        name: "royalties-createWallet",
-        component: CreateWalletView,
-      },
-      {
-        path: "success",
-        name: "royalties-success",
-        component: RoyaltiesSuccessView,
-        meta: {
-          title: "Success",
-          step: 4,
-        },
-      },
-      // deprecated
-      {
-        path: "signature",
-        name: "royalties-signature",
-        component: SignatureView,
-      },
-    ],
-  },
-
-  {
-    path: "/about",
-    name: "about",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
   },
 ];
 
