@@ -3,7 +3,7 @@
     {
       "IdName": "nearTokens",
       "IdNameDesc": "Near tokens",
-      "IdDescription": "Verify a NEAR ERC20 Token",
+      "IdDescription": "Verify a NEAR Native token",
       "type": "WEB3",
       "contractType": "native",
       "options": [
@@ -15,38 +15,7 @@
         }
       ]
     },
-    {
-      "IdName": "nearNFT",
-      "IdNameDesc": "Near NFT's",
-      "IdDescription": "Verify a NEAR NFT",
-      "type": "WEB3",
-      "options": [
-        {
-          "field": "NEAR NFT Holder",
-          "description": ["Holds at least 1 NFT"],
-          "state": false
-        }
-      ]
-    },
-    {
-      "IdName": "usdcToken",
-      "IdNameDesc": "USDC Token",
-      "imgType": "url",
-      "imgUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/3408.png",
-      "IdDescription": "Verify USDC Tokens",
-      "type": "WEB3",
-      "contractType": "ERC20",
-      "contractAddress": "a0b86991c6218b36c1d19d4a2e9eb0ce3606eb48.factory.bridge.near",
-      "options": [
-        {
-          "field": "USDC possessions",
-          "type": "balance",
-          "description": ["Positive balance"],
-          "value": 0,
-          "state": false
-        }
-      ]
-    },
+
     {
       "IdName": "google",
       "IdNameDesc": "Google",
@@ -69,41 +38,15 @@
           "description": ["(Encrypted)"],
           "state": false
         },
-        {
-          "field": "Tweets",
-          "description": ["• More than 10"],
-          "state": false
-        },
+
         {
           "field": "Followers",
-          "description": ["• More than 100", "• More than 1000"],
+          "description": ["• More than 100", "• At least 1 year account"],
           "state": false
         }
       ]
     },
-    {
-      "IdName": "facebook",
-      "IdNameDesc": "Facebook",
-      "status": "INACTIVE",
-      "type": "OAUTH",
-      "options": [
-        {
-          "field": "Account name",
-          "description": ["(Encrypted)"],
-          "state": false
-        },
-        {
-          "field": "Friends",
-          "description": ["Greater then 100"],
-          "state": false
-        },
-        {
-          "field": "Profile",
-          "description": ["Profile Picture attached"],
-          "state": false
-        }
-      ]
-    },
+
     {
       "IdName": "linkedin",
       "IdNameDesc": "Linkedin",
@@ -116,45 +59,7 @@
         }
       ]
     },
-    {
-      "IdName": "discord",
-      "IdNameDesc": "Discord",
-      "type": "OAUTH",
-      "options": [
-        {
-          "field": "Account name",
-          "description": ["(Encrypted)"],
-          "state": false
-        }
-      ]
-    },
 
-    {
-      "IdName": "reddit",
-      "IdNameDesc": "Reddit",
-      "type": "OAUTH",
-      "options": [
-        {
-          "field": "Account name",
-          "description": ["(Encrypted)"],
-          "state": false
-        },
-        {
-          "field": "Karma",
-          "description": [
-            "At least 10 Post Karma",
-            "At least 2 comment Karma",
-            "At least 2 Awardee Karma"
-          ],
-          "state": false
-        },
-        {
-          "field": "Followers",
-          "description": ["Ten or more Reddit followers", "Fifty or more Reddit followers"],
-          "state": false
-        }
-      ]
-    },
     {
       "IdName": "github",
       "IdNameDesc": "Github",
