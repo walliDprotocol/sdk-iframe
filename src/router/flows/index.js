@@ -29,7 +29,7 @@ const baseFlow = {
       },
     },
     {
-      path: "connect-account",
+      path: "select-account",
       name: "base-select",
       component: ConnectAccountView,
       meta: {
@@ -40,11 +40,11 @@ const baseFlow = {
     },
     {
       path: "connect-wallet",
-      name: "base-createWallet",
+      name: "base-connect",
       component: ConnectWalletView,
       meta: {
         i18n: messages,
-        title: "Verify tokens ownership",
+        title: "Connect and verify",
         step: 2,
       },
     },

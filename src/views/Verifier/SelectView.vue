@@ -22,11 +22,11 @@
     </v-container>
 
     <v-container v-if="step == 2" fill-height class="pa-0 align-content-space-between">
-      <v-row>
-        <v-col cols="12">
+      <v-row justify="center">
+        <v-col cols="8">
           <h1 class="title-h1 text-center">
-            Connect to your {{ selectedAccount.IdNameDesc }} account and select the attributes you
-            want to verify
+            Connect to your {{ selectedAccount.IdNameDesc }} account and select the levels you want
+            to verify
           </h1>
         </v-col>
         <v-col cols="12" class="pt-5">
@@ -41,7 +41,7 @@
         <v-col class="d-flex justify-end">
           <FormButton class="mr-5" :text="'Back'" :type="'back'" @click="backStep"> </FormButton>
           <FormButton
-            :text="'CONNECT'"
+            :text="nearAccountId ? 'VERIFY' : 'CONNECT'"
             :disabled="isDisabled"
             :loading="loadingConnectAccount"
             @click="connectAccount"
@@ -102,7 +102,9 @@ export default {
             this.$router.push({ name: "base-success" });
           }
         } else {
-          await this.$store.dispatch("near/connectNear");
+          this.$router.push({ name: "base-connect" });
+
+          // await this.$store.dispatch("near/connectNear");
         }
       } catch (error) {
         console.log("connectAccount", error);

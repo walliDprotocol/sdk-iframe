@@ -1,16 +1,10 @@
 <template>
-  <v-container fill-height class="align-content-space-between">
-    <v-row v-if="loading" class="pt-8 d-flex justify-center">
-      <LoaderCircle :loading="loading"></LoaderCircle>
-    </v-row>
-    <v-row v-else-if="errorMessage" class="pt-8 d-flex justify-center">
-      <ErrorState
-        :error-type="errorType"
-        :error-message="errorMessage"
-        :selected-account="tokenData"
-      ></ErrorState>
-    </v-row>
-    <v-row v-else-if="successState" justify="center" class="pa-10">
+  <v-container
+    fill-height
+    class="align-content-space-between"
+    :style="{ height: !successState ? '910px' : 'unset' }"
+  >
+    <v-row v-if="successState" justify="center" class="pa-10">
       <v-col cols="8" class="pt-5">
         <v-img
           :src="require(`@/assets/icons/success.webp`)"
@@ -26,55 +20,28 @@
       </v-col>
 
       <v-col cols="8" class="pt-5">
-        <h1 class="title-h1 text-center">
+        <h3 class="sub-title-h3 text-center">
           You now have access to the wallet receiving your royalties.
-        </h1>
+        </h3>
       </v-col>
     </v-row>
-    <v-row v-else-if="!loading" justify="center" class="pt-6">
+    <v-row v-else justify="center" class="pt-6">
+      <LoaderCircle :loading="loading"></LoaderCircle>
       <v-col v-if="!loading" cols="12" class="pt-4">
-        <h1 class="title-h1 text-center mb-1">{{ $t(`connectWallet.title`) }} {{ tokenName }}</h1>
+        <h1 class="title-h1 text-center">Import wallet account using seedphrase</h1>
+
+        <SeedPhraseWrapper :seedphrase="seedphrase"> </SeedPhraseWrapper>
       </v-col>
-      <v-col v-for="asset in web3TokensList" :key="asset.IdName" cols="12" class="pt-3">
-        <ConnectAccount
-          :selectedAccount="tokenData"
-          @errorMessage="errorMessage = $event"
-          @allSelected="($event) => (allSelected = $event)"
-          :checkBalance="false"
-        />
-      </v-col>
-      <v-col v-if="!loading && hasWeb3BrowserExtension" cols="12" class="pt-2">
-        <WalletSelector
-          class=""
-          v-model="selectedWallet"
-          :loading="loadingConnection"
-        ></WalletSelector>
+      <v-col cols="12" class="pt-4">
+        <div id="nws-modal-stub">
+          <!-- <component v-if="!loading" :is="headerComponent"></component> -->
+        </div>
       </v-col>
     </v-row>
 
     <v-row>
-      <v-col cols="12" class="d-flex justify-end pb-5">
-        <FormButton
-          v-if="!errorMessage"
-          class="mr-4"
-          :text="'Back'"
-          :type="'back'"
-          @click="backStep"
-        >
-        </FormButton>
-        <FormButton
-          v-if="!errorMessage"
-          :text="$t(`connectWallet.connectButton`)"
-          @click="doVerifyTokenBalanceFlow"
-          :disabled="!(allSelected && selectedWallet)"
-        >
-        </FormButton>
-        <FormButton
-          v-else
-          :text="$t(`connectWallet.tryAgain`)"
-          @click="backStep"
-          :disabled="!(allSelected && selectedWallet)"
-        >
+      <v-col v-if="false" cols="12" class="d-flex justify-end pb-5">
+        <FormButton :text="'Connect Wallet'" @click="connectAccount" :disabled="!selected">
         </FormButton>
       </v-col>
     </v-row>
@@ -82,192 +49,140 @@
 </template>
 
 <script>
-import ConnectAccount from "@/components/ConnectAccount.vue";
-import ErrorState from "@/components/ErrorState.vue";
 import FormButton from "@/components/FormButton.vue";
 import LoaderCircle from "@/components/LoaderCircle.vue";
-import WalletSelector from "@/components/WalletSelector";
-import { networks } from "@/constants/networks";
+import SeedPhraseWrapper from "@/components/SeedPhraseWrapper";
 
-import { mapState } from "vuex";
+import { mapGetters, mapState } from "vuex";
 
-// import { compareBalance } from "@/plugins/utils";
+import { setupModal } from "@near-wallet-selector/modal-ui";
+
+import NearAPI from "@/plugins/near";
 
 export default {
-  name: "ConnectWalletView",
+  name: "CreateWalletView",
   beforeDestroy() {
-    localStorage.setItem("@wallid:oauth:state", 1);
+    this.modal.hide();
   },
   data() {
     return {
-      allSelected: false,
-      loading: false,
-      loadingConnection: false,
+      loading: true,
+      modal: null,
       selected: false,
       successState: false,
-      errorMessage: null,
-      errorType: null,
-      hasWeb3BrowserExtension: false,
+      nearAccountItem: {
+        IdName: "nearTokens",
+        IdNameDesc: "Near Wallet",
+        IdDescription: "Connect to your NEAR wallet",
+        type: "web3",
+      },
+      // headerComponent: {
+      //   template: "#near-wallet-selector-modal", // refer to template element by selector
+      // },
     };
   },
   computed: {
-    ...mapState(["web3TokensList", "chainId"]),
-
-    tokenName() {
-      return this.tokenData?.IdNameDesc;
-    },
-    tokenData() {
-      return this.web3TokensList?.[0];
-    },
-    selectedWallet: {
-      get() {
-        return this.$store.getters["web3wallet/selectedWallet"];
-      },
-      set(value) {
-        console.log(value);
-        this.$store.commit("web3wallet/setSelectedWallet", value);
-      },
-    },
+    ...mapState(["nearAccount"]),
+    ...mapState("near", ["walletSelector", "nearAccount"]),
+    ...mapState("royalty", ["seedphrase"]),
+    ...mapGetters("near", ["nearAccountId"]),
   },
   watch: {
-    selectedWallet(value) {
-      console.log("Value", value);
+    nearAccount(value) {
+      console.log(value);
+      console.log(this.$route.path);
+
+      if (value?.accountId) {
+        if (this.$route.path.includes("/royalties")) {
+          this.$router.push({ name: "royalties-signature" });
+        } else {
+          this.$router.push({ name: "base-select" });
+        }
+      }
+    },
+    walletSelector(value) {
+      this.modal = setupModal(value, {
+        // contractId: process.env.VUE_APP_NEAR_SOCIAL_CONTRACT_TESTNET,
+        contractId: NearAPI.NEAR_SOCIAL_CONTRACT_ADDRESS,
+        description: "where ythis goes",
+      });
+      console.log(value);
+      if (!value.isSignedIn()) {
+        console.log(this.modal);
+
+        this.modal.show();
+
+        this.loading = false;
+      } else {
+        this.modal.hide();
+      }
     },
   },
   methods: {
-    async doVerifyTokenBalanceFlow() {
-      console.log("Call doVerifyTokenBalanceFlow");
-      this.loadingConnection = true;
-      try {
-        const walletAddress = await this.connectAccount();
-
-        console.log("walletAddress", walletAddress, this.tokenData);
-
-        for (let index = 0; index < this.tokenData?.options.length; index++) {
-          const option = this.tokenData?.options[index];
-          option.result = await this.verifyOptionData(option);
-        }
-
-        // let res = await this.verifyOptionData(this.tokenData?.options?.[0]);
-
-        console.log("verifyOptionData", this.tokenData?.options);
-
-        let selectedOptionsResults = this.tokenData?.options.every(
-          (option) => option.state && option.result
-        );
-
-        console.log("selectedOptionsResults", selectedOptionsResults);
-
-        if (selectedOptionsResults) {
-          this.$router.push({ name: "base-success-view" });
-        } else {
-          this.errorMessage = "It seems like you don't have enough tokens.";
-        }
-        return walletAddress;
-      } catch (error) {
-        console.log("error", error);
-        this.errorMessage = `It was not possible to verify ${this.tokenData.IdNameDesc} ownership.`;
-      } finally {
-        this.loadingConnection = false;
-      }
-    },
-
-    async verifyOptionData({ type, value }) {
-      console.log("verifyOptionData", type);
-
-      switch (type) {
-        case "balance": {
-          let balance = await this.checkTokenBalance();
-          // return compareBalance(balance, value, "bt");
-          return balance >= value;
-        }
-
-        default:
-          return "Nothing";
-      }
-    },
-
-    async checkTokenBalance() {
-      let tokenBalance = await this.$store.dispatch("web3wallet/tokenBalance", {
-        walletAddress: this.walletAddress,
-        contractAddress: this.tokenData?.contractAddress,
-        contractType: this.tokenData?.contractType,
-      });
-      console.log("tokenBalance", tokenBalance);
-      return tokenBalance;
-    },
     async connectAccount() {
       console.log("Call connectAccount");
+      this.modal.show();
 
-      // connect to wallet
-      try {
-        let walletAddress;
-        if (this.requestWalletChange) {
-          await this.$store.dispatch("web3wallet/requestAccounts");
-        }
-        walletAddress = await this.$store.dispatch("web3wallet/connectProvider");
+      // const popup = window.open(
+      //   "/near",
+      //   "popup",
+      //   "width=600,height=600,toolbar=no,menubar=no"
+      // );
+      // const checkPopup = setInterval(async () => {
+      //   // if (popup.window.location.href.includes("success=1")) {
+      //   //   popup.close();
+      //   // }
+      //   if (!popup || !popup.closed) return;
+      //   clearInterval(checkPopup);
+      //   const { nearAccountId } = await this.$store.dispatch(
+      //     "getURLSearchParams"
+      //   );
 
-        const networkParams = networks.find((n) => n.chainId === this.chainId);
-
-        let res = await window.ethereum.request({
-          method: "wallet_addEthereumChain",
-          params: [networkParams],
-        });
-
-        await window.ethereum.request({
-          method: "wallet_switchEthereumChain",
-          params: [{ chainId: networkParams.chainId }],
-        });
-        this.walletAddress = walletAddress;
-        console.log(res);
-        return walletAddress;
-      } catch (error) {
-        console.log("error", error);
-      }
-    },
-    backStep() {
-      if (this.errorMessage) {
-        this.errorMessage = null;
-        this.requestWalletChange = true;
-        return;
-      }
-      this.$router.go(-1);
-
-      // uncomment this line to remove selected value on back
-      // this.$store.commit("selectedAccountId");
+      //   console.log("popup close check near account", nearAccountId);
+      //   if (nearAccountId) {
+      //     this.$router.push("/home");
+      //   }
+      // }, 1000);
+      // await this.$store.dispatch("near/connectNear");
     },
   },
   async mounted() {
     // this will store a wallet access keys in browser's local  storage
     // await this.$store.dispatch("near/initNear");
-    try {
-      let provider = await this.$store.dispatch("web3wallet/checkProvider");
+    if (this.walletSelector) {
+      this.modal = setupModal(this.walletSelector, {
+        // contractId: process.env.VUE_APP_NEAR_SOCIAL_CONTRACT_TESTNET,
+        contractId: NearAPI.NEAR_SOCIAL_CONTRACT_ADDRESS,
+      });
 
-      if (provider) {
-        this.hasWeb3BrowserExtension = true;
-      }
+      if (!this.walletSelector.isSignedIn()) {
+        console.log(this.modal);
+        await this.modal.show();
+        await this.$nextTick();
 
-      let address = await this.$store.dispatch("web3wallet/checkConnection", provider);
-      if (!address) {
-        // this.$store.commit("errorMsg", "ERR_NO_PERMISSION");
-        // this.errorMessage = "ERR_NO_PERMISSION";
-        console.log(address);
+        this.$forceUpdate();
+        // var nodesToMove = document.querySelectorAll(".nws-modal-wrapper");
+        // console.log(nodesToMove);
+
+        // var destinationContainerNode = document.querySelector("#nws-modal-stub");
+        // console.log(destinationContainerNode);
+        // Array.from(nodesToMove).forEach(function (node) {
+        //   destinationContainerNode.appendChild(node);
+        // });
+      } else {
+        this.modal.hide();
+        // this.successState = true;
+        this.$router.push({ name: "royalties-success" });
+
+        this.$store.commit("royalty/verifySuccess", true);
       }
-    } catch (error) {
-      // if (this.errorMsg !== "noComp") this.selectedWallet = "wallid";
-      console.log(error);
-      // this.errorMessage = error?.message || error;
-      // this.$store.commit("errorMsgStatus", error.message);
+      this.loading = false;
     }
-
-    this.loading = false;
   },
   components: {
     FormButton,
     LoaderCircle,
-    WalletSelector,
-    ErrorState,
-    ConnectAccount,
+    SeedPhraseWrapper,
   },
 };
 </script>
