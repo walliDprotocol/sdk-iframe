@@ -95,7 +95,10 @@ export default {
       if (this.flow == "celo") {
         return 2;
       }
-      return 2;
+      if (this.nearAccountId || this.$route.path.includes("/royalties")) {
+        return 2;
+      }
+      return 3;
     },
     cssVars() {
       return {

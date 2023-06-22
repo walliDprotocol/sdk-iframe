@@ -34,7 +34,7 @@ const baseFlow = {
       component: ConnectWalletView,
       meta: {
         i18n: messages,
-        title: "Connect and verify",
+        title: "Connect wallet",
         step: 1,
       },
     },

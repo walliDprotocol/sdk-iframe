@@ -29,7 +29,7 @@
     <v-row v-else justify="center" class="pt-6">
       <LoaderCircle :loading="loading"></LoaderCircle>
       <v-col v-if="!loading" cols="12" class="pt-4">
-        <h1 class="title-h1 text-center">Connect to NEAR wallet and verify NEAR possessions</h1>
+        <h1 class="title-h1 text-center">Connect to NEAR wallet</h1>
       </v-col>
       <v-col cols="12" class="pt-4">
         <div id="nws-modal-stub">

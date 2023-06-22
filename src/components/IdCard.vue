@@ -73,7 +73,7 @@ export default {
   align-items: center;
   padding-top: 20px;
   padding-bottom: 20px;
-
+  border: solid 1px #ebebeb;
   &.INACTIVE {
     opacity: 0.3;
     pointer-events: none;
