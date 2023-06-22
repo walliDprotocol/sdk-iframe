@@ -52,6 +52,9 @@ export default {
       flow: "celo", // TODO: add correct translations
     };
   },
+  mounted() {
+    this.startFlow();
+  },
   methods: {
     async startFlow() {
       //   // try go get oauth data
