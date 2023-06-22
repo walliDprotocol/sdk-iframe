@@ -93,7 +93,7 @@ export default {
       //For now we will be doing everything from start
       localStorage.setItem("@wallid:oauth:state", 1);
 
-      this.$router.push({ name: "base-select" });
+      this.$router.push({ name: "base-connect" });
 
       this.loading = false;
     },

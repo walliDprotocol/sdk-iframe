@@ -2,8 +2,9 @@
   <v-container
     fill-height
     class="align-content-space-between"
-    :style="{ height: !successState ? '910px' : 'unset' }"
+    :style="{ height: !successState ? '410px' : 'unset' }"
   >
+    <component :is="'style'"> :root { --topDistance: 190px; } </component>
     <v-row v-if="successState" justify="center" class="pa-10">
       <v-col cols="8" class="pt-5">
         <v-img
@@ -28,9 +29,7 @@
     <v-row v-else justify="center" class="pt-6">
       <LoaderCircle :loading="loading"></LoaderCircle>
       <v-col v-if="!loading" cols="12" class="pt-4">
-        <h1 class="title-h1 text-center">Import wallet account using seedphrase</h1>
-
-        <SeedPhraseWrapper :seedphrase="seedphrase"> </SeedPhraseWrapper>
+        <h1 class="title-h1 text-center">Connect to NEAR wallet and verify NEAR possessions</h1>
       </v-col>
       <v-col cols="12" class="pt-4">
         <div id="nws-modal-stub">
@@ -51,7 +50,6 @@
 <script>
 import FormButton from "@/components/FormButton.vue";
 import LoaderCircle from "@/components/LoaderCircle.vue";
-import SeedPhraseWrapper from "@/components/SeedPhraseWrapper";
 
 import { mapGetters, mapState } from "vuex";
 
@@ -86,6 +84,11 @@ export default {
     ...mapState("near", ["walletSelector", "nearAccount"]),
     ...mapState("royalty", ["seedphrase"]),
     ...mapGetters("near", ["nearAccountId"]),
+    cssVars() {
+      return {
+        "--topDistance": 20,
+      };
+    },
   },
   watch: {
     nearAccount(value) {
@@ -104,7 +107,6 @@ export default {
       this.modal = setupModal(value, {
         // contractId: process.env.VUE_APP_NEAR_SOCIAL_CONTRACT_TESTNET,
         contractId: NearAPI.NEAR_SOCIAL_CONTRACT_ADDRESS,
-        description: "where ythis goes",
       });
       console.log(value);
       if (!value.isSignedIn()) {
@@ -172,7 +174,7 @@ export default {
       } else {
         this.modal.hide();
         // this.successState = true;
-        this.$router.push({ name: "royalties-success" });
+        this.$router.push({ name: "base-select" });
 
         this.$store.commit("royalty/verifySuccess", true);
       }
@@ -182,7 +184,6 @@ export default {
   components: {
     FormButton,
     LoaderCircle,
-    SeedPhraseWrapper,
   },
 };
 </script>
@@ -199,4 +200,7 @@ export default {
 // * {
 //   outline: solid 1px rgba($color: red, $alpha: 0.2);
 // }
+.nws-modal-wrapper .nws-modal {
+  top: var(--topDistance, 390px) !important;
+}
 </style>

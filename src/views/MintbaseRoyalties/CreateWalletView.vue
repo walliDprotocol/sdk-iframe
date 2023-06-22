@@ -25,7 +25,7 @@
         </h3>
       </v-col>
     </v-row>
-    <v-row v-else justify="center" class="pt-6">
+    <v-row v-else justify="center" class="">
       <LoaderCircle :loading="loading"></LoaderCircle>
       <v-col v-if="!loading" cols="12" class="pt-4">
         <h1 class="title-h1 text-center">Import wallet account using seedphrase</h1>

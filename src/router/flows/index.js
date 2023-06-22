@@ -29,22 +29,22 @@ const baseFlow = {
       },
     },
     {
-      path: "select-account",
-      name: "base-select",
-      component: ConnectAccountView,
-      meta: {
-        i18n: messages,
-        title: "Verify social network",
-        step: 1,
-      },
-    },
-    {
       path: "connect-wallet",
       name: "base-connect",
       component: ConnectWalletView,
       meta: {
         i18n: messages,
         title: "Connect and verify",
+        step: 1,
+      },
+    },
+    {
+      path: "select-account",
+      name: "base-select",
+      component: ConnectAccountView,
+      meta: {
+        i18n: messages,
+        title: "Verify social network",
         step: 2,
       },
     },
