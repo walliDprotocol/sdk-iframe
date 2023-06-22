@@ -48,19 +48,6 @@
     },
 
     {
-      "IdName": "linkedin",
-      "IdNameDesc": "Linkedin",
-      "type": "OAUTH",
-      "options": [
-        {
-          "field": "Account name",
-          "description": ["(Encrypted)"],
-          "state": false
-        }
-      ]
-    },
-
-    {
       "IdName": "github",
       "IdNameDesc": "Github",
       "type": "OAUTH",
@@ -72,16 +59,12 @@
         },
         {
           "field": "Repositories",
-          "description": [
-            "Five or more Githubs repos",
-            "At least 1 Github repo forked by another user",
-            "At least 1 Github repo starred by another user"
-          ],
+          "description": ["At least 5 repos"],
           "state": false
         },
         {
-          "field": "Followers",
-          "description": ["Ten more Github followers", "Fifty or more Github followers"],
+          "field": "Contributions",
+          "description": ["At least 5 contributions"],
           "state": false
         }
       ]
