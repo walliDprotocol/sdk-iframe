@@ -42,16 +42,14 @@
 </template>
 <script>
 import FormButton from "@/components/FormButton.vue";
-import { mapGetters } from "vuex";
 
 export default {
   name: "WelcomeView",
-  computed: {
-    ...mapGetters(["flow"]),
-  },
+  computed: {},
   data() {
     return {
       getOauthDataQuery: {},
+      flow: "celo", // TODO: add correct translations
     };
   },
   methods: {

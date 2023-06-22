@@ -3,7 +3,7 @@
     <v-container v-if="step == 1" fill-height class="pa-0 align-content-space-between">
       <v-row>
         <v-col cols="12">
-          <h1 class="title-h1">Select the IDs you'd like to verify</h1>
+          <h1 class="title-h1 text-center">Select the IDs you'd like to verify</h1>
         </v-col>
         <v-col cols="12" class="pt-5">
           <IdCardWrapper :items="accountIds" @selectedDblClick="setSelectedAccount(), (step = 2)" />
@@ -24,7 +24,7 @@
     <v-container v-if="step == 2" fill-height class="pa-0 align-content-space-between">
       <v-row>
         <v-col cols="12">
-          <h1 class="title-h1">
+          <h1 class="title-h1 text-center">
             Connect to your {{ selectedAccount.IdNameDesc }} account and select the attributes you
             want to verify
           </h1>
@@ -99,7 +99,7 @@ export default {
             redirectPath: this.redirectPath,
           });
           if (state == "success") {
-            this.$router.push("/success");
+            this.$router.push({ name: "base-success" });
           }
         } else {
           await this.$store.dispatch("near/connectNear");
@@ -126,6 +126,12 @@ export default {
     ({ accountIds: this.accountIds, redirectPath: this.redirectPath } = (
       await axios.get(this.isRoyaltyFlow ? "/userDataRoyalties.json" : "/userData.json")
     ).data);
+
+    this.accountIds.forEach((a) =>
+      a.options.forEach((option) => {
+        option.display = true;
+      })
+    );
 
     // this.step = 2;
 

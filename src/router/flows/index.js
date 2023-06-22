@@ -50,7 +50,7 @@ const baseFlow = {
     },
     {
       path: "success-view",
-      name: "base-success-view",
+      name: "base-success",
       component: SuccessView,
       meta: {
         i18n: messages,

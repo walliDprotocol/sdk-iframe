@@ -4,7 +4,7 @@
       "IdName": "nearTokens",
       "IdNameDesc": "Near tokens",
       "IdDescription": "Verify a NEAR ERC20 Token",
-      "type": "web3",
+      "type": "WEB3",
       "contractType": "native",
       "options": [
         {
@@ -19,7 +19,7 @@
       "IdName": "nearNFT",
       "IdNameDesc": "Near NFT's",
       "IdDescription": "Verify a NEAR NFT",
-      "type": "web3",
+      "type": "WEB3",
       "options": [
         {
           "field": "NEAR NFT Holder",
@@ -34,7 +34,7 @@
       "imgType": "url",
       "imgUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/3408.png",
       "IdDescription": "Verify USDC Tokens",
-      "type": "web3",
+      "type": "WEB3",
       "contractType": "ERC20",
       "contractAddress": "a0b86991c6218b36c1d19d4a2e9eb0ce3606eb48.factory.bridge.near",
       "options": [
@@ -50,7 +50,7 @@
     {
       "IdName": "google",
       "IdNameDesc": "Google",
-      "type": "web2",
+      "type": "OAUTH",
       "options": [
         {
           "field": "Email account",
@@ -62,7 +62,7 @@
     {
       "IdName": "twitter",
       "IdNameDesc": "Twitter",
-      "type": "web2",
+      "type": "OAUTH",
       "options": [
         {
           "field": "Account name",
@@ -85,7 +85,7 @@
       "IdName": "facebook",
       "IdNameDesc": "Facebook",
       "status": "INACTIVE",
-      "type": "web2",
+      "type": "OAUTH",
       "options": [
         {
           "field": "Account name",
@@ -107,7 +107,7 @@
     {
       "IdName": "linkedin",
       "IdNameDesc": "Linkedin",
-      "type": "web2",
+      "type": "OAUTH",
       "options": [
         {
           "field": "Account name",
@@ -119,7 +119,7 @@
     {
       "IdName": "discord",
       "IdNameDesc": "Discord",
-      "type": "web2",
+      "type": "OAUTH",
       "options": [
         {
           "field": "Account name",
@@ -132,7 +132,7 @@
     {
       "IdName": "reddit",
       "IdNameDesc": "Reddit",
-      "type": "web2",
+      "type": "OAUTH",
       "options": [
         {
           "field": "Account name",
@@ -150,10 +150,7 @@
         },
         {
           "field": "Followers",
-          "description": [
-            "Ten or more Reddit followers",
-            "Fifty or more Reddit followers"
-          ],
+          "description": ["Ten or more Reddit followers", "Fifty or more Reddit followers"],
           "state": false
         }
       ]
@@ -161,7 +158,7 @@
     {
       "IdName": "github",
       "IdNameDesc": "Github",
-      "type": "web2",
+      "type": "OAUTH",
       "options": [
         {
           "field": "Account name",
@@ -179,10 +176,7 @@
         },
         {
           "field": "Followers",
-          "description": [
-            "Ten more Github followers",
-            "Fifty or more Github followers"
-          ],
+          "description": ["Ten more Github followers", "Fifty or more Github followers"],
           "state": false
         }
       ]

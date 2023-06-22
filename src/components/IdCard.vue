@@ -71,8 +71,8 @@ export default {
   // max-height: 106px;
   display: flex;
   align-items: center;
-  padding-top: 24px;
-  padding-bottom: 24px;
+  padding-top: 20px;
+  padding-bottom: 20px;
 
   &.INACTIVE {
     opacity: 0.3;
@@ -81,6 +81,7 @@ export default {
   &:hover,
   &.selected {
     background-color: var(--white);
+    border: solid 1px #b3b2c0;
   }
   .id-card-row.row {
     .id-card-col.col {

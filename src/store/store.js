@@ -173,7 +173,7 @@ const actions = {
     );
   },
   // Send localStorage data trough pubnub to iframe opener
-  async publishData(_, { data }) {
+  async publishData(_, { data } = {}) {
     console.log("publishData Action");
 
     var pubnub = new PubNub({

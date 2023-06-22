@@ -1,7 +1,7 @@
 <template>
-  <v-container class="px-0 id-card-wrapper">
+  <v-container class="id-card-wrapper">
     <v-row class="text-center">
-      <v-col cols="12" sm="4" v-for="(item, index) in items" :key="index">
+      <v-col cols="12" sm="4" class="pr-1" v-for="(item, index) in items" :key="index">
         <IdCard
           :item="item"
           @selected="selected = index"
@@ -41,13 +41,13 @@ export default {
 </script>
 <style lang="scss">
 .id-card-wrapper {
-  height: 390px;
+  height: 360px;
   // overflow: hidden;
-
+  // max-height: 395px;
+  overflow-x: hidden;
+  overflow-y: auto;
   & > .row {
-    max-height: 395px;
-    overflow-x: hidden;
-    overflow-y: auto;
+    padding-right: 12px;
   }
 }
 </style>

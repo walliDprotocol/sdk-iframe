@@ -4,13 +4,6 @@
       <v-col cols="12" sm="12" class="pt-10">
         <v-container class="" style="max-width: 700px">
           <v-row justify="center" class="pa-10">
-            <v-col cols="auto" class="pt-7 pr-0" style="z-index: 3">
-              <div class="img-border mt-n1 mr-n1">
-                <!-- <div> -->
-                <v-img contain max-width="46" max-height="46" :src="walletIconUrl()" />
-              </div>
-              <!-- </div> -->
-            </v-col>
             <v-col cols="auto" class="pt-7 mx-n4" style="z-index: 2">
               <v-img
                 contain
@@ -28,13 +21,7 @@
               ></v-img>
             </v-col>
             <v-col cols="12" sm="12" class="pt-12 text-center">
-              <h1 class="title-h1">Success!</h1>
-            </v-col>
-            <v-col cols="12" sm="9" class="">
-              <p class="normal-text-p mb-0 ml-2 text-center">
-                Your account was succesfully verified and there's a juicy NFT waiting for you to
-                claim it.
-              </p>
+              <h1 class="title-h1">Your data has been successfully verified!</h1>
             </v-col>
           </v-row>
         </v-container>
@@ -43,9 +30,13 @@
 
     <v-row>
       <v-col cols="12" class="d-flex justify-end pb-4">
-        <!-- <FormButton class="mr-5" :text="'Done'" :type="'back'" @click="publishData">
-           </FormButton> -->
-        <FormButton :text="'CLAIM IT'" @click="doClaimRequest"> </FormButton>
+        <FormButton class="mr-5" :text="'Done'" :type="'back'" @click="publishData"> </FormButton>
+
+        <FormButton
+          :text="'VERIFY ANOTHER ID'"
+          @click="$router.push({ name: 'base-select' }), $store.dispatch('publishData')"
+        >
+        </FormButton>
       </v-col>
     </v-row>
   </v-container>
@@ -83,9 +74,11 @@ export default {
       await this.$store.dispatch("emitClose");
     },
     publishData() {
-      setTimeout(() => {
-        this.$store.dispatch("publishData");
-      }, 3 * 1000);
+      this.$router.push({ name: "base-select" });
+
+      // setTimeout(() => {
+      this.$store.dispatch("publishData");
+      // }, 3 * 1000);
     },
   },
   async mounted() {

@@ -35,7 +35,9 @@ export default {
       },
     },
   },
-  async created() {},
+  async created() {
+    await this.$store.dispatch("near/initNear");
+  },
 
   async mounted() {
     let { state, code, flow, configId } = await this.$store.dispatch("getURLSearchParams");
@@ -47,12 +49,10 @@ export default {
 
     // Temp Values
     this.$store.commit("setFlow", flow);
-    this.$store.commit("selectedAccountId", "twitter");
 
     this.getOauthDataQuery = {
       state,
       code,
-      redirectPath: "/?flow=" + flow,
     };
     console.log("getOauthDataQuery", this.getOauthDataQuery);
 
@@ -99,7 +99,7 @@ export default {
       this.hasData = getJSONStorage("local", this.selectedAccountId + "_user");
       console.log("hasData", this.hasData);
       if (this.hasData) {
-        this.$router.push({ name: "base-select" });
+        this.$router.push({ name: "base-success" });
         this.loading = false;
       }
       return;
