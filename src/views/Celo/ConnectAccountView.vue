@@ -189,6 +189,8 @@ export default {
       if (hasUserData) {
         // this.$router.push({ name: "celo-createWallet" });
         this.successTwitterAccVerification = true;
+        this.$store.commit("stepSuccess", true);
+
         this.loading = false;
       }
       // this.timer = setTimeout(() => {
