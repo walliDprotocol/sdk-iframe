@@ -10,7 +10,6 @@ import axios from "axios";
 
 // import router from "@/router";
 
-const TWITTER_LOGIN = process.env.VUE_APP_BACKEND_URL + "/api/v1/redirect/login/twitter";
 const CONFIG_URL = (configId) =>
   `${process.env.VUE_APP_BACKEND_URL}/api/v1/config/byId?configId=${configId}`;
 
@@ -25,8 +24,6 @@ const ACCOUNTS_LIST = [
   "nearTokens",
   "usdcToken",
 ];
-
-console.log(TWITTER_LOGIN);
 
 Vue.use(Vuex);
 
@@ -82,7 +79,6 @@ const getters = {
 };
 const actions = {
   async getConfig(_, { configId }) {
-    console.log("configId", configId);
     // CONFIG_URL
     // return await axios.get("/userDataRoyalties.json");
     return await axios.get(CONFIG_URL(configId));
@@ -95,6 +91,7 @@ const actions = {
     console.log("state.selectedNetwork.id", state.selectedNetwork.id);
     console.log("selectedNetwork.id", selectedNetwork.id);
     if (selectedNetwork.id !== state.selectedNetwork.id && accountId) {
+      console.log("**removing key**");
       localStorage.removeItem("near_app_wallet_auth_key");
 
       // await NearAPI.init(selectedNetwork.id);

@@ -43,6 +43,7 @@
 <script>
 import { mapGetters, mapState } from "vuex";
 import NetworkDropdown from "@/components/NetworkDropdown";
+import { getJSONStorage } from "@/plugins/utils";
 
 export default {
   name: "AppHeader",
@@ -63,11 +64,28 @@ export default {
       this.currentStep = this.currentStep >= this.totalSteps ? this.totalSteps : this.currentStep;
 
       this.$store.commit("stepSuccess", false);
+
+      if (to.path.includes("/royalties")) {
+        this.totalSteps = 2;
+      }
     },
     stepSuccess(value) {
       if (value) {
         console.log("stepSuccess");
         this.successModifier = 0;
+      }
+    },
+    flow(value) {
+      if (value == "celo") {
+        this.totalSteps = 2;
+      }
+    },
+    nearAccountId(value) {
+      const isLoggedOff = getJSONStorage("session", "isLoggedOff");
+      console.log("isLoggedOff nearAccountId", isLoggedOff);
+
+      if (value && !isLoggedOff.value) {
+        this.totalSteps = 2;
       }
     },
   },
@@ -90,15 +108,6 @@ export default {
         "Connect social account to your wallet",
       ];
       return this.verifySuccess ? "Success!" : titlesList[this.currentStep - 1];
-    },
-    totalSteps() {
-      if (this.flow == "celo") {
-        return 2;
-      }
-      if (this.nearAccountId || this.$route.path.includes("/royalties")) {
-        return 2;
-      }
-      return 3;
     },
     cssVars() {
       return {
@@ -129,6 +138,7 @@ export default {
     return {
       currentStep: 0,
       successModifier: 1,
+      totalSteps: 3,
     };
   },
 };

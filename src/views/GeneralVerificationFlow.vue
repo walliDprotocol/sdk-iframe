@@ -35,11 +35,8 @@ export default {
       },
     },
   },
-  async created() {
-    await this.$store.dispatch("near/initNear");
-  },
-
   async mounted() {
+    await this.$store.dispatch("near/initNear");
     let { state, code, flow, configId } = await this.$store.dispatch("getURLSearchParams");
     // try to get this values from local storage
     configId ??= (await getStorageFields(["configId", "flow"])).configId;
