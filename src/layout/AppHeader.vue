@@ -121,14 +121,17 @@ export default {
     },
     setCurrentStep() {
       let currentRoutes = this.recursiveChildrenSearch(this.$router.options.routes, "MintbaseFlow");
+      if (this.$route.name.includes("royalties")) {
+        this.totalSteps = 2;
+      }
 
       this.currentStep =
         this.$route?.meta?.step || currentRoutes.findIndex(({ name }) => name === this.$route.name);
 
       const isLoggedOff = getJSONStorage("session", "isLoggedOff");
-      console.log("isLoggedOff nearAccountId", isLoggedOff);
+      console.log("isLoggedOff nearAccountId", isLoggedOff, this.currentStep);
 
-      if (this.nearAccountId && !isLoggedOff.value) {
+      if (this.nearAccountId && !isLoggedOff.value && !this.$route.name.includes("royalties")) {
         this.totalSteps = 2;
         this.currentStep =
           this.currentStep > this.totalSteps ? this.totalSteps : this.currentStep - 1;
