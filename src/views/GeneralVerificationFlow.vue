@@ -101,9 +101,7 @@ export default {
       }
       return;
     }
-    // this.$router.push({ name: "base-select" });
-    // } else {
-    //   this.$router.push("/");
+
     this.loading = false;
   },
   components: {

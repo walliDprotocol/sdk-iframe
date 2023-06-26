@@ -57,11 +57,7 @@ export default {
   },
   watch: {
     $route(to) {
-      let currentRoutes = this.recursiveChildrenSearch(this.$router.options.routes, "MintbaseFlow");
-      this.currentStep =
-        this.$route?.meta?.step || currentRoutes.findIndex(({ name }) => name === to.name);
-      this.successModifier = this.currentStep > this.totalSteps ? 0 : 1;
-      this.currentStep = this.currentStep >= this.totalSteps ? this.totalSteps : this.currentStep;
+      this.setCurrentStep(to);
 
       this.$store.commit("stepSuccess", false);
 
@@ -123,13 +119,28 @@ export default {
         if (route.name === name) return route.children;
       }
     },
+    setCurrentStep() {
+      let currentRoutes = this.recursiveChildrenSearch(this.$router.options.routes, "MintbaseFlow");
+
+      this.currentStep =
+        this.$route?.meta?.step || currentRoutes.findIndex(({ name }) => name === this.$route.name);
+
+      const isLoggedOff = getJSONStorage("session", "isLoggedOff");
+      console.log("isLoggedOff nearAccountId", isLoggedOff);
+
+      if (this.nearAccountId && !isLoggedOff.value) {
+        this.totalSteps = 2;
+        this.currentStep =
+          this.currentStep > this.totalSteps ? this.totalSteps : this.currentStep - 1;
+      } else {
+        this.currentStep = this.currentStep > this.totalSteps ? this.totalSteps : this.currentStep;
+      }
+
+      this.successModifier = this.stepSuccess ? 0 : 1; //this.currentStep > this.totalSteps ? 0 : 1;
+    },
   },
   mounted() {
-    let currentRoutes = this.recursiveChildrenSearch(this.$router.options.routes, "MintbaseFlow");
-    this.currentStep =
-      this.$route?.meta?.step || currentRoutes.findIndex(({ name }) => name === this.$route.name);
-    this.successModifier = this.currentStep > this.totalSteps ? 0 : 1;
-    this.currentStep = this.currentStep >= this.totalSteps ? this.totalSteps : this.currentStep;
+    this.setCurrentStep();
   },
   components: {
     NetworkDropdown,

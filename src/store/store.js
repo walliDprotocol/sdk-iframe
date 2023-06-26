@@ -108,7 +108,7 @@ const actions = {
     { getters },
     { IdName: selectedIdName, IdNameDesc, contractType, contractAddress }
   ) {
-    console.log({ selectedIdName, contractType, contractAddress });
+    console.log("getAccountBalance: ", { selectedIdName, contractType, contractAddress });
     try {
       if (contractType == "ERC20") {
         const accountId = getters["near/nearAccountId"];

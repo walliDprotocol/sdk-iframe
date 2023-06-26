@@ -38,7 +38,7 @@
 import { getJSONStorage } from "@/plugins/utils";
 
 export default {
-  name: "HelloWorld",
+  name: "IdCard",
   props: ["item"],
   computed: {
     userData() {

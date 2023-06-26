@@ -30,13 +30,15 @@
 
     <v-row>
       <v-col cols="12" class="d-flex justify-end pb-4">
-        <FormButton class="mr-5" :text="'Done'" :type="'back'" @click="publishData"> </FormButton>
-
         <FormButton
-          :text="'VERIFY ANOTHER ID'"
-          @click="$router.push({ name: 'base-select' }), $store.dispatch('publishData')"
+          class="mr-5"
+          :text="'Done'"
+          :type="'back'"
+          @click="$store.dispatch('publishData')"
         >
         </FormButton>
+
+        <FormButton :text="'VERIFY ANOTHER ID'" @click="publishData"> </FormButton>
       </v-col>
     </v-row>
   </v-container>
@@ -74,6 +76,8 @@ export default {
       await this.$store.dispatch("emitClose");
     },
     publishData() {
+      sessionStorage.removeItem("isLoggedOff");
+
       this.$router.push({ name: "base-select" });
 
       // setTimeout(() => {
@@ -82,6 +86,8 @@ export default {
     },
   },
   async mounted() {
+    this.$store.commit("stepSuccess", true);
+
     console.log(this.selectedAccountId);
   },
   components: {

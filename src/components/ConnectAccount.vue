@@ -92,9 +92,9 @@
 
 <script>
 export default {
-  name: "HelloWorld",
+  name: "ConnectAccount",
   props: {
-    selectedAccount: Object,
+    selectedAccount: { type: Object, default: () => {} },
     checkBalance: {
       type: Boolean,
       default: true,

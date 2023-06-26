@@ -8,6 +8,7 @@ import GeneralVerificationFlow from "@/views/GeneralVerificationFlow";
 import WelcomeViewVue from "@/views/Verifier/WelcomeView";
 import ConnectWalletView from "@/views/Verifier/ConnectWalletView";
 import ConnectAccountView from "@/views/Verifier/SelectView";
+import VerifyAccountView from "@/views/Verifier/VerifyAccountView";
 import SuccessView from "@/views/Verifier/SuccessView";
 
 const baseFlow = {
@@ -44,8 +45,18 @@ const baseFlow = {
       component: ConnectAccountView,
       meta: {
         i18n: messages,
-        title: "Verify social network",
+        title: "Select data to verify",
         step: 2,
+      },
+    },
+    {
+      path: "verify-account",
+      name: "base-verify",
+      component: VerifyAccountView,
+      meta: {
+        i18n: messages,
+        title: "Verify data",
+        step: 3,
       },
     },
     {
@@ -55,7 +66,7 @@ const baseFlow = {
       meta: {
         i18n: messages,
         title: "Success",
-        step: 3,
+        step: 4,
       },
     },
   ],

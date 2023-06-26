@@ -18,7 +18,7 @@ import IdCard from "./IdCard.vue";
 import { mapState } from "vuex";
 
 export default {
-  name: "HelloWorld",
+  name: "IdCardWrapper",
   components: { IdCard },
   computed: {
     ...mapState(["nearAccount", "selectedAccountId"]),
