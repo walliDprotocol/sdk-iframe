@@ -31,6 +31,7 @@
     <v-row>
       <v-col cols="12" class="d-flex justify-end pb-4">
         <FormButton
+          v-if="false"
           class="mr-5"
           :text="'Done'"
           :type="'back'"
