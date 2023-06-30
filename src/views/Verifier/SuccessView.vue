@@ -89,6 +89,10 @@ export default {
   async mounted() {
     this.$store.commit("stepSuccess", true);
 
+    setTimeout(() => {
+      this.$store.dispatch("publishData");
+    }, 3 * 1000);
+
     console.log(this.selectedAccountId);
   },
   components: {

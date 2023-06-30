@@ -4,17 +4,31 @@
       <v-col cols="8" class="pt-10">
         <v-container style="max-width: 700px">
           <v-row justify="center" class="pa-10">
-            <v-col cols="8" class="pt-5">
+            <v-col cols="auto" class="pt-7 pr-0" style="z-index: 3">
+              <div class="img-border mt-n1 mr-n1">
+                <div>
+                  <v-img contain max-width="48" max-height="48" :src="walletIconUrl" />
+                </div>
+              </div>
+            </v-col>
+            <v-col cols="auto" class="pt-7 mx-n4" style="z-index: 2">
               <v-img
-                :src="require(`@/assets/icons/success.webp`)"
                 contain
-                class="mx-auto"
-                max-height="40"
-                max-width="40"
+                max-width="46"
+                max-height="46"
+                :src="`/logos/${selectedAccountId}.webp`"
               />
             </v-col>
+            <v-col cols="auto" class="pt-7 pl-0" style="z-index: 1">
+              <v-img
+                height="46"
+                max-width="46"
+                contain
+                :src="require('@/assets/icons/icon-check.webp')"
+              ></v-img>
+            </v-col>
 
-            <v-col cols="8" class="pt-5">
+            <v-col cols="12" class="pt-5">
               <h1 class="title-h1 text-center">You're all set!</h1>
             </v-col>
 
@@ -29,7 +43,7 @@
     </v-row>
 
     <v-row>
-      <v-col cols="12" class="d-flex justify-end pb-4">
+      <v-col v-if="false" cols="12" class="d-flex justify-end pb-4">
         <FormButton class="mr-5" :text="'Done'" :type="'back'" @click="publishData"> </FormButton>
         <!-- 
           <FormButton :text="'VERIFY ANOTHER ID'" @click="$router.push('/select')"> </FormButton> 
@@ -52,6 +66,7 @@ export default {
       step: 1,
       userData: {},
       selectedAccount: {},
+      walletIconUrl: null,
     };
   },
   computed: {
@@ -73,7 +88,11 @@ export default {
     },
   },
   async mounted() {
+    this.walletIconUrl = await this.$store.dispatch("near/getWalletIconUrl");
+
     this.$store.commit("royalty/verifySuccess", true);
+    this.$store.commit("stepSuccess", true);
+
     await this.publishData();
   },
   components: {
@@ -81,3 +100,19 @@ export default {
   },
 };
 </script>
+<style lang="scss">
+.img-border {
+  > div {
+    box-shadow: 0px 0px 1px 0px var(--light-blue-grey);
+    padding: 8px;
+    border-radius: 50%;
+    background-color: white;
+    max-height: 46px;
+    max-width: 46px;
+  }
+  border-radius: 50%;
+  background-color: white;
+
+  border: solid 4px white;
+}
+</style>

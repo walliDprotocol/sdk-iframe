@@ -69,6 +69,8 @@ export default {
       if (value) {
         console.log("stepSuccess");
         this.successModifier = 0;
+      } else {
+        this.successModifier = 1;
       }
     },
     flow(value) {

@@ -13,7 +13,11 @@
 
 .verification-iframe#app {
   ///// FONTS /////
+  ///
 
+  .container {
+    max-width: 900px;
+  }
   .border-none {
     border: none !important;
   }

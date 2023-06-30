@@ -26,13 +26,13 @@
   --get-wallet-option-bg-color: #f8f9fa;
   --get-wallet-option-bg-color-hover: #6494ee3d;
   --get-wallet-option-border-color: #c1c1c1;
-  --get-wallet-outline-color: #6494ee;
+  --get-wallet-outline-color: #b3b2c0;
   --get-wallet-option-box-shadow: 0px 2px 2px rgba(17, 22, 24, 0.04);
   --secondary-button-bg-color: #4f7cd129;
   --secondary-button-border-color: #4f7cd129;
   --secondary-button-text-color: #4f7cd1;
   --what-wallet-icon-color: #ffffff;
-  --deprecated-icon-bg-color: #d7e2f7;
+  --deprecated-icon-bg-color: none;
   --deprecated-icon-bg-color-selected: #4f7cd1;
 }
 
@@ -294,6 +294,7 @@
   .single-wallet.sidebar:hover
   .warning-triangle {
   background-color: var(--deprecated-icon-bg-color);
+  border: solid 1px #b3b2c0;
 }
 
 .nws-modal-wrapper
@@ -1170,7 +1171,7 @@
 }
 
 .single-wallet-get:focus-within {
-  outline: var(--get-wallet-outline-color) solid 2px;
+  outline: var(--get-wallet-outline-color) solid 1px;
 }
 
 .single-wallet-get .icon {

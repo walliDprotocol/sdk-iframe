@@ -1,5 +1,5 @@
 <template>
-  <v-container class="connect-account pt-10" style="max-width: 840px">
+  <v-container class="connect-account pt-10" style="max-width: 820px">
     <v-row justify="start" class="pa-2">
       <v-col cols="auto" class="">
         <div class="number">1</div>

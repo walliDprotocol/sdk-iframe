@@ -11,7 +11,7 @@
       </v-row>
       <v-row class="pb-2">
         <v-col class="d-flex justify-end">
-          <FormButton :text="'Next'" :disabled="!selectedAccountId" @click="setSelectedAccount()">
+          <FormButton :text="'Next'" :disabled="isDisabled" @click="setSelectedAccount()">
           </FormButton>
         </v-col>
       </v-row>
