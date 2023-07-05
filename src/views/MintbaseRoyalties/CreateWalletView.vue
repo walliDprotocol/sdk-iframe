@@ -94,7 +94,7 @@ export default {
 
       if (value?.accountId) {
         if (this.$route.path.includes("/royalties")) {
-          this.$router.push({ name: "royalties-signature" });
+          this.$router.push({ name: "royalties-success" });
         } else {
           this.$router.push({ name: "base-select" });
         }
@@ -104,7 +104,6 @@ export default {
       this.modal = setupModal(value, {
         // contractId: process.env.VUE_APP_NEAR_SOCIAL_CONTRACT_TESTNET,
         contractId: NearAPI.NEAR_SOCIAL_CONTRACT_ADDRESS,
-        description: "where ythis goes",
       });
       console.log(value);
       if (!value.isSignedIn()) {
