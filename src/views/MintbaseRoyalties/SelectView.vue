@@ -16,19 +16,22 @@
       </v-row>
       <v-row v-else-if="successTwitterAccVerification" justify="center">
         <v-col cols="12" class="pt-16 d-flex justify-center">
-          <v-img
-            style="position: absolute; left: calc(50% - 66px)"
-            contain
-            max-width="48"
-            max-height="48"
-            :src="`/logos/${selectedAccount.IdName}.webp`"
-          />
-          <v-img
-            contain
-            max-width="41"
-            max-height="46"
-            :src="require('@/assets/icons/icon-check.webp')"
-          />
+          <div class="d-flex grow" style="min-height: 48px; position: relative">
+            <v-img
+              style="position: absolute; left: calc(50% - 46px)"
+              contain
+              max-width="48"
+              max-height="48"
+              :src="`/logos/${selectedAccount.IdName}.webp`"
+            />
+            <v-img
+              style="position: absolute; left: calc(50%)"
+              contain
+              max-width="41"
+              max-height="46"
+              :src="require('@/assets/icons/icon-check.webp')"
+            />
+          </div>
         </v-col>
         <v-col cols="9" class="pt-5">
           <h1 class="title-h1 text-center">

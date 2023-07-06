@@ -1,9 +1,9 @@
 <template>
   <v-container class="connect-account pt-10" style="max-width: 820px">
     <v-row justify="start" class="pa-2">
-      <v-col cols="auto" class="">
+      <!-- <v-col cols="auto" class="">
         <div class="number">1</div>
-      </v-col>
+      </v-col> -->
       <v-col cols="4" class="">
         <p class="bold-text-p f15 mb-4">Copy this seedphrase to the clipboard</p>
         <p class="small-text-p">
@@ -89,7 +89,7 @@ export default {
       try {
         navigator.clipboard.writeText(this.seedphrase);
         this.show = true;
-
+        this.$emit("copy-click");
         if (!this.tooltipTimeOut) {
           this.tooltipTimeOut = setTimeout(() => {
             this.show = false;

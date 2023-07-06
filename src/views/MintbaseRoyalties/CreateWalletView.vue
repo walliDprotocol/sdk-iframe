@@ -30,7 +30,7 @@
       <v-col v-if="!loading" cols="12" class="pt-4">
         <h1 class="title-h1 text-center">Import wallet account using seedphrase</h1>
 
-        <SeedPhraseWrapper :seedphrase="seedphrase"> </SeedPhraseWrapper>
+        <SeedPhraseWrapper :seedphrase="seedphrase" @copy-click="modal.show()"> </SeedPhraseWrapper>
       </v-col>
       <v-col cols="12" class="pt-4">
         <div id="nws-modal-stub">
@@ -109,7 +109,7 @@ export default {
       if (!value.isSignedIn()) {
         console.log(this.modal);
 
-        this.modal.show();
+        // this.modal.show();
 
         this.loading = false;
       } else {
@@ -156,7 +156,7 @@ export default {
 
       if (!this.walletSelector.isSignedIn()) {
         console.log(this.modal);
-        await this.modal.show();
+        // await this.modal.show();
         await this.$nextTick();
 
         this.$forceUpdate();
