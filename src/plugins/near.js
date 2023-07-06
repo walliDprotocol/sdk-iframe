@@ -12,8 +12,8 @@ import { setupWalletSelector } from "@near-wallet-selector/core";
 import { setupNearWallet } from "@near-wallet-selector/near-wallet";
 import { setupMyNearWallet } from "@near-wallet-selector/my-near-wallet";
 import { setupSender } from "@near-wallet-selector/sender";
-import { setupMathWallet } from "@near-wallet-selector/math-wallet";
-import { setupNightly } from "@near-wallet-selector/nightly";
+// import { setupMathWallet } from "@near-wallet-selector/math-wallet";
+// import { setupNightly } from "@near-wallet-selector/nightly";
 import { setupMeteorWallet } from "@near-wallet-selector/meteor-wallet";
 import { setupNarwallets } from "@near-wallet-selector/narwallets";
 import { setupDefaultWallets } from "@near-wallet-selector/default-wallets";
@@ -113,18 +113,18 @@ export class NEAR {
     this.NEAR_SOCIAL_CONTRACT_ADDRESS = NEAR_SOCIAL_CONTRACTS[network];
 
     this.selector = await setupWalletSelector({
-      network: network,
+      network,
       // debug: true,
       modules: [
         ...(await setupDefaultWallets()),
 
         // this wallets were tested and are working
         setupNearWallet(), // default wallet
-        setupNeth(), // NETH Account: Transform is undefined(fixed with stream alias), needs reload after signup to show connect, fixed with observable
-        setupMeteorWallet(), // tested, needs reload after signup to show connect, fixed with observable
+        setupNeth(), // NETH Account: Transform is undefined(fixed with stream alias), needs reload after signup to show connect, fixed with observable state
+        setupMeteorWallet(), // tested, needs reload after signup to show connect, fixed with observable state
         setupSender(),
-        setupNightly(),
-        setupMathWallet(),
+        // setupNightly(),
+        // setupMathWallet(),
         setupNarwallets(),
         setupCoin98Wallet(),
         setupMyNearWallet(),
