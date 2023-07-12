@@ -15,11 +15,11 @@ import { setupSender } from "@near-wallet-selector/sender";
 // import { setupMathWallet } from "@near-wallet-selector/math-wallet";
 // import { setupNightly } from "@near-wallet-selector/nightly";
 import { setupMeteorWallet } from "@near-wallet-selector/meteor-wallet";
-import { setupNarwallets } from "@near-wallet-selector/narwallets";
+// import { setupNarwallets } from "@near-wallet-selector/narwallets";
 import { setupDefaultWallets } from "@near-wallet-selector/default-wallets";
-import { setupCoin98Wallet } from "@near-wallet-selector/coin98-wallet";
+// import { setupCoin98Wallet } from "@near-wallet-selector/coin98-wallet";
 import { setupNeth } from "@near-wallet-selector/neth";
-import { setupXDEFI } from "@near-wallet-selector/xdefi";
+// import { setupXDEFI } from "@near-wallet-selector/xdefi";
 import { ethers } from "ethers";
 // import { getJSONStorage } from "./utils";
 
@@ -125,10 +125,10 @@ export class NEAR {
         setupSender(),
         // setupNightly(),
         // setupMathWallet(),
-        setupNarwallets(),
-        setupCoin98Wallet(),
+        // setupNarwallets(),
+        // setupCoin98Wallet(),
         setupMyNearWallet(),
-        setupXDEFI(),
+        // setupXDEFI(),
 
         //not tested yet
 
