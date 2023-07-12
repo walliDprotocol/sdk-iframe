@@ -8,8 +8,11 @@
   >
     <v-col cols="12">
       <div class="half-circle-spinner">
-        <div class="circle circle-1"></div>
-        <div class="circle circle-2"></div>
+        <!-- <div class="circle circle-1"></div> -->
+        <!-- <div class="circle circle-2"></div> -->
+        <div class="background">
+          <div class="circle"></div>
+        </div>
       </div>
     </v-col>
   </v-row>
@@ -21,37 +24,77 @@ export default {
 };
 </script>
 
-<style>
-.half-circle-spinner,
-.half-circle-spinner * {
-  box-sizing: border-box;
-}
+<style lang="scss">
+// .half-circle-spinner,
+// .half-circle-spinner * {
+//   box-sizing: border-box;
+// }
 
 .half-circle-spinner {
   width: 45px;
   height: 45px;
-  border-radius: 100%;
-  position: relative;
+  // border-radius: 100%;
+  // position: relative;
   margin: auto;
+  background: linear-gradient(90deg, #73dde773 15%, #64ffdd75 35%, #7acdfd6c 75%, transparent 100%);
+  border-radius: 50%;
+
+  filter: blur(1px);
 }
 
-.half-circle-spinner .circle {
-  content: "";
-  position: absolute;
+// .half-circle-spinner .circle {
+//   content: "";
+//   position: absolute;
+//   width: 100%;
+//   height: 100%;
+//   border-radius: 100%;
+//   border: calc(30px / 10) solid;
+// }
+
+.half-circle-spinner .background {
+  $border: calc(30px / 10);
+
+  position: relative;
+
   width: 100%;
   height: 100%;
-  border-radius: 100%;
-  border: calc(30px / 10) solid transparent;
-}
 
-.half-circle-spinner .circle.circle-1 {
-  border-top-color: #01a3b0;
+  background: linear-gradient(90deg, #73dde7 15%, transparent 35%, #7acefd 75%, transparent 100%);
+  border-radius: 50%;
+
   animation: half-circle-spinner-animation 2s infinite;
+
+  .circle {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    border-radius: inherit; /* !importanté */
+
+    display: flex;
+    align-items: center;
+    //width: 50vw;
+
+    color: #fff;
+    background: #fff;
+    background-clip: padding-box; /* !importanté */
+    border: solid $border transparent; /* !importanté */
+    border-radius: 50%;
+  }
+  // z-index: 1;
+}
+.half-circle-spinner .circle.circle-1 {
+  border-top-color: #7acefd;
+  animation: half-circle-spinner-animation 2s infinite;
+  z-index: 3;
 }
 
 .half-circle-spinner .circle.circle-2 {
-  border-bottom-color: #035b60;
+  border-bottom-color: #73dde7;
   animation: half-circle-spinner-animation 2s infinite alternate;
+
+  z-index: 3;
 }
 
 @keyframes half-circle-spinner-animation {
