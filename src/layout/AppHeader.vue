@@ -88,13 +88,14 @@ export default {
     },
   },
   computed: {
-    ...mapState(["selectedAccountId", "stepSuccess"]),
+    ...mapState(["selectedAccountId", "stepSuccess", "stepperTitle"]),
     ...mapGetters("near", ["nearAccountId"]),
     ...mapState("near", ["walletSelector", "nearAccount"]),
     ...mapState("royalty", ["verifySuccess"]),
     ...mapGetters(["flow"]),
 
     appHeaderTitle() {
+      if (this.stepperTitle) return this.stepperTitle;
       if (this.flow == "celo" || this.$route?.meta?.title) {
         console.log("meta title", this.$route?.meta);
         return this.$route?.meta?.title;

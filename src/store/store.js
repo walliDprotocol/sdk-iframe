@@ -36,8 +36,12 @@ const state = {
   flow: null,
   chainId: null,
   stepSuccess: null,
+  stepperTitle: "",
 };
 const mutations = {
+  forceStepperTitle(state, value) {
+    state.stepperTitle = value;
+  },
   stepSuccess(state, value) {
     state.stepSuccess = value;
   },

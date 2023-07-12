@@ -4,33 +4,19 @@
     class="align-content-space-between"
     :style="{ height: !successState ? '910px' : 'unset' }"
   >
-    <v-row v-if="successState" justify="center" class="pa-10">
-      <v-col cols="8" class="pt-5">
-        <v-img
-          :src="require(`@/assets/icons/success.webp`)"
-          contain
-          class="mx-auto"
-          max-height="40"
-          max-width="40"
-        />
-      </v-col>
+    <component :is="'style'">
+      :root { --topDistance: {{ !successState ? "390px" : "150px" }} }
+    </component>
 
-      <v-col cols="8" class="pt-5">
-        <h1 class="title-h1 text-center">You're all set!</h1>
-      </v-col>
-
-      <v-col cols="8" class="pt-5">
-        <h3 class="sub-title-h3 text-center">
-          You now have access to the wallet receiving your royalties.
-        </h3>
-      </v-col>
-    </v-row>
-    <v-row v-else justify="center" class="">
+    <v-row justify="center" class="">
       <LoaderCircle :loading="loading"></LoaderCircle>
-      <v-col v-if="!loading" cols="12" class="pt-4">
+      <v-col v-if="!loading && !isSignedIn" cols="12" class="pt-4">
         <h1 class="title-h1 text-center">Import wallet account using seedphrase</h1>
 
         <SeedPhraseWrapper :seedphrase="seedphrase" @copy-click="modal.show()"> </SeedPhraseWrapper>
+      </v-col>
+      <v-col v-else-if="!loading && isSignedIn" cols="12" class="pt-4">
+        <h1 class="title-h1 text-center">Connect to your wallet account</h1>
       </v-col>
       <v-col cols="12" class="pt-4">
         <div id="nws-modal-stub">
@@ -86,14 +72,19 @@ export default {
     ...mapState("near", ["walletSelector", "nearAccount"]),
     ...mapState("royalty", ["seedphrase"]),
     ...mapGetters("near", ["nearAccountId"]),
+    isSignedIn() {
+      return this.walletSelector.isSignedIn();
+    },
   },
   watch: {
-    nearAccount(value) {
+    nearAccount(value, oldValue) {
       console.log(value);
-      console.log(this.$route.path);
+      console.log(oldValue);
+      console.log(this.$route);
 
       if (value?.accountId) {
         if (this.$route.path.includes("/royalties")) {
+          this.$store.commit("forceStepperTitle", "");
           this.$router.push({ name: "royalties-success" });
         } else {
           this.$router.push({ name: "base-select" });
@@ -113,7 +104,8 @@ export default {
 
         this.loading = false;
       } else {
-        this.modal.hide();
+        // this.modal.hide();
+        this.modal.show();
       }
     },
   },
@@ -160,20 +152,17 @@ export default {
         await this.$nextTick();
 
         this.$forceUpdate();
-        // var nodesToMove = document.querySelectorAll(".nws-modal-wrapper");
-        // console.log(nodesToMove);
-
-        // var destinationContainerNode = document.querySelector("#nws-modal-stub");
-        // console.log(destinationContainerNode);
-        // Array.from(nodesToMove).forEach(function (node) {
-        //   destinationContainerNode.appendChild(node);
-        // });
-      } else {
-        this.modal.hide();
-        // this.successState = true;
-        this.$router.push({ name: "royalties-success" });
+      } else if (this.$route?.query?.account_id) {
+        this.successState = true;
+        this.$store.commit("forceStepperTitle", "");
 
         this.$store.commit("royalty/verifySuccess", true);
+        this.$router.push({ name: "royalties-success" });
+      } else {
+        this.modal.show();
+        this.$store.commit("forceStepperTitle", "Connect wallet");
+
+        this.successState = true;
       }
       this.loading = false;
     }
