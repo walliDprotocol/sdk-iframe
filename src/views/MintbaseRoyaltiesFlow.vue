@@ -1,7 +1,7 @@
 <template>
   <div>
     <AppHeader />
-    <LoaderCircle :loading="loading"></LoaderCircle>
+    <LoaderCircle :loading="!loading"></LoaderCircle>
 
     <router-view v-if="!loading" />
     <AppFooter />

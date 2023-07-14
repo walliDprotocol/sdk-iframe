@@ -8,11 +8,12 @@
   >
     <v-col cols="12">
       <div class="half-circle-spinner">
+        <span class="loader"></span>
         <!-- <div class="circle circle-1"></div> -->
         <!-- <div class="circle circle-2"></div> -->
-        <div class="background">
+        <!-- <div class="background">
           <div class="circle"></div>
-        </div>
+        </div> -->
       </div>
     </v-col>
   </v-row>
@@ -36,10 +37,8 @@ export default {
   // border-radius: 100%;
   // position: relative;
   margin: auto;
-  background: linear-gradient(90deg, #73dde773 15%, #64ffdd75 35%, #7acdfd6c 75%, transparent 100%);
-  border-radius: 50%;
 
-  filter: blur(1px);
+  border-radius: 50%;
 }
 
 // .half-circle-spinner .circle {
@@ -51,6 +50,56 @@ export default {
 //   border: calc(30px / 10) solid;
 // }
 
+.loader {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: inline-block;
+  border: 3px solid #7acefd;
+  border-right: 3px solid transparent;
+  border-top: 3px solid transparent;
+  box-sizing: border-box;
+  position: relative;
+  animation: rotation 1.2s infinite;
+}
+.loader::after {
+  content: "";
+  box-sizing: border-box;
+  position: absolute;
+  top: 0;
+  margin: 3px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 3px solid #64ffde;
+  border-top: 3px solid transparent;
+  border-right: 3px solid transparent;
+
+  animation: rotation 1s infinite reverse;
+}
+.loader::before {
+  content: "";
+  box-sizing: border-box;
+
+  display: block;
+
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 3px solid #73dde7;
+  border-bottom: 3px solid transparent;
+  border-right: 3px solid transparent;
+  animation: rotation 1.2s infinite reverse;
+}
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 .half-circle-spinner .background {
   $border: calc(30px / 10);
 
@@ -59,7 +108,16 @@ export default {
   width: 100%;
   height: 100%;
 
-  background: linear-gradient(90deg, #73dde7 15%, transparent 35%, #7acefd 75%, transparent 100%);
+  background: linear-gradient(
+    90deg,
+    transparent 8%,
+    #64ffde 15%,
+    #73dde7 25%,
+    #7acefd 45%,
+    #73dde7 75%,
+    #64ffde 85%,
+    transparent 92%
+  );
   border-radius: 50%;
 
   animation: half-circle-spinner-animation 2s infinite;
