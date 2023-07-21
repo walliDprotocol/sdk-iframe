@@ -155,7 +155,7 @@ export default {
     return {
       currentStep: 0,
       successModifier: 1,
-      totalSteps: 3,
+      totalSteps: 2,
     };
   },
 };

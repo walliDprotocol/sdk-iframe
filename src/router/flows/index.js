@@ -46,7 +46,7 @@ const baseFlow = {
       meta: {
         i18n: messages,
         title: "Select data to verify",
-        step: 2,
+        step: 1,
       },
     },
     {
@@ -56,7 +56,7 @@ const baseFlow = {
       meta: {
         i18n: messages,
         title: "Verify data",
-        step: 3,
+        step: 2,
       },
     },
     {
@@ -66,7 +66,7 @@ const baseFlow = {
       meta: {
         i18n: messages,
         title: "Success",
-        step: 4,
+        step: 3,
       },
     },
   ],
