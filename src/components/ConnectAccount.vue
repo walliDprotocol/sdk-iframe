@@ -91,13 +91,15 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   name: "ConnectAccount",
   props: {
     selectedAccount: { type: Object, default: () => {} },
     checkBalance: {
       type: Boolean,
-      default: true,
+      default: false,
     },
   },
   beforeDestroy() {
@@ -108,36 +110,23 @@ export default {
     allSelected(val) {
       this.$emit("allSelected", val);
     },
+    checkBalance(val) {
+      if (val) {
+        this.checkAccountBalance();
+      }
+    },
   },
   async mounted() {
-    try {
-      if (
-        (this.selectedAccount.contractType == "native" ||
-          this.selectedAccount.contractType == "ERC20") &&
-        this.checkBalance
-      ) {
-        const availableBalance = await this.$store.dispatch(
-          "getAccountBalance",
-          this.selectedAccount
-        );
-        if (availableBalance > this.selectedAccount?.options?.[0]?.value) {
-          this.selectedAccount?.options.map((e) => (e.state = true));
-        } else {
-          throw new Error(
-            `Your  ${this.selectedAccount?.IdNameDesc}  balance doesn't meet the requirements`
-          );
-        }
-      }
-    } catch (error) {
-      this.$emit("errorMessage", error.message);
-      this.errorMessage = error.message;
-    }
-
     this.$emit("allSelected", this.allSelected);
+    if (this.walletSelector?.isSignedIn()) {
+      this.checkAccountBalance();
+    }
   },
   computed: {
+    ...mapGetters("near", ["walletSelector"]),
+
     optionsFiltered() {
-      return this.selectedAccount?.options.filter((e) => !("display" in e) || e.display);
+      return this.selectedAccount?.options?.filter((e) => !("display" in e) || e.display);
     },
     allSelected() {
       return this.selectedAccount?.options.every((e) => {
@@ -152,6 +141,29 @@ export default {
     },
   },
   methods: {
+    async checkAccountBalance() {
+      try {
+        if (
+          this.selectedAccount.contractType == "native" ||
+          this.selectedAccount.contractType == "ERC20"
+        ) {
+          const availableBalance = await this.$store.dispatch(
+            "getAccountBalance",
+            this.selectedAccount
+          );
+          if (availableBalance > this.selectedAccount?.options?.[0]?.value) {
+            this.selectedAccount?.options.map((e) => (e.state = true));
+          } else {
+            throw new Error(
+              `Your  ${this.selectedAccount?.IdNameDesc}  balance doesn't meet the requirements`
+            );
+          }
+        }
+      } catch (error) {
+        this.$emit("errorMessage", error.message);
+        this.errorMessage = error.message;
+      }
+    },
     setAll() {
       if (this.allSelected) {
         this.selectedAccount?.options.map((e) => (e.state = false));

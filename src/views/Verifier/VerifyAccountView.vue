@@ -1,5 +1,5 @@
 <template>
-  <v-container fill-height class="pt-7 align-content-space-between">
+  <v-container v-if="selectedAccount.type" fill-height class="pt-7 align-content-space-between">
     <v-row justify="center">
       <v-col cols="8">
         <h1 class="title-h1 text-center">
@@ -12,11 +12,17 @@
         </h1>
       </v-col>
       <v-col v-if="!loading" cols="12" class="pt-5">
-        <ConnectAccount :selectedAccount="selectedAccount" @errorMessage="errorMessage = $event" />
+        <ConnectAccount
+          :selectedAccount="selectedAccount"
+          @errorMessage="errorMessage = $event"
+          :check-balance="checkBalance"
+        />
+      </v-col>
+      <v-col v-if="showWalletSelector" cols="12" class="pt-5">
+        <NearWalletSelector :topDistance="'368px'" :forcedHeight="'490px'" />
       </v-col>
     </v-row>
-
-    <v-row class="pb-2">
+    <v-row v-if="!showWalletSelector" class="pb-2">
       <v-col class="d-flex justify-end">
         <FormButton class="mr-5" :text="'Back'" :type="'back'" @click="backStep"> </FormButton>
         <FormButton
@@ -33,9 +39,13 @@
 <script>
 import FormButton from "@/components/FormButton.vue";
 import ConnectAccount from "@/components/ConnectAccount.vue";
+import NearWalletSelector from "@/components/NearWalletSelector.vue";
 
 import { mapGetters, mapState } from "vuex";
 import axios from "axios";
+
+import { setupModal } from "@near-wallet-selector/modal-ui";
+import NearAPI from "@/plugins/near";
 
 export default {
   name: "SelectView",
@@ -44,17 +54,31 @@ export default {
       accountIds: [],
       step: 1,
       userData: {},
-      selectedAccount: {},
       loadingConnectAccount: false,
       errorMessage: null,
       loading: true,
+      checkBalance: false,
+      modal: null,
     };
+  },
+  watch: {
+    nearAccountId(val) {
+      if (val) {
+        this.checkBalance = true;
+      }
+    },
   },
   computed: {
     ...mapState(["selectedAccountId"]),
-    ...mapGetters("near", ["nearAccountId"]),
+    ...mapGetters("near", ["nearAccountId", "walletSelector"]),
     isDisabled() {
       return !!this.errorMessage || !this.selectedAccount?.options?.some((value) => value.state);
+    },
+    showWalletSelector() {
+      return this.selectedAccount?.IdName?.includes("near") && !this.walletSelector?.isSignedIn();
+    },
+    selectedAccount() {
+      return this.accountIds.find((e) => e.IdName == this.selectedAccountId) || {};
     },
   },
   methods: {
@@ -89,10 +113,30 @@ export default {
       }
     },
   },
-  async created() {
-    if (!this.selectedAccountId) {
-      this.$router.push({ name: "base-select" });
+  async mounted() {
+    if (this.walletSelector) {
+      this.modal = setupModal(this.walletSelector, {
+        contractId: NearAPI.NEAR_SOCIAL_CONTRACT_ADDRESS,
+      });
+
+      if (!this.walletSelector.isSignedIn()) {
+        console.log(this.modal);
+        sessionStorage.setItem("isLoggedOff", JSON.stringify({ value: true }));
+        await this.modal.show();
+      } else {
+        this.modal.hide();
+        // this.successState = true;
+        // this.$router.push({ name: "base-select" });
+
+        // this.$store.commit("royalty/verifySuccess", true);
+      }
+      this.loading = false;
     }
+  },
+  async created() {
+    // if (!this.selectedAccountId) {
+    //   this.$router.push({ name: "base-select" });
+    // }
     ({ accountIds: this.accountIds, redirectPath: this.redirectPath } = (
       await axios.get("/userData.json")
     ).data);
@@ -103,13 +147,13 @@ export default {
       })
     );
 
-    this.selectedAccount = this.accountIds.find((e) => e.IdName == this.selectedAccountId);
-    console.log(this.selectedAccount);
+    console.log("selectedAccount", this.selectedAccount);
     this.loading = false;
   },
   components: {
     FormButton,
     ConnectAccount,
+    NearWalletSelector,
   },
 };
 </script>

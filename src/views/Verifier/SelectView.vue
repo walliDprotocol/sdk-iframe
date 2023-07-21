@@ -44,7 +44,7 @@ export default {
     ...mapState(["selectedAccountId"]),
     ...mapGetters("near", ["nearAccountId"]),
     isDisabled() {
-      return !!this.errorMessage || !this.selectedAccount?.options?.some((value) => value.state);
+      return !!this.errorMessage || !this.selectedAccountId;
     },
   },
   methods: {
