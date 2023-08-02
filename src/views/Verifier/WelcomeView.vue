@@ -49,11 +49,11 @@ export default {
   data() {
     return {
       getOauthDataQuery: {},
-      flow: "celo", // TODO: add correct translations
+      flow: "verifier", // TODO: add correct translations
     };
   },
   mounted() {
-    this.startFlow();
+    // this.startFlow();
   },
   methods: {
     async startFlow() {

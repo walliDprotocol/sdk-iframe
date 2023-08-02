@@ -4,13 +4,12 @@ export default {
       title: "Welcome to WalliD",
       bulletPointsTitle: "After completing the process you'll have:",
     },
-    celo: {
+    verifier: {
       subtitle:
-        "To get started and receive your NFT, follow these simple steps to verify your social network account and your WalliDAO tokens ownership.",
+        "To get started and increase your trust score, choose one of the data sources available to verify your data.",
       bulletPoints: [
-        "Verified your social network account qualified to recieve your NFT",
-        "Verified your WalliDAO tokens ownership",
-        "A new and ultra rare NFT in your wallet",
+        "Connected to different data sources and verified the requested data",
+        "Your trust score based on social network history and on-chain credentials",
       ],
     },
   },

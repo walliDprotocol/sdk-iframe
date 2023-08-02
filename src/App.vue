@@ -27,11 +27,19 @@ export default {
     },
   },
   async created() {
-    let { state, code, flow } = await this.$store.dispatch("getURLSearchParams");
+    let {
+      state,
+      code,
+      flow,
+      account_id: accountId,
+    } = await this.$store.dispatch("getURLSearchParams");
+    if (accountId) {
+      sessionStorage.setItem("isLoggedIn", JSON.stringify({ value: true }));
+    }
     // try to get this values from local storage
     flow ??= (await getStorageFields(["configId", "flow"])).flow;
 
-    console.log("flow", flow, state, code);
+    console.log("flow", flow, state, code, accountId);
     if (flow == "celo") {
       this.$router.push("Celo");
     }

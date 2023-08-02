@@ -77,8 +77,8 @@ export default {
       await this.$store.dispatch("emitClose");
     },
     publishData() {
-      sessionStorage.removeItem("isLoggedOff");
-
+      sessionStorage.removeItem("isLoggedIn");
+      this.$router.replace({ "query.account_id": null });
       this.$router.push({ name: "base-select" });
 
       // setTimeout(() => {

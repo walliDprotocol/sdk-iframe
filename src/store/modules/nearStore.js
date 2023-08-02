@@ -29,8 +29,9 @@ const actions = {
     console.log("setWalletSelector isSignedIn", selector.isSignedIn());
     commit("setWalletSelector", selector);
 
-    selector.store.observable.subscribe((state) => {
-      console.log("State changed:", state);
+    selector.store.observable.subscribe((selectorState) => {
+      console.log("selectorState changed:", selectorState);
+
       dispatch("getAccounts").then((account) => dispatch("setAccount", { account }));
     });
 
@@ -81,6 +82,10 @@ const actions = {
       const accounts = await wallet.getAccounts();
       const account = accounts[0];
 
+      if (state.nearAccount?.accountId && state.nearAccount?.accountId !== account) {
+        sessionStorage.removeItem("isLoggedIn");
+      }
+
       // TODO: fix when value is missing
       const { profile } = await dispatch("getProfileName", {
         accountId: account.accountId,
@@ -91,7 +96,8 @@ const actions = {
       console.log("account", account);
       return { ...account, ...profile };
     } catch (error) {
-      console.log(error);
+      console.log(error?.message);
+      return {};
     }
   },
   async setAccount({ commit }, { account }) {

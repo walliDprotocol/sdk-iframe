@@ -57,7 +57,7 @@ export default {
   },
   watch: {
     $route(to) {
-      this.setCurrentStep(to);
+      this.setCurrentStep();
 
       this.$store.commit("stepSuccess", false);
 
@@ -80,7 +80,7 @@ export default {
     },
     nearAccountId(value) {
       const isLoggedOff = getJSONStorage("session", "isLoggedOff");
-      console.log("isLoggedOff nearAccountId", isLoggedOff);
+      console.log("watch isLoggedOff nearAccountId", isLoggedOff);
 
       if (value && !isLoggedOff.value) {
         this.totalSteps = 2;
@@ -136,13 +136,13 @@ export default {
 
       if (this.nearAccountId && !isLoggedOff.value && !this.$route.name.includes("royalties")) {
         this.totalSteps = 2;
-        this.currentStep =
-          this.currentStep > this.totalSteps ? this.totalSteps : this.currentStep - 1;
+        this.currentStep = this.currentStep > this.totalSteps ? this.totalSteps : this.currentStep;
       } else {
         this.currentStep = this.currentStep > this.totalSteps ? this.totalSteps : this.currentStep;
       }
 
       this.successModifier = this.stepSuccess ? 0 : 1; //this.currentStep > this.totalSteps ? 0 : 1;
+      console.log("this.currentStep ", this.currentStep);
     },
   },
   mounted() {

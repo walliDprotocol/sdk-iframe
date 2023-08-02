@@ -1,14 +1,9 @@
 <template>
   <v-container v-if="selectedAccount.type" fill-height class="pt-7 align-content-space-between">
     <v-row justify="center">
-      <v-col cols="8">
+      <v-col cols="12">
         <h1 class="title-h1 text-center">
-          {{
-            selectedAccount.type == "WEB3"
-              ? `Verify your ${selectedAccount.IdNameDesc} balance`
-              : `Connect to your ${selectedAccount.IdNameDesc}
-            account and select the levels you want to verify`
-          }}
+          {{ headerTitle }}
         </h1>
       </v-col>
       <v-col v-if="!loading" cols="12" class="pt-5">
@@ -19,13 +14,14 @@
         />
       </v-col>
       <v-col v-if="showWalletSelector" cols="12" class="pt-5">
-        <NearWalletSelector :topDistance="'368px'" :forcedHeight="'490px'" />
+        <NearWalletSelector :topDistance="'350px'" :forcedHeight="'590px'" />
       </v-col>
     </v-row>
-    <v-row v-if="!showWalletSelector" class="pb-2">
+    <v-row class="pb-2">
       <v-col class="d-flex justify-end">
         <FormButton class="mr-5" :text="'Back'" :type="'back'" @click="backStep"> </FormButton>
         <FormButton
+          v-if="!showWalletSelector || nearAccountId"
           :text="nearAccountId ? 'VERIFY' : 'CONNECT'"
           :disabled="isDisabled"
           :loading="loadingConnectAccount"
@@ -46,6 +42,7 @@ import axios from "axios";
 
 import { setupModal } from "@near-wallet-selector/modal-ui";
 import NearAPI from "@/plugins/near";
+import { getJSONStorage } from "@/plugins/utils";
 
 export default {
   name: "SelectView",
@@ -59,12 +56,17 @@ export default {
       loading: true,
       checkBalance: false,
       modal: null,
+      isLoggedIn: false,
     };
   },
   watch: {
-    nearAccountId(val) {
+    nearAccountId(val, old) {
       if (val) {
         this.checkBalance = true;
+      }
+
+      if (val !== old) {
+        this.isLoggedIn = true;
       }
     },
   },
@@ -74,11 +76,27 @@ export default {
     isDisabled() {
       return !!this.errorMessage || !this.selectedAccount?.options?.some((value) => value.state);
     },
+    requiresNearAccount() {
+      return this.selectedAccount?.IdName?.includes("near");
+    },
     showWalletSelector() {
-      return this.selectedAccount?.IdName?.includes("near") && !this.walletSelector?.isSignedIn();
+      return (
+        this.selectedAccount?.IdName?.includes("near") &&
+        (!this.walletSelector?.isSignedIn() || !this.isLoggedIn)
+      );
     },
     selectedAccount() {
       return this.accountIds.find((e) => e.IdName == this.selectedAccountId) || {};
+    },
+    headerTitle() {
+      return this.selectedAccount.type == "WEB3"
+        ? !this.isLoggedIn
+          ? `Connect to  ${this.selectedAccount.IdNameDesc?.split(" ")?.[0]} wallet and verify ${
+              this.selectedAccount.IdNameDesc
+            } possessions`
+          : `Verify your ${this.selectedAccount.IdNameDesc} balance`
+        : `Connect to your ${this.selectedAccount.IdNameDesc}
+            account and select the levels you want to verify`;
     },
   },
   methods: {
@@ -93,7 +111,7 @@ export default {
       console.log("Call connectAccount", this.nearAccountId);
       this.loadingConnectAccount = true;
       try {
-        if (this.isRoyaltyFlow || this.nearAccountId) {
+        if (!this.requiresNearAccount || this.nearAccountId) {
           const { state } = await this.$store.dispatch("connectAccount", {
             selectedAccount: this.selectedAccount,
             redirectPath: this.redirectPath,
@@ -101,10 +119,6 @@ export default {
           if (state == "success") {
             this.$router.push({ name: "base-success" });
           }
-        } else {
-          this.$router.push({ name: "base-connect" });
-
-          // await this.$store.dispatch("near/connectNear");
         }
       } catch (error) {
         console.log("connectAccount", error);
@@ -118,25 +132,16 @@ export default {
       this.modal = setupModal(this.walletSelector, {
         contractId: NearAPI.NEAR_SOCIAL_CONTRACT_ADDRESS,
       });
+      const isLoggedIn = getJSONStorage("session", "isLoggedIn");
 
-      if (!this.walletSelector.isSignedIn()) {
-        console.log(this.modal);
-        sessionStorage.setItem("isLoggedOff", JSON.stringify({ value: true }));
-        await this.modal.show();
-      } else {
-        this.modal.hide();
-        // this.successState = true;
-        // this.$router.push({ name: "base-select" });
+      this.isLoggedIn = isLoggedIn.value;
 
-        // this.$store.commit("royalty/verifySuccess", true);
-      }
+      console.log("isLoggedIn", this.isLoggedIn);
+
       this.loading = false;
     }
   },
   async created() {
-    // if (!this.selectedAccountId) {
-    //   this.$router.push({ name: "base-select" });
-    // }
     ({ accountIds: this.accountIds, redirectPath: this.redirectPath } = (
       await axios.get("/userData.json")
     ).data);
@@ -148,7 +153,6 @@ export default {
     );
 
     console.log("selectedAccount", this.selectedAccount);
-    this.loading = false;
   },
   components: {
     FormButton,
