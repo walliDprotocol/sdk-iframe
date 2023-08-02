@@ -18,13 +18,15 @@
           <p class="bold-text-p text-uppercase">
             {{ item.IdNameDesc }}
           </p>
-          <img
-            v-if="isVerified"
-            class="d-flex ml-2"
-            :src="require(`../assets/icons/connected.webp`)"
-            contain
-            style="width: 100%; height: auto; max-width: 70px; max-height: 15px"
-          />
+          <div v-if="isVerified" class="verified-check">
+            <img
+              class="d-flex mr-1"
+              :src="require(`../assets/icons/verified-check.svg`)"
+              contain
+              style="width: 100%; height: auto; max-width: 70px; max-height: 15px"
+            />
+            <p>VERIFIED</p>
+          </div>
         </div>
         <p class="normal-text-p">
           {{ idDescription[item.type](item) }}
@@ -62,6 +64,25 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.verified-check {
+  border-radius: 11px;
+  background-color: #00e284;
+  padding: 1px 5px;
+  display: flex;
+  align-items: center;
+  margin-left: 8px;
+  max-height: 15px;
+  p {
+    margin: 0;
+    font-size: 11px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #fff;
+  }
+}
 .id-card-container.container {
   border: solid 1px #fff;
   border-radius: 16px;

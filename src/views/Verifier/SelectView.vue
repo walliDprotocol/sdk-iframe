@@ -44,7 +44,7 @@ export default {
     ...mapState(["selectedAccountId"]),
     ...mapGetters("near", ["nearAccountId"]),
     isDisabled() {
-      return !!this.errorMessage || !this.selectedAccount?.options?.some((value) => value.state);
+      return !!this.errorMessage || !this.selectedAccountId;
     },
   },
   methods: {
@@ -55,33 +55,8 @@ export default {
 
       this.$router.push({ name: "base-verify" });
     },
-    async connectAccount() {
-      console.log("Call connectAccount", this.nearAccountId);
-      this.loadingConnectAccount = true;
-      try {
-        if (this.isRoyaltyFlow || this.nearAccountId) {
-          const { state } = await this.$store.dispatch("connectAccount", {
-            selectedAccount: this.selectedAccount,
-            redirectPath: this.redirectPath,
-          });
-          if (state == "success") {
-            this.$router.push({ name: "base-success" });
-          }
-        } else {
-          this.$router.push({ name: "base-connect" });
-
-          // await this.$store.dispatch("near/connectNear");
-        }
-      } catch (error) {
-        console.log("connectAccount", error);
-      } finally {
-        this.loadingConnectAccount = false;
-      }
-    },
   },
   async mounted() {
-    console.log(this.$route);
-
     this.isRoyaltyFlow = this.$route?.path.includes("royalties");
     ({ accountIds: this.accountIds, redirectPath: this.redirectPath } = (
       await axios.get(this.isRoyaltyFlow ? "/userDataRoyalties.json" : "/userData.json")

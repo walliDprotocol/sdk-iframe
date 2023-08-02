@@ -49,11 +49,11 @@ export default {
   data() {
     return {
       getOauthDataQuery: {},
-      flow: "celo", // TODO: add correct translations
+      flow: "verifier", // TODO: add correct translations
     };
   },
   mounted() {
-    this.startFlow();
+    // this.startFlow();
   },
   methods: {
     async startFlow() {
@@ -93,7 +93,7 @@ export default {
       //For now we will be doing everything from start
       localStorage.setItem("@wallid:oauth:state", 1);
 
-      this.$router.push({ name: "base-connect" });
+      this.$router.push({ name: "base-select" });
 
       this.loading = false;
     },

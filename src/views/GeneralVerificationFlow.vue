@@ -37,12 +37,19 @@ export default {
   },
   async mounted() {
     await this.$store.dispatch("near/initNear");
-    let { state, code, flow, configId } = await this.$store.dispatch("getURLSearchParams");
+    let {
+      state,
+      code,
+      flow,
+      configId,
+      account_id: accountId,
+    } = await this.$store.dispatch("getURLSearchParams");
+
     // try to get this values from local storage
     configId ??= (await getStorageFields(["configId", "flow"])).configId;
     flow ??= (await getStorageFields(["configId", "flow"])).flow;
 
-    console.log("flow", flow, state, code);
+    console.log("flow", flow, state, code, accountId);
 
     // Temp Values
     this.$store.commit("setFlow", flow);
