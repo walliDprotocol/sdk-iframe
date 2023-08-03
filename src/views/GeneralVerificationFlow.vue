@@ -49,7 +49,7 @@ export default {
     configId ??= (await getStorageFields(["configId", "flow"])).configId;
     flow ??= (await getStorageFields(["configId", "flow"])).flow;
 
-    console.log("flow", flow, state, code, accountId);
+    console.log("flow mounted verifier", flow, state, code, accountId);
 
     // Temp Values
     this.$store.commit("setFlow", flow);

@@ -17,11 +17,25 @@
         <NearWalletSelector :topDistance="'350px'" :forcedHeight="'590px'" />
       </v-col>
     </v-row>
-    <v-row class="pb-2">
-      <v-col class="d-flex justify-end">
-        <FormButton class="mr-5" :text="'Back'" :type="'back'" @click="backStep"> </FormButton>
+    <v-row class="pb-2 v-footer--fixed justify-space-between">
+      <v-col cols="3" class="d-flex justify-center align-center"> </v-col>
+      <v-col cols="3" class="d-flex justify-center align-center">
+        <p class="footer-label mb-0">Powered by</p>
+
+        <v-img
+          alt="Vuetify Logo"
+          class="shrink ml-2"
+          contain
+          src="/logos/wallid.webp"
+          transition="scale-transition"
+          width="60"
+        />
+      </v-col>
+      <v-col cols="3" class="d-flex justify-end">
+        <FormButton class="" :text="'Back'" :type="'back'" @click="backStep"> </FormButton>
         <FormButton
           v-if="!showWalletSelector || nearAccountId"
+          class="ml-5"
           :text="nearAccountId ? 'VERIFY' : 'CONNECT'"
           :disabled="isDisabled"
           :loading="loadingConnectAccount"
@@ -161,3 +175,11 @@ export default {
   },
 };
 </script>
+<style lang="scss">
+.row.v-footer--fixed {
+  background: white;
+  left: 40px;
+  right: 40px;
+  bottom: 12px;
+}
+</style>

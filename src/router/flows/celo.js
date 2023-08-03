@@ -11,8 +11,6 @@ import VueI18n from "@/plugins/i18n";
 
 const mergedMessages = VueI18n.mergeLocaleMessage(VueI18n.locale, messages[VueI18n.locale]);
 
-console.log(VueI18n);
-
 export default {
   path: "/Celo",
   name: "CeloVerificationFlow",

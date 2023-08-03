@@ -1,7 +1,7 @@
 <template>
   <v-app class="verification-iframe">
     <v-main>
-      <router-view v-if="!loading" class="router-view px-7" style="height: 100%" />
+      <router-view id="router-view" v-if="!loading" class="router-view px-7" style="height: 100%" />
     </v-main>
     <!-- <div class="popup-info" v-if="hasData">
       <p class="normal-text-p">
@@ -39,7 +39,7 @@ export default {
     // try to get this values from local storage
     flow ??= (await getStorageFields(["configId", "flow"])).flow;
 
-    console.log("flow", flow, state, code, accountId);
+    console.log("flow app created", flow, state, code, accountId);
     if (flow == "celo") {
       this.$router.push({ name: "celo-welcome" });
     }
