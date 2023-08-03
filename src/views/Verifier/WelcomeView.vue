@@ -1,6 +1,6 @@
 <template>
-  <v-container fill-height class="align-content-space-between">
-    <v-row justify="center" class="px-sm-16">
+  <v-container fill-height class="">
+    <v-row justify="center" class="px-sm-16 align-self-start">
       <v-col cols="12" sm="8" class="pt-13">
         <h1 class="title-h1 text-center">{{ $t("welcome.common.title") }}</h1>
       </v-col>
@@ -10,8 +10,6 @@
         </h3>
         <h3 class="sub-title-h3 text-center">{{ $t(`welcome.common.bulletPointsTitle`) }}</h3>
       </v-col>
-    </v-row>
-    <v-row class="justify-center">
       <v-col
         v-for="bulletPoint in $t(`welcome.${flow}.bulletPoints`)"
         :key="bulletPoint"
@@ -33,7 +31,7 @@
       </v-col>
     </v-row>
 
-    <v-row class="mt-10">
+    <v-row class="mt-auto align-self-baseline">
       <v-col cols="12" class="d-flex justify-end pb-5">
         <FormButton :text="'Get started'" @click="startFlow"> </FormButton>
       </v-col>
