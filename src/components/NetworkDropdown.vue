@@ -1,19 +1,22 @@
 <template>
-  <v-col cols="auto" class="text-center d-flex align-center justify-end">
-    <v-select
-      class="network-dropdown"
-      v-model="selectedNetwork"
-      :items="networksList"
-      variant="solo"
-      :item-text="'name'"
-      :color="'none'"
-      return-object
-      attach
-      hide-details
-      append-icon="mdi-chevron-down"
-      :ripple="false"
-    >
-      <template #prepend-inner>
+  <v-select
+    class="network-dropdown mx-3"
+    v-model="selectedNetwork"
+    :items="networksList"
+    variant="solo"
+    :item-text="'name'"
+    :color="'none'"
+    return-object
+    attach
+    hide-details
+    append-icon="mdi-chevron-down"
+    :ripple="false"
+  >
+    <template #prepend-inner>
+      <v-img :src="`/logos/nearTokens.webp`" contain max-height="16" max-width="16" class="mr-3" />
+    </template>
+    <template #item="{ item }">
+      <div class="d-flex align-center">
         <v-img
           :src="`/logos/nearTokens.webp`"
           contain
@@ -21,31 +24,20 @@
           max-width="16"
           class="mr-3"
         />
-      </template>
-      <template #item="{ item }">
-        <div class="d-flex align-center">
-          <v-img
-            :src="`/logos/nearTokens.webp`"
-            contain
-            max-height="16"
-            max-width="16"
-            class="mr-3"
-          />
-          <p>
-            {{ item.name }}
-          </p>
-          <v-img
-            v-if="item.id === selectedNetwork.id"
-            :src="`/logos/check.webp`"
-            contain
-            max-height="6"
-            max-width="8"
-            class="ml-3"
-          />
-        </div>
-      </template>
-    </v-select>
-  </v-col>
+        <p>
+          {{ item.name }}
+        </p>
+        <v-img
+          v-if="item.id === selectedNetwork.id"
+          :src="`/logos/check.webp`"
+          contain
+          max-height="6"
+          max-width="8"
+          class="ml-3"
+        />
+      </div>
+    </template>
+  </v-select>
 </template>
 <script>
 import { getJSONStorage } from "@/plugins/utils";
