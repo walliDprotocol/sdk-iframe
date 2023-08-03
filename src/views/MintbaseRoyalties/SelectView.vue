@@ -171,12 +171,12 @@ export default {
         return;
       }
       // now we check the account balance
-      const hasBalance = await this.getBalance(implicitAccountId);
-      if (!hasBalance) {
-        this.errorType = "balance";
-        this.errorTwitterAccVerification = true;
-        return;
-      }
+      // const hasBalance = await this.getBalance(implicitAccountId);
+      // if (!hasBalance) {
+      //   this.errorType = "balance";
+      //   this.errorTwitterAccVerification = true;
+      //   return;
+      // }
       this.successTwitterAccVerification = true;
 
       this.$store.commit("stepSuccess", true);
