@@ -159,7 +159,6 @@ export default {
 
       if (!this.walletSelector.isSignedIn()) {
         console.log(this.modal);
-        sessionStorage.setItem("isLoggedOff", JSON.stringify({ value: true }));
         await this.modal.show();
         await this.$nextTick();
 

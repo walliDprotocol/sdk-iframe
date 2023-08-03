@@ -13,50 +13,6 @@ export default {
       ],
     },
   },
-  status: {
-    browserWalletNoSignIn: {
-      msg: "Sign in with {wallet}",
-      color: "#f79520",
-      error: "Sign in with {wallet}",
-    },
-    noPlugin: {
-      msg: "Install WalliD wallet extension",
-      color: "#e95e5e",
-      error: "It seems like you don't have a digital wallet installed yet",
-    },
-    noWallet: {
-      msg: "WalliD setup",
-      color: "#e95e5e",
-      error: "It seems like you don't have your digital wallet set up yet.",
-    },
-    noIdStored: {
-      msg: "No ID stored in wallet",
-      color: "#e95e5e",
-      error: "It seems like you haven't stored an ID document in your digital wallet yet.",
-    },
-    idStored: {
-      msg: "ID stored in wallet",
-      color: "#00e284",
-    },
-    lockedWallet: {
-      msg: "Sign in with MyWalliD wallet",
-      color: "#f79520",
-      error:
-        "You're not connected to your wallet. Please sign in to your wallet in the pop-up presented by your digital wallet.",
-    },
-    ERR_NO_PERMISSION: {
-      msg: "Connect to {wallet} wallet",
-      color: "#f79520",
-    },
-    walletConnected: {
-      msg: "MyWalliD wallet plug-in installed on your browser",
-      color: "#00e284",
-    },
-    noIdAssetList: {
-      msg: "Authorise MyWalliD wallet",
-      color: "#f79520",
-    },
-  },
   verifyAccount: {
     title: "Connect to your Twitter account and select the levels you want to verify",
   },
@@ -67,10 +23,7 @@ export default {
     connectButton: "Connect and verify",
     tryAgain: "Try Again",
   },
-  walletSelector: {
-    label: "Choose a wallet to connect",
-    text: "After select a wallet, confirm the connection in the extension window",
-  },
+
   authentication: {
     title: "Authentication validation",
     text: "Please provide the code sent to your phone by AMA's CMD within the next 5 minutes and complete the signature.",
