@@ -89,6 +89,8 @@ export default {
     },
   },
   async mounted() {
+    this.$store.commit("stepSuccess", true);
+
     console.log(this.selectedAccountId);
   },
   components: {

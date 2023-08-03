@@ -5,14 +5,20 @@ import ConnectWalletView from "@/views/Celo/ConnectWalletView";
 import ConnectAccountView from "@/views/Celo/ConnectAccountView";
 import SuccessView from "@/views/Celo/SuccessView";
 
-import messages from "@/locales/languages/verifier";
+import messages from "@/locales/languages/celo";
+
+import VueI18n from "@/plugins/i18n";
+
+const mergedMessages = VueI18n.mergeLocaleMessage(VueI18n.locale, messages[VueI18n.locale]);
+
+console.log(VueI18n);
 
 export default {
   path: "/Celo",
   name: "CeloVerificationFlow",
   component: CeloVerificationFlow,
   meta: {
-    i18n: messages,
+    i18n: mergedMessages,
     totalSteps: 2,
   },
   children: [
@@ -21,7 +27,7 @@ export default {
       name: "celo-welcome",
       component: WelcomeViewVue,
       meta: {
-        i18n: messages,
+        i18n: mergedMessages,
         title: "Welcome",
       },
     },
@@ -30,7 +36,7 @@ export default {
       name: "celo-select",
       component: ConnectAccountView,
       meta: {
-        i18n: messages,
+        i18n: mergedMessages,
         title: "Verify social network",
         step: 1,
       },
@@ -40,7 +46,7 @@ export default {
       name: "celo-createWallet",
       component: ConnectWalletView,
       meta: {
-        i18n: messages,
+        i18n: mergedMessages,
         title: "Verify tokens ownership",
         step: 2,
       },
@@ -50,7 +56,7 @@ export default {
       name: "celo-success-view",
       component: SuccessView,
       meta: {
-        i18n: messages,
+        i18n: mergedMessages,
         title: "Success",
         step: 3,
       },

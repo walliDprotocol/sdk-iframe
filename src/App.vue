@@ -41,7 +41,7 @@ export default {
 
     console.log("flow", flow, state, code, accountId);
     if (flow == "celo") {
-      this.$router.push("Celo");
+      this.$router.push({ name: "celo-welcome" });
     }
     this.loading = false;
   },
