@@ -120,28 +120,29 @@ export default {
         // contractId: process.env.VUE_APP_NEAR_SOCIAL_CONTRACT_TESTNET,
         contractId: NearAPI.NEAR_SOCIAL_CONTRACT_ADDRESS,
       });
+      await this.modal.show();
 
-      if (!this.walletSelector.isSignedIn()) {
-        console.log(this.modal);
-        await this.modal.show();
-        await this.$nextTick();
+      // if (!this.walletSelector.isSignedIn()) {
+      //   console.log(this.modal);
+      //   await this.modal.show();
+      //   await this.$nextTick();
 
-        this.$forceUpdate();
-        // var nodesToMove = document.querySelectorAll(".nws-modal-wrapper");
-        // console.log(nodesToMove);
+      //   this.$forceUpdate();
+      //   // var nodesToMove = document.querySelectorAll(".nws-modal-wrapper");
+      //   // console.log(nodesToMove);
 
-        // var destinationContainerNode = document.querySelector("#nws-modal-stub");
-        // console.log(destinationContainerNode);
-        // Array.from(nodesToMove).forEach(function (node) {
-        //   destinationContainerNode.appendChild(node);
-        // });
-      } else {
-        this.modal.hide();
-        // this.successState = true;
-        // this.$router.push({ name: "base-select" });
+      //   // var destinationContainerNode = document.querySelector("#nws-modal-stub");
+      //   // console.log(destinationContainerNode);
+      //   // Array.from(nodesToMove).forEach(function (node) {
+      //   //   destinationContainerNode.appendChild(node);
+      //   // });
+      // } else {
+      //   this.modal.hide();
+      //   // this.successState = true;
+      //   // this.$router.push({ name: "base-select" });
 
-        this.$store.commit("royalty/verifySuccess", true);
-      }
+      //   this.$store.commit("royalty/verifySuccess", true);
+      // }
       this.loading = false;
     }
   },
