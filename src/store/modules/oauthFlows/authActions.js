@@ -43,7 +43,7 @@ export default {
       let { data } = await axios.post(oauthDataURL(account), {
         code,
         state,
-        redirectUrl: window.location.origin + (redirectPath || ""),
+        redirectUrl: window.location.origin + (redirectPath || "/"),
         codeVerifier,
       });
       console.log("response getOauthDataURL login: ", data);
@@ -67,7 +67,7 @@ export default {
     try {
       let { data } = await axios.get(redirectURL(selectedId), {
         params: {
-          redirectUrl: window.location.origin + (redirectPath || ""),
+          redirectUrl: window.location.origin + (redirectPath || "/"),
         },
       });
       console.log(`response getRedirectURL: ${selectedId} => `, data);
