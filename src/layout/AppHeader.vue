@@ -31,7 +31,7 @@
         </v-col>
 
         <v-col cols="4" class="d-flex align-center justify-end">
-          <NetworkDropdown v-if="walletSelector"></NetworkDropdown>
+          <NetworkDropdown v-show="showNetworkDropdown"></NetworkDropdown>
           <p v-if="nearAccountId" class="account-id mb-0">
             <span>&bull;</span>{{ nearAccountId | truncate(16) }}
           </p>
@@ -59,15 +59,17 @@ export default {
     $route(to) {
       this.setCurrentStep();
 
-      this.$store.commit("stepSuccess", false);
+      if (!to.path.includes("success")) {
+        this.$store.commit("stepSuccess", false);
+      }
 
       if (to.path.includes("/royalties")) {
         this.totalSteps = 2;
       }
     },
     stepSuccess(value) {
+      console.log("stepSuccess", value);
       if (value) {
-        console.log("stepSuccess");
         this.successModifier = 0;
       } else {
         this.successModifier = 1;
@@ -94,6 +96,9 @@ export default {
     ...mapState("royalty", ["verifySuccess"]),
     ...mapGetters(["flow"]),
 
+    showNetworkDropdown() {
+      return this.walletSelector && this.selectedAccountId?.includes?.("near");
+    },
     appHeaderTitle() {
       if (this.stepperTitle) return this.stepperTitle;
       if (this.flow == "celo" || this.$route?.meta?.title) {
@@ -143,6 +148,7 @@ export default {
 
       this.successModifier = this.stepSuccess ? 0 : 1; //this.currentStep > this.totalSteps ? 0 : 1;
       console.log("this.currentStep ", this.currentStep);
+      console.log("this.successModifier ", this.successModifier);
     },
   },
   mounted() {
