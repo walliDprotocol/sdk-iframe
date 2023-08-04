@@ -28,8 +28,8 @@
       </v-col>
     </v-row>
 
-    <v-row>
-      <v-col cols="12" class="d-flex justify-end pb-4">
+    <v-row class="pb-2">
+      <v-col cols="12" class="d-flex justify-end">
         <FormButton
           v-if="false"
           class="mr-5"
